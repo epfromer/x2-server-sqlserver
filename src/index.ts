@@ -32,32 +32,48 @@
  */
 import * as fs from 'fs';
 import * as fsext from 'fs-ext';
+import * as mongoose from 'mongoose';
 import { PSTMessage } from 'pst-extractor';
 import { PSTFile } from 'pst-extractor';
 import { PSTFolder } from 'pst-extractor';
 import { Log } from './Log.class';
 import { PSTAttachment } from 'pst-extractor';
 import { PSTRecipient } from 'pst-extractor';
+import { Email } from './Email';
+import { EmailInterface } from './Email';
 
 const pstFolder = '/media/sf_Outlook/test/';
-const topOutputFolder = '/media/sf_Outlook/pst-extractor/';
 const verbose = false;
 let col = 0;
 
-let directoryListing = fs.readdirSync(pstFolder);
-directoryListing.forEach(filename => {
-    console.log(pstFolder + filename);
+// set up MongoDB
+mongoose.set('debug', true);
+let uri = 'mongodb://localhost/x2';
+mongoose.connect(uri, (err) => {
+    if (err) {
+        console.log(err.message);
+        console.log(err);
+    }
+    else {
+        console.log('Connected to MongoDb');
 
-    // time for performance comparison to Java and improvement
-    const start = Date.now();
-    let pstFile = new PSTFile(pstFolder + filename);
-    console.log(pstFile.getMessageStore().displayName);
-    processFolder(pstFile.getRootFolder());
-    const end = Date.now();
-    console.log('\nprocessed in ' + (end - start) + ' ms');
+        // walk through PSTs in folder
+        let directoryListing = fs.readdirSync(pstFolder);
+        directoryListing.forEach(filename => {
+            console.log(pstFolder + filename);
+
+            // time for performance comparison to Java and improvement
+            const start = Date.now();
+            let pstFile = new PSTFile(pstFolder + filename);
+            console.log(pstFile.getMessageStore().displayName);
+            processFolder(pstFile.getRootFolder());
+            const end = Date.now();
+            console.log('\nprocessed in ' + (end - start) + ' ms');
+        });
+
+        Log.flushLogsAndExit();
+    }
 });
-
-Log.flushLogsAndExit();
 
 /**
  * Walk the folder tree recursively and process emails.
@@ -76,11 +92,13 @@ function processFolder(folder: PSTFolder) {
     if (folder.contentCount > 0) {
         let email: PSTMessage = folder.getNextChild();
         while (email != null && email.messageClass === 'IPM.Note') {
-            // sender
-            let sender = getSender(email);
 
-            // recipients
-            let recipients = getRecipients(email);
+            let sender = email.senderName;
+            if (sender !== email.senderEmailAddress) {
+                sender += ' (' + email.senderEmailAddress + ')';
+            }
+
+            let recipients = email.displayTo;
 
             if (verbose) {
                 console.log(email.clientSubmitTime + ' From: ' + sender + ', To: ' + recipients + ', Subject: ' + email.subject);
@@ -89,6 +107,10 @@ function processFolder(folder: PSTFolder) {
             }
 
             // store in MongoDB
+            let mongoEmail = new Email(<EmailInterface>{
+                foo: email.subject
+            });
+            create(mongoEmail);
 
             // onto next
             email = folder.getNextChild();
@@ -96,28 +118,13 @@ function processFolder(folder: PSTFolder) {
     }
 }
 
-/**
- * Get the sender and display.
- * @param {PSTMessage} email 
- * @returns {string} 
- */
-function getSender(email: PSTMessage): string {
-
-    let sender = email.senderName;
-    if (sender !== email.senderEmailAddress) {
-        sender += ' (' + email.senderEmailAddress + ')';
+async function create(mongoEmail: Email) {
+    try {
+        await mongoEmail.create();
+        console.log('await finished')
+    } catch (err) {
+        console.log(err); 
     }
-    return sender;
-}
-
-/**
- * Get the recipients and display.
- * @param {PSTMessage} email 
- * @returns {string} 
- */
-function getRecipients(email: PSTMessage): string {
-    // could walk recipients table, but be fast and cheap
-    return email.displayTo;
 }
 
 /**

@@ -2,28 +2,26 @@ import * as mongoose from 'mongoose';
 import { Schema } from 'mongoose';
 
 export interface EmailInterface extends mongoose.Document {
-  foo: string;
-  // creationTime: Date;
-  // displayTo: String;
-  // displayCC: String;
-  // displayBCC: String;
-  // senderEmailAddress: String;
-  // senderName: String;
-  // subject: String;
-  // body: String;
+  creationTime: Date;
+  displayTo: String;
+  displayCC: String;
+  displayBCC: String;
+  senderEmailAddress: String;
+  senderName: String;
+  subject: String;
+  body: String;
 }
 
 // create a schema
 const schema = new Schema({
-  foo: String
-  // creationTime: Date,
-  // displayTo: String,
-  // displayCC: String,
-  // displayBCC: String,
-  // senderEmailAddress: String,
-  // senderName: String,
-  // subject: String,
-  // body: String
+  creationTime: Date,
+  displayTo: String,
+  displayCC: String,
+  displayBCC: String,
+  senderEmailAddress: String,
+  senderName: String,
+  subject: String,
+  body: String
 });
 
 // create a model based on the schema
@@ -35,7 +33,11 @@ export class Email {
     this._email = email;
   }
 
-  public create() {
-    return EmailSchema.create(this._email);
+  public async create() {
+    await EmailSchema.create(this._email);
+  }
+
+  public async search() {
+    await EmailSchema.find();
   }
 }

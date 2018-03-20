@@ -33,47 +33,39 @@
 import * as fs from 'fs';
 import * as fsext from 'fs-ext';
 import * as mongoose from 'mongoose';
+import { Log } from './Log.class';
 import { PSTMessage } from 'pst-extractor';
 import { PSTFile } from 'pst-extractor';
 import { PSTFolder } from 'pst-extractor';
-import { Log } from './Log.class';
 import { PSTAttachment } from 'pst-extractor';
 import { PSTRecipient } from 'pst-extractor';
-import { Email } from './Email';
-import { EmailInterface } from './Email';
+import { Email, EmailInterface } from './Email';
 
 const pstFolder = '/media/sf_Outlook/test/';
-const verbose = false;
+const verbose = true;
 let col = 0;
+let count = 0;
 
-// set up MongoDB
 mongoose.set('debug', true);
-let uri = 'mongodb://localhost/x2';
-mongoose.connect(uri, (err) => {
-    if (err) {
-        console.log(err.message);
-        console.log(err);
-    }
-    else {
-        console.log('Connected to MongoDb');
+mongoose.connect('mongodb://localhost/x2');
 
-        // walk through PSTs in folder
-        let directoryListing = fs.readdirSync(pstFolder);
-        directoryListing.forEach(filename => {
-            console.log(pstFolder + filename);
+// walk through PSTs in folder
+let directoryListing = fs.readdirSync(pstFolder);
+directoryListing.forEach(filename => {
+    console.log(pstFolder + filename);
 
-            // time for performance comparison to Java and improvement
-            const start = Date.now();
-            let pstFile = new PSTFile(pstFolder + filename);
-            console.log(pstFile.getMessageStore().displayName);
-            processFolder(pstFile.getRootFolder());
-            const end = Date.now();
-            console.log('\nprocessed in ' + (end - start) + ' ms');
-        });
-
-        Log.flushLogsAndExit();
-    }
+    // time for performance comparison to Java and improvement
+    count = 0;
+    const start = Date.now();
+    let pstFile = new PSTFile(pstFolder + filename);
+    console.log(pstFile.getMessageStore().displayName);
+    processFolder(pstFile.getRootFolder());
+    const end = Date.now();
+    console.log('\n' + count + ' emails processed in ' + (end - start) + ' ms');
 });
+
+console.log('exiting')
+// Log.flushLogsAndExit();
 
 /**
  * Walk the folder tree recursively and process emails.
@@ -100,6 +92,7 @@ function processFolder(folder: PSTFolder) {
 
             let recipients = email.displayTo;
 
+            count++;
             if (verbose) {
                 console.log(email.clientSubmitTime + ' From: ' + sender + ', To: ' + recipients + ', Subject: ' + email.subject);
             } else {
@@ -107,23 +100,28 @@ function processFolder(folder: PSTFolder) {
             }
 
             // store in MongoDB
-            let mongoEmail = new Email(<EmailInterface>{
-                foo: email.subject
+            let mongoEmail = new Email(<any>{
+                creationTime: email.creationTime,
+                displayTo: email.displayTo,
+                displayCC: email.displayCC,
+                displayBCC: email.displayBCC,
+                senderEmailAddress: email.senderEmailAddress,
+                senderName: email.senderName,
+                subject: email.subject,
+                body: email.body,
             });
-            create(mongoEmail);
+            try {
+                mongoEmail.create();
+                console.log('back from await');
+                console.log(mongoEmail.search())
+                console.log('back from search');
+            } catch (err) {
+                console.log(err);
+            }
 
             // onto next
             email = folder.getNextChild();
         }
-    }
-}
-
-async function create(mongoEmail: Email) {
-    try {
-        await mongoEmail.create();
-        console.log('await finished')
-    } catch (err) {
-        console.log(err); 
     }
 }
 
@@ -132,7 +130,7 @@ async function create(mongoEmail: Email) {
  */
 function printDot() {
     process.stdout.write('.');
-    if (col++ > 100) {
+    if (col++ > 80) {
         console.log('');
         col = 0;
     }

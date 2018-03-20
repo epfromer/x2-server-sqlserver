@@ -39,90 +39,158 @@ import { PSTFile } from 'pst-extractor';
 import { PSTFolder } from 'pst-extractor';
 import { PSTAttachment } from 'pst-extractor';
 import { PSTRecipient } from 'pst-extractor';
-import { Email, EmailInterface } from './Email';
+import { Email, EmailModel, EmailInterface } from './Email';
 
 const pstFolder = '/media/sf_Outlook/test/';
 const verbose = true;
 let col = 0;
-let count = 0;
+let pstPromiseList = Promise[];
+let promiseList: Promise<mongoose.Document>[] = [];
+let emailList: PSTMessage[] = [];
 
+// connect to MongoDB
 mongoose.set('debug', true);
 mongoose.connect('mongodb://localhost/x2');
 
-// walk through PSTs in folder
-let directoryListing = fs.readdirSync(pstFolder);
-directoryListing.forEach(filename => {
-    console.log(pstFolder + filename);
+// processPST('kate_symes_003_1_1.pst').then(function(values) {
+//     processPST('phillip_allen_002_1_1.pst');
+// })
 
-    // time for performance comparison to Java and improvement
-    count = 0;
-    const start = Date.now();
+pstPromiseList.push(processPST('kate_symes_003_1_1.pst'));
+pstPromiseList.push(processPST('phillip_allen_002_1_1.pst'));
+Promise.all(pstPromiseList).then(function(values) {
+    Log.debug1('all promises complete')
+})
+
+// let directoryListing = fs.readdirSync(pstFolder);
+// directoryListing.forEach(filename => {
+//     processPST(filename);
+
+//     Log.debug1('all promises complete')
+// })
+
+function processPST(filename: string) {
+    promiseList = [];
+    emailList = [];
+
+    console.log(pstFolder + filename);
     let pstFile = new PSTFile(pstFolder + filename);
     console.log(pstFile.getMessageStore().displayName);
-    processFolder(pstFile.getRootFolder());
-    const end = Date.now();
-    console.log('\n' + count + ' emails processed in ' + (end - start) + ' ms');
-});
 
-console.log('exiting')
-// Log.flushLogsAndExit();
+    // extract the emails and put into list
+    processFolder(emailList, pstFile.getRootFolder());
+
+    // walk list and save to MongoDB
+    saveEmails(emailList, promiseList);
+
+    return Promise.all(promiseList);
+}
+
+Log.debug1('exiting')
+
+        // const start = Date.now();
+        // const end = Date.now();
+        // console.log('\n' + emailList.length + ' emails processed in ' + (end - start) + ' ms');
+
+
+// // walk through PSTs in folder
+// let directoryListing = fs.readdirSync(pstFolder);
+// directoryListing.forEach(filename => {
+
+//     let emailList: PSTMessage[] = [];
+//     let promiseList: Promise<mongoose.Document>[] = [];
+
+//     const start = Date.now();
+//     console.log(pstFolder + filename);
+//     let pstFile = new PSTFile(pstFolder + filename);
+//     console.log(pstFile.getMessageStore().displayName);
+
+//     // extract the emails and put into list
+//     processFolder(emailList, pstFile.getRootFolder());
+
+//     // walk list and save to MongoDB
+//     saveEmails(emailList, promiseList);
+
+//     // wait for all promises to finish
+//     Promise.all(promiseList).then(function(values) {
+//         Log.debug1('all promises resolved');
+
+//         const end = Date.now();
+//         console.log('\n' + emailList.length + ' emails processed in ' + (end - start) + ' ms');
+//     })
+// });
+
 
 /**
- * Walk the folder tree recursively and process emails.
+ * Walk the folder tree recursively and process emails, storing in email list.
  * @param {PSTFolder} folder 
  */
-function processFolder(folder: PSTFolder) {
+async function processFolder(emailList: PSTMessage[], folder: PSTFolder) {
     // go through the folders...
     if (folder.hasSubfolders) {
         let childFolders: PSTFolder[] = folder.getSubFolders();
         for (let childFolder of childFolders) {
-            processFolder(childFolder);
+            processFolder(emailList, childFolder);
         }
     }
 
     // and now the emails for this folder
     if (folder.contentCount > 0) {
+
+        // get first in folder
         let email: PSTMessage = folder.getNextChild();
-        while (email != null && email.messageClass === 'IPM.Note') {
+        while (email != null) {
 
-            let sender = email.senderName;
-            if (sender !== email.senderEmailAddress) {
-                sender += ' (' + email.senderEmailAddress + ')';
-            }
+            // if an email
+            if (email.messageClass === 'IPM.Note') {
+                
+                let sender = email.senderName;
+                if (sender !== email.senderEmailAddress) {
+                    sender += ' (' + email.senderEmailAddress + ')';
+                }
+    
+                let recipients = email.displayTo;
+    
+                if (verbose) {
+                    console.log(email.clientSubmitTime + ' From: ' + sender + ', To: ' + recipients + ', Subject: ' + email.subject);
+                } else {
+                    printDot();
+                }
 
-            let recipients = email.displayTo;
-
-            count++;
-            if (verbose) {
-                console.log(email.clientSubmitTime + ' From: ' + sender + ', To: ' + recipients + ', Subject: ' + email.subject);
-            } else {
-                printDot();
-            }
-
-            // store in MongoDB
-            let mongoEmail = new Email(<any>{
-                creationTime: email.creationTime,
-                displayTo: email.displayTo,
-                displayCC: email.displayCC,
-                displayBCC: email.displayBCC,
-                senderEmailAddress: email.senderEmailAddress,
-                senderName: email.senderName,
-                subject: email.subject,
-                body: email.body,
-            });
-            try {
-                mongoEmail.create();
-                console.log('back from await');
-                console.log(mongoEmail.search())
-                console.log('back from search');
-            } catch (err) {
-                console.log(err);
+                emailList.push(email);
             }
 
             // onto next
             email = folder.getNextChild();
         }
     }
+}
+
+/**
+ * Walk email list storing in Mongo and save promise in list.
+ * @param {PSTMessage[]} emailList 
+ * @param {Promise<mongoose.Document>[]} promiseList 
+ */
+function saveEmails(emailList: PSTMessage[], promiseList: Promise<mongoose.Document>[]) {
+    emailList.forEach(email => {
+        // store in MongoDB
+        let mongoEmail = new Email(<any>{
+            // creationTime: email.creationTime,
+            // displayTo: email.displayTo,
+            // displayCC: email.displayCC,
+            // displayBCC: email.displayBCC,
+            // senderEmailAddress: email.senderEmailAddress,
+            // senderName: email.senderName,
+            subject: email.subject,
+            // body: email.body,
+        });
+        try {
+            Log.debug1('saveEmails: ' + email.subject)
+            promiseList.push(mongoEmail.create());
+        } catch (err) {
+            console.log(err);
+        }
+    });
 }
 
 /**

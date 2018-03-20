@@ -1,7 +1,6 @@
 import * as mongoose from 'mongoose';
-import { Schema } from 'mongoose';
 
-export interface EmailInterface extends mongoose.Document {
+export interface EmailInterface {
   creationTime: Date;
   displayTo: String;
   displayCC: String;
@@ -13,7 +12,7 @@ export interface EmailInterface extends mongoose.Document {
 }
 
 // create a schema
-const schema = new Schema({
+const EmailSchema = new mongoose.Schema({
   creationTime: Date,
   displayTo: String,
   displayCC: String,
@@ -25,7 +24,7 @@ const schema = new Schema({
 });
 
 // create a model based on the schema
-const EmailSchema = mongoose.model('email', schema, 'email');
+export const EmailModel = mongoose.model('email', EmailSchema);
 
 export class Email {
   private _email: EmailInterface;
@@ -33,11 +32,11 @@ export class Email {
     this._email = email;
   }
 
-  public async create() {
-    await EmailSchema.create(this._email);
+  public create() {
+    return EmailModel.create(this._email);
   }
 
-  public async search() {
-    await EmailSchema.find();
+  public search() {
+    return EmailModel.find();
   }
 }

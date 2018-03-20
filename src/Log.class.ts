@@ -21,7 +21,10 @@ export class Log {
         colors: Log.logColors,
         level: 'debug1',
         transports: [
-            new winston.transports.Console({ colorize: true }),
+            new winston.transports.Console({ 
+                timestamp: true,
+                colorize: true 
+            }),
             new winston.transports.File({
                 filename: 'errors.log',
                 level: 'error'
@@ -35,19 +38,19 @@ export class Log {
         ]
     });
 
-    static error(s: string) {
+    static error(s: any) {
         Log.logger.error(s);
     }
 
-    static info(s: string) {
+    static info(s: any) {
         Log.logger.info(s);
     }
 
-    static debug1(s: string) {
+    static debug1(s: any) {
         Log.logger.debug1(s);
     }
 
-    static debug2(s: string) {
+    static debug2(s: any) {
         Log.logger.debug2(s);
     }
 

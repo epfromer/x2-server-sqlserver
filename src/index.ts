@@ -44,7 +44,6 @@ import { Email, EmailModel, EmailInterface } from './Email';
 const pstFolder = '/media/sf_Outlook/test/';
 const verbose = true;
 let col = 0;
-let pstPromiseList = Promise[];
 let promiseList: Promise<mongoose.Document>[] = [];
 let emailList: PSTMessage[] = [];
 
@@ -52,15 +51,35 @@ let emailList: PSTMessage[] = [];
 mongoose.set('debug', true);
 mongoose.connect('mongodb://localhost/x2');
 
+// let directoryListing = fs.readdirSync(pstFolder);
+// if (directoryListing.length > 0) {
+//     let promise = processPST(directoryListing[0]);
+//     for (var i = 1; i < directoryListing.length; i++) {
+//         promise = promise.then(function(values) {
+//             processPST(directoryListing[i])
+//         })
+//     }
+// }
+
+async function run() {
+    let folderListing = fs.readdirSync(pstFolder);
+    for (let folder of folderListing) {
+        console.log(await processPST(folder));
+    }
+}
+
+run()
+
+// async function runPromisesInSequence(promises) {
+//     for (let promise of promises) {
+//       console.log(await promise());
+//     }
+//   }
+
 // processPST('kate_symes_003_1_1.pst').then(function(values) {
 //     processPST('phillip_allen_002_1_1.pst');
 // })
 
-pstPromiseList.push(processPST('kate_symes_003_1_1.pst'));
-pstPromiseList.push(processPST('phillip_allen_002_1_1.pst'));
-Promise.all(pstPromiseList).then(function(values) {
-    Log.debug1('all promises complete')
-})
 
 // let directoryListing = fs.readdirSync(pstFolder);
 // directoryListing.forEach(filename => {

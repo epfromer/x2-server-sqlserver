@@ -42,59 +42,40 @@ import { PSTRecipient } from 'pst-extractor';
 import { Email, EmailModel, EmailInterface } from './Email';
 
 const pstFolder = '/media/sf_Outlook/test/';
-const verbose = true;
+const verbose = false;
 let col = 0;
 let promiseList: Promise<mongoose.Document>[] = [];
 let emailList: PSTMessage[] = [];
 
 // connect to MongoDB
-mongoose.set('debug', true);
+// mongoose.set('debug', true);
 mongoose.connect('mongodb://localhost/x2');
 
-// let directoryListing = fs.readdirSync(pstFolder);
-// if (directoryListing.length > 0) {
-//     let promise = processPST(directoryListing[0]);
-//     for (var i = 1; i < directoryListing.length; i++) {
-//         promise = promise.then(function(values) {
-//             processPST(directoryListing[i])
-//         })
-//     }
-// }
-
+/**
+ * Main async app that walks list of PSTs and processes them.
+ */
 async function run() {
     let folderListing = fs.readdirSync(pstFolder);
     for (let folder of folderListing) {
-        console.log(await processPST(folder));
+        await processPST(folder);
     }
 }
+run().catch(error => Log.error(error));
 
-run()
-
-// async function runPromisesInSequence(promises) {
-//     for (let promise of promises) {
-//       console.log(await promise());
-//     }
-//   }
-
-// processPST('kate_symes_003_1_1.pst').then(function(values) {
-//     processPST('phillip_allen_002_1_1.pst');
-// })
-
-
-// let directoryListing = fs.readdirSync(pstFolder);
-// directoryListing.forEach(filename => {
-//     processPST(filename);
-
-//     Log.debug1('all promises complete')
-// })
-
+/**
+ * Processes a PST, storing emails in list and walking list to add to MongoDB.
+ * Create promises are stored in list, and Promise.all waits for them to complete.
+ * @param {string} filename 
+ * @returns 
+ */
 function processPST(filename: string) {
+    const start = Date.now();
+
     promiseList = [];
     emailList = [];
 
     console.log(pstFolder + filename);
     let pstFile = new PSTFile(pstFolder + filename);
-    console.log(pstFile.getMessageStore().displayName);
 
     // extract the emails and put into list
     processFolder(emailList, pstFile.getRootFolder());
@@ -102,43 +83,11 @@ function processPST(filename: string) {
     // walk list and save to MongoDB
     saveEmails(emailList, promiseList);
 
+    const end = Date.now();
+    console.log('\n' + emailList.length + ' emails processed in ' + (end - start) + ' ms');
+
     return Promise.all(promiseList);
 }
-
-Log.debug1('exiting')
-
-        // const start = Date.now();
-        // const end = Date.now();
-        // console.log('\n' + emailList.length + ' emails processed in ' + (end - start) + ' ms');
-
-
-// // walk through PSTs in folder
-// let directoryListing = fs.readdirSync(pstFolder);
-// directoryListing.forEach(filename => {
-
-//     let emailList: PSTMessage[] = [];
-//     let promiseList: Promise<mongoose.Document>[] = [];
-
-//     const start = Date.now();
-//     console.log(pstFolder + filename);
-//     let pstFile = new PSTFile(pstFolder + filename);
-//     console.log(pstFile.getMessageStore().displayName);
-
-//     // extract the emails and put into list
-//     processFolder(emailList, pstFile.getRootFolder());
-
-//     // walk list and save to MongoDB
-//     saveEmails(emailList, promiseList);
-
-//     // wait for all promises to finish
-//     Promise.all(promiseList).then(function(values) {
-//         Log.debug1('all promises resolved');
-
-//         const end = Date.now();
-//         console.log('\n' + emailList.length + ' emails processed in ' + (end - start) + ' ms');
-//     })
-// });
-
 
 /**
  * Walk the folder tree recursively and process emails, storing in email list.
@@ -194,14 +143,14 @@ function saveEmails(emailList: PSTMessage[], promiseList: Promise<mongoose.Docum
     emailList.forEach(email => {
         // store in MongoDB
         let mongoEmail = new Email(<any>{
-            // creationTime: email.creationTime,
-            // displayTo: email.displayTo,
-            // displayCC: email.displayCC,
-            // displayBCC: email.displayBCC,
-            // senderEmailAddress: email.senderEmailAddress,
-            // senderName: email.senderName,
+            creationTime: email.creationTime,
+            displayTo: email.displayTo,
+            displayCC: email.displayCC,
+            displayBCC: email.displayBCC,
+            senderEmailAddress: email.senderEmailAddress,
+            senderName: email.senderName,
             subject: email.subject,
-            // body: email.body,
+            body: email.body,
         });
         try {
             Log.debug1('saveEmails: ' + email.subject)

@@ -62,7 +62,7 @@
     "fs-ext": "^1.0.0",
     "long": "^4.0.0",
     "math-float64-from-bits": "^1.0.0",
-    "mongoose": "^5.0.10",
+    "mongoose": "^5.0.11",
     "pst-extractor": "^1.1.0",
     "uuid-parse": "^1.0.0",
     "winston": "^2.4.1",

@@ -19,10 +19,10 @@ export class Log {
     static logger = new winston.Logger({
         levels: Log.logLevels,
         colors: Log.logColors,
-        level: 'debug1',
         transports: [
             new winston.transports.Console({ 
                 timestamp: true,
+                level: 'error',
                 colorize: true 
             }),
             new winston.transports.File({

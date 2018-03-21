@@ -35,8 +35,4 @@ export class Email {
   public create() {
     return EmailModel.create(this._email);
   }
-
-  public search() {
-    return EmailModel.find();
-  }
 }

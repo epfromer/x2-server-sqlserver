@@ -10,8 +10,8 @@ import { PSTRecipient } from 'pst-extractor';
 import { Email, EmailModel, EmailInterface } from './Email';
 const config = require('config');
 
-const pstFolder = '/media/sf_Outlook/test/';
-const verbose = false;
+const pstFolder = config.pstFolder;
+const verbose = config.verbose;
 let col = 0;
 let promiseList: Promise<mongoose.Document>[] = [];
 let emailList: PSTMessage[] = [];

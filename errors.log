@@ -1,3 +1,7 @@
 {"level":"error","message":"all promises resolved","timestamp":"2018-03-20T17:00:22.200Z"}
 {"level":"error","message":"using database mongodb://localhost/x2fetest","timestamp":"2018-03-24T17:06:01.907Z"}
 {"level":"error","message":"using database mongodb://localhost/x2fetest","timestamp":"2018-03-24T17:06:08.341Z"}
+{"level":"error","message":"using database undefined","timestamp":"2018-03-24T20:20:56.286Z"}
+{"level":"error","message":"using database undefined","timestamp":"2018-03-24T20:24:37.628Z"}
+{"level":"error","message":"using database undefined","timestamp":"2018-03-24T20:27:32.012Z"}
+{"level":"error","message":"using database undefined","timestamp":"2018-03-24T20:27:42.685Z"}

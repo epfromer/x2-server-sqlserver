@@ -1,4 +1,4 @@
-let mongoose = require('mongoose');
+import * as mongoose from 'mongoose';
 
 export interface EmailInterface {
   creationTime: Date;
@@ -24,7 +24,7 @@ const EmailSchema = new mongoose.Schema({
 });
 
 // create a model based on the schema
-export const EmailModel = mongoose.model('email', EmailSchema);
+export const EmailModel = mongoose.model('Email', EmailSchema);
 
 export class Email {
   private _email: EmailInterface;
@@ -34,5 +34,9 @@ export class Email {
 
   public create() {
     return EmailModel.create(this._email);
+  }
+
+  public static count() {
+    return EmailModel.count({}).exec();
   }
 }

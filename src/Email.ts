@@ -28,7 +28,7 @@ export const EmailModel = mongoose.model('email', EmailSchema);
 
 export class Email {
   private _email: EmailInterface;
-  constructor (email: EmailInterface) {
+  constructor(email: EmailInterface) {
     this._email = email;
   }
 

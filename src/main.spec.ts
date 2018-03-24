@@ -25,34 +25,25 @@ after(() => {
 /**
  * Async function which waits till Mongo promises complete and then
  * performs additional tests.
- * @param {string} pstFile 
+ * @param {string} pstFile
  */
 async function process(pstFile: string) {
   await main.processPST(config.pstFile);
 
   // confirm # of items
   Email.count().then(function(count) {
-    expect(count).to.equal(71);
+    count.should.equal(71);
 
     // get one of the emails, and confirm fields
-    
+    Email.query({ senderName: 'Clickathome,' }).then(function(data) {
+      data.should.be.a('array');
+      data[0].should.have.property('senderEmailAddress').eql('Clickathome@ENRON.com');
+    });
   });
 }
 
 describe('main tests', () => {
   it('should process the file', () => {
-    console.log('using database ' + config.DBHost);
-
-    // process the test file
     process(config.pstFile);
-
-    // find one, and confirm
-
-    // expect(pstFile.encryptionType).to.equal(1);
-    // expect(pstFile.pstFileType).to.equal(23);
-    // expect(pstFile.pstFilename).to.contain('michelle_lokay_000_1_1_1_1.pst');
-    // expect(pstFile.getMessageStore().displayName).to.equal('Personal folders');
-    // expect(pstFile.getRootFolder()).to.not.be.null;
-    // Log.debug1(JSON.stringify(pstFile, null, 2));
   });
 });

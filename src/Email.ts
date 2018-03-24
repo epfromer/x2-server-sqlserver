@@ -39,4 +39,8 @@ export class Email {
   public static count() {
     return EmailModel.count({}).exec();
   }
+
+  public static query(queryString: {}) {
+    return EmailModel.find(queryString).exec();
+  }
 }

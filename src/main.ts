@@ -1,35 +1,3 @@
-/**
- * Copyright 2010-2018 Richard Johnson, Orin Eman & Ed Pfromer
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- * ---
- *
- * This file is part of pst-extractor.
- *
- * pst-extractor is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * pst-extractor is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with pst-extractor. If not, see <http://www.gnu.org/licenses/>.
- */
 import * as fs from 'fs';
 import * as fsext from 'fs-ext';
 import * as mongoose from 'mongoose';
@@ -40,6 +8,7 @@ import { PSTFolder } from 'pst-extractor';
 import { PSTAttachment } from 'pst-extractor';
 import { PSTRecipient } from 'pst-extractor';
 import { Email, EmailModel, EmailInterface } from './Email';
+const config = require('config');
 
 const pstFolder = '/media/sf_Outlook/test/';
 const verbose = false;
@@ -48,8 +17,10 @@ let promiseList: Promise<mongoose.Document>[] = [];
 let emailList: PSTMessage[] = [];
 
 // connect to MongoDB
-// mongoose.set('debug', true);
-mongoose.connect('mongodb://localhost/x2');
+if (config.util.getEnv('NODE_ENV') !== 'prod') {
+  mongoose.set('debug', true);
+}
+mongoose.connect(config.DBHost);
 
 /**
  * Main async app that walks list of PSTs and processes them.
@@ -57,10 +28,12 @@ mongoose.connect('mongodb://localhost/x2');
 async function run() {
   let folderListing = fs.readdirSync(pstFolder);
   for (let folder of folderListing) {
-    await processPST(folder);
+    await processPST(pstFolder + folder);
   }
 }
-run().catch(error => Log.error(error));
+if (config.util.getEnv('NODE_ENV') !== 'test') {
+  run().catch(error => Log.error(error));
+}
 
 /**
  * Processes a PST, storing emails in list and walking list to add to MongoDB.
@@ -68,14 +41,14 @@ run().catch(error => Log.error(error));
  * @param {string} filename
  * @returns
  */
-function processPST(filename: string) {
+export function processPST(filename: string) {
   const start = Date.now();
 
   promiseList = [];
   emailList = [];
 
-  console.log(pstFolder + filename);
-  let pstFile = new PSTFile(pstFolder + filename);
+  console.log(filename);
+  let pstFile = new PSTFile(filename);
 
   // extract the emails and put into list
   processFolder(emailList, pstFile.getRootFolder());

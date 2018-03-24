@@ -1,4 +1,4 @@
-import * as mongoose from 'mongoose';
+let mongoose = require('mongoose');
 
 export interface EmailInterface {
   creationTime: Date;

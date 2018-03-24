@@ -22,7 +22,7 @@ export class Log {
     transports: [
       new winston.transports.Console({
         timestamp: true,
-        level: 'error',
+        level: 'debug',
         colorize: true
       }),
       new winston.transports.File({

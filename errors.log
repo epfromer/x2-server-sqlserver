@@ -1,1 +1,3 @@
 {"level":"error","message":"all promises resolved","timestamp":"2018-03-20T17:00:22.200Z"}
+{"level":"error","message":"using database mongodb://localhost/x2fetest","timestamp":"2018-03-24T17:06:01.907Z"}
+{"level":"error","message":"using database mongodb://localhost/x2fetest","timestamp":"2018-03-24T17:06:08.341Z"}

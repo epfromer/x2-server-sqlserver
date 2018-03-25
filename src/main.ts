@@ -28,7 +28,7 @@ mongoose.connect(config.DBHost);
 async function run() {
   let folderListing = fs.readdirSync(pstFolder);
   for (let folder of folderListing) {
-    await processPST(pstFolder + folder);
+    await processPST(pstFolder + folder); 
   }
 }
 if (config.util.getEnv('NODE_ENV') !== 'test') {

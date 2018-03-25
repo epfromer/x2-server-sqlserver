@@ -10,11 +10,14 @@ const main = require('./main');
 
 before(() => {
   // drop collection if it exists
-  mongoose.connection.db.dropCollection('emails', function(err: any, result: any) {
-    if (err) {
-      console.log(err);
-    }
-  });
+  try {
+    mongoose.connection.db.dropCollection('emails', function(err: any, result: any) {
+        if (err) {
+          console.log(err);
+        }
+      });
+  } catch (err) {
+  }
 });
 
 after(() => {

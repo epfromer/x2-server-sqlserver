@@ -114,6 +114,7 @@ function saveEmails(emailList: PSTMessage[], promiseList: Promise<mongoose.Docum
     // store in MongoDB
     let mongoEmail = new Email(<any>{
       creationTime: email.creationTime,
+      clientSubmitTime: email.clientSubmitTime,
       displayTo: email.displayTo,
       displayCC: email.displayCC,
       displayBCC: email.displayBCC,

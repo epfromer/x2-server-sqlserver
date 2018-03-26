@@ -2,6 +2,7 @@ import * as mongoose from 'mongoose';
 
 export interface EmailInterface {
   creationTime: Date;
+  clientSubmitTime: Date;
   displayTo: String;
   displayCC: String;
   displayBCC: String;
@@ -14,6 +15,7 @@ export interface EmailInterface {
 // create a schema
 const EmailSchema = new mongoose.Schema({
   creationTime: Date,
+  clientSubmitTime: Date,
   displayTo: String,
   displayCC: String,
   displayBCC: String,

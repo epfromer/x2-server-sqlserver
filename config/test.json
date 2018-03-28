@@ -1,5 +1,6 @@
 {
     "DBHost": "mongodb://localhost/x2fetest",
     "pstFile": "./src/testdata/michelle_lokay_000_1_1_1_1.pst",
+    "LogLevel": "debug1",
     "verbose": true
 }

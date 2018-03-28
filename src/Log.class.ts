@@ -1,4 +1,5 @@
 const winston = require('winston');
+const config = require('config');
 // const loggly = require('winston-loggly-bulk');
 
 export class Log {
@@ -22,7 +23,7 @@ export class Log {
     transports: [
       new winston.transports.Console({
         timestamp: true,
-        level: 'debug',
+        level: config.LogLevel,
         colorize: true
       }),
       new winston.transports.File({

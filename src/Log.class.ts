@@ -27,8 +27,8 @@ export class Log {
         colorize: true
       }),
       new winston.transports.File({
-        filename: 'errors.log',
-        level: 'error'
+        filename: 'debug.log',
+        level: 'debug1'
       })
       // new winston.transports.Loggly({
       //     subdomain: 'epfromer',

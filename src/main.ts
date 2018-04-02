@@ -18,66 +18,71 @@ let emailList: PSTMessage[] = [];
 
 // connect to MongoDB
 if (config.util.getEnv('NODE_ENV') !== 'prod') {
-  mongoose.set('debug', true);
+    mongoose.set('debug', true);
 }
 mongoose.connect(config.DBHost);
 
 try {
-  if (config.util.getEnv('NODE_ENV') !== 'test') {
-    run().catch(error => Log.error(error));
-  }
+    if (config.util.getEnv('NODE_ENV') !== 'test') {
+        run().catch(error => Log.error(error));
+    }
 } catch (error) {
-  Log.error(error);  
+    Log.error(error);
 }
 
 /**
  * Main async app that walks list of PSTs and processes them.
  */
 async function run() {
-  if (config['dropDatabase']) {
-    dropDatabase();
-  }
+    if (config['dropDatabase']) {
+        dropDatabase();
+    }
 
-  let folderListing = fs.readdirSync(pstFolder);
-  for (let folder of folderListing) {
-    await processPST(pstFolder + folder);
-  }
+    let folderListing = fs.readdirSync(pstFolder);
+    for (let folder of folderListing) {
+        const start = Date.now();
 
-  if (config['createIndexes']) {
-    createIndexes();
-  }
+        await processPST(pstFolder + folder);
+
+        const end = Date.now();
+        console.log('\nprocessed in ' + (end - start) + ' ms');
+    }
+
+    if (config['createIndexes']) {
+        createIndexes();
+    }
 }
 
 /**
  * Remove existing emails first.
  */
 function dropDatabase() {
-  console.log('drop database first');
-  mongoClient.connect(config.DBHost, function(err: any, db: any) {
-    if (err) throw err;
-    const dbo = db.db("x2");
-    dbo.dropDatabase(function(err: any, obj: any) {
-      if (err) throw err;
-      db.close();
-      console.log('database dropped');
-    })
-  });
+    console.log('drop database first');
+    mongoClient.connect(config.DBHost, function(err: any, db: any) {
+        if (err) throw err;
+        const dbo = db.db('x2');
+        dbo.dropDatabase(function(err: any, obj: any) {
+            if (err) throw err;
+            db.close();
+            console.log('database dropped');
+        });
+    });
 }
 
 /**
  * Create indexes.
  */
 function createIndexes() {
-  console.log('create indexes');
-  mongoClient.connect(config.DBHost, function(err: any, db: any) {
-    if (err) throw err;
-    const dbo = db.db("x2");
-    dbo.collection('emails').createIndex({ '$**': 'text' }, function(err: any, obj: any) {
-      if (err) throw err;
-      db.close();
-      console.log('index creation started');
-    })
-  });
+    console.log('create indexes');
+    mongoClient.connect(config.DBHost, function(err: any, db: any) {
+        if (err) throw err;
+        const dbo = db.db('x2');
+        dbo.collection('emails').createIndex({ '$**': 'text' }, function(err: any, obj: any) {
+            if (err) throw err;
+            db.close();
+            console.log('index creation started');
+        });
+    });
 }
 
 /**
@@ -87,24 +92,24 @@ function createIndexes() {
  * @returns
  */
 export function processPST(filename: string) {
-  const start = Date.now();
+    const start = Date.now();
 
-  promiseList = [];
-  emailList = [];
+    promiseList = [];
+    emailList = [];
 
-  console.log(filename);
-  let pstFile = new PSTFile(filename);
+    console.log(filename);
+    let pstFile = new PSTFile(filename);
 
-  // extract the emails and put into list
-  processFolder(emailList, pstFile.getRootFolder());
+    // extract the emails and put into list
+    processFolder(emailList, pstFile.getRootFolder());
 
-  // walk list and save to MongoDB
-  saveEmails(emailList, promiseList);
+    // walk list and save to MongoDB
+    saveEmails(emailList, promiseList);
 
-  const end = Date.now();
-  console.log('\n' + emailList.length + ' emails processed in ' + (end - start) + ' ms');
+    const end = Date.now();
+    console.log('\n' + emailList.length + ' emails processed in ' + (end - start) + ' ms');
 
-  return Promise.all(promiseList);
+    return Promise.all(promiseList);
 }
 
 /**
@@ -112,41 +117,41 @@ export function processPST(filename: string) {
  * @param {PSTFolder} folder
  */
 async function processFolder(emailList: PSTMessage[], folder: PSTFolder) {
-  // go through the folders...
-  if (folder.hasSubfolders) {
-    let childFolders: PSTFolder[] = folder.getSubFolders();
-    for (let childFolder of childFolders) {
-      processFolder(emailList, childFolder);
-    }
-  }
-
-  // and now the emails for this folder
-  if (folder.contentCount > 0) {
-    // get first in folder
-    let email: PSTMessage = folder.getNextChild();
-    while (email != null) {
-      // if an email
-      if (email.messageClass === 'IPM.Note') {
-        let sender = email.senderName;
-        if (sender !== email.senderEmailAddress) {
-          sender += ' (' + email.senderEmailAddress + ')';
+    // go through the folders...
+    if (folder.hasSubfolders) {
+        let childFolders: PSTFolder[] = folder.getSubFolders();
+        for (let childFolder of childFolders) {
+            processFolder(emailList, childFolder);
         }
-
-        let recipients = email.displayTo;
-
-        if (verbose) {
-          console.log(email.clientSubmitTime + ' From: ' + sender + ', To: ' + recipients + ', Subject: ' + email.subject);
-        } else {
-          printDot();
-        }
-
-        emailList.push(email);
-      }
-
-      // onto next
-      email = folder.getNextChild();
     }
-  }
+
+    // and now the emails for this folder
+    if (folder.contentCount > 0) {
+        // get first in folder
+        let email: PSTMessage = folder.getNextChild();
+        while (email != null) {
+            // if an email
+            if (email.messageClass === 'IPM.Note') {
+                let sender = email.senderName;
+                if (sender !== email.senderEmailAddress) {
+                    sender += ' (' + email.senderEmailAddress + ')';
+                }
+
+                let recipients = email.displayTo;
+
+                if (verbose) {
+                    console.log(email.clientSubmitTime + ' From: ' + sender + ', To: ' + recipients + ', Subject: ' + email.subject);
+                } else {
+                    printDot();
+                }
+
+                emailList.push(email);
+            }
+
+            // onto next
+            email = folder.getNextChild();
+        }
+    }
 }
 
 /**
@@ -155,35 +160,35 @@ async function processFolder(emailList: PSTMessage[], folder: PSTFolder) {
  * @param {Promise<mongoose.Document>[]} promiseList
  */
 function saveEmails(emailList: PSTMessage[], promiseList: Promise<mongoose.Document>[]) {
-  emailList.forEach(email => {
-    // store in MongoDB
-    let mongoEmail = new Email(<any>{
-      creationTime: email.creationTime,
-      clientSubmitTime: email.clientSubmitTime,
-      displayTo: email.displayTo,
-      displayCC: email.displayCC,
-      displayBCC: email.displayBCC,
-      senderEmailAddress: email.senderEmailAddress,
-      senderName: email.senderName,
-      subject: email.subject,
-      body: email.body
+    emailList.forEach(email => {
+        // store in MongoDB
+        let mongoEmail = new Email(<any>{
+            creationTime: email.creationTime,
+            clientSubmitTime: email.clientSubmitTime,
+            displayTo: email.displayTo,
+            displayCC: email.displayCC,
+            displayBCC: email.displayBCC,
+            senderEmailAddress: email.senderEmailAddress,
+            senderName: email.senderName,
+            subject: email.subject,
+            body: email.body
+        });
+        try {
+            Log.debug1('saveEmails: ' + email.subject);
+            promiseList.push(mongoEmail.create());
+        } catch (err) {
+            console.log(err);
+        }
     });
-    try {
-      Log.debug1('saveEmails: ' + email.subject);
-      promiseList.push(mongoEmail.create());
-    } catch (err) {
-      console.log(err);
-    }
-  });
 }
 
 /**
  * Print a dot representing a message.
  */
 function printDot() {
-  process.stdout.write('.');
-  if (col++ > 80) {
-    console.log('');
-    col = 0;
-  }
+    process.stdout.write('.');
+    if (col++ > 80) {
+        console.log('');
+        col = 0;
+    }
 }

@@ -7,9 +7,9 @@ import { PSTFile } from 'pst-extractor';
 import { PSTFolder } from 'pst-extractor';
 import { PSTAttachment } from 'pst-extractor';
 import { PSTRecipient } from 'pst-extractor';
-import { Email, EmailModel, EmailInterface } from './Email';
+import { Email, EmailModel, EmailInterface, EmailSchema } from './Email';
 const config = require('config');
-
+const mongoClient = require('mongodb').MongoClient;
 const pstFolder = config.pstFolder;
 const verbose = config.verbose;
 let col = 0;
@@ -22,17 +22,58 @@ if (config.util.getEnv('NODE_ENV') !== 'prod') {
 }
 mongoose.connect(config.DBHost);
 
+if (config.util.getEnv('NODE_ENV') !== 'test') {
+  run().catch(error => Log.error(error));
+}
+
 /**
  * Main async app that walks list of PSTs and processes them.
  */
 async function run() {
+  if (config['dropDatabase']) {
+    dropDatabase();
+  }
+
   let folderListing = fs.readdirSync(pstFolder);
   for (let folder of folderListing) {
-    await processPST(pstFolder + folder); 
+    await processPST(pstFolder + folder);
+  }
+
+  if (config['createIndexes']) {
+    createIndexes();
   }
 }
-if (config.util.getEnv('NODE_ENV') !== 'test') {
-  run().catch(error => Log.error(error));
+
+/**
+ * Remove existing emails first.
+ */
+function dropDatabase() {
+  console.log('drop database first');
+  mongoClient.connect(config.DBHost, function(err: any, db: any) {
+    if (err) throw err;
+    const dbo = db.db("x2");
+    dbo.dropDatabase(function(err: any, obj: any) {
+      if (err) throw err;
+      db.close();
+      console.log('database dropped');
+    })
+  });
+}
+
+/**
+ * Create indexes.
+ */
+function createIndexes() {
+  console.log('create indexes');
+  mongoClient.connect(config.DBHost, function(err: any, db: any) {
+    if (err) throw err;
+    const dbo = db.db("x2");
+    dbo.collection('emails').createIndex({ '$**': 'text' }, function(err: any, obj: any) {
+      if (err) throw err;
+      db.close();
+      console.log('index creation started');
+    })
+  });
 }
 
 /**

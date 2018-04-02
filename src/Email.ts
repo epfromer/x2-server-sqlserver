@@ -13,7 +13,7 @@ export interface EmailInterface {
 }
 
 // create a schema
-const EmailSchema = new mongoose.Schema({
+export const EmailSchema = new mongoose.Schema({
   creationTime: Date,
   clientSubmitTime: Date,
   displayTo: String,

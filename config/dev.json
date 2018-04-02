@@ -1,6 +1,9 @@
 {
-    "DBHost": "mongodb://localhost/x2",
+    // "DBHost": "mongodb://localhost/x2",
+    "DBHost": "mongodb://test:test123@ds231719.mlab.com:31719/x2",
+    "dropDatabase": true,
+    "createIndexes": true,
     "pstFolder": "/media/sf_Outlook/test/",
-    "LogLevel": "error",
+    "LogLevel": "debug1",
     "verbose": false
 }

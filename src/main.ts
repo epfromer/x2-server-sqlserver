@@ -22,8 +22,12 @@ if (config.util.getEnv('NODE_ENV') !== 'prod') {
 }
 mongoose.connect(config.DBHost);
 
-if (config.util.getEnv('NODE_ENV') !== 'test') {
-  run().catch(error => Log.error(error));
+try {
+  if (config.util.getEnv('NODE_ENV') !== 'test') {
+    run().catch(error => Log.error(error));
+  }
+} catch (error) {
+  Log.error(error);  
 }
 
 /**

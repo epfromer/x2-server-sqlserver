@@ -48,7 +48,7 @@
     "@types/long": "^3.0.32",
     "@types/mocha": "^2.2.48",
     "@types/mongoose": "^5.0.7",
-    "@types/node": "^9.6.0",
+    "@types/node": "^9.6.1",
     "@types/typescript": "^2.0.0",
     "@types/winston": "^2.3.8",
     "chai": "^4.1.2",
@@ -61,15 +61,15 @@
     "source-map-support": "^0.5.4",
     "supports-color": "^5.3.0",
     "ts-node": "^5.0.1",
-    "typescript": "^2.7.2"
+    "typescript": "^2.8.1"
   },
   "dependencies": {
     "config": "^1.30.0",
     "fs-ext": "^1.0.0",
     "long": "^4.0.0",
     "math-float64-from-bits": "^1.0.0",
-    "mongoose": "^5.0.11",
-    "nodemon": "^1.17.2",
+    "mongoose": "^5.0.12",
+    "nodemon": "^1.17.3",
     "pst-extractor": "^1.1.0",
     "rimraf": "^2.6.2",
     "uuid-parse": "^1.0.0",

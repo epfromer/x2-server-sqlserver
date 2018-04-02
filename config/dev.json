@@ -1,6 +1,6 @@
 {
     "DBHost": "mongodb://localhost/x2",
     "pstFolder": "/media/sf_Outlook/test/",
-    "LogLevel": "debug1",
+    "LogLevel": "error",
     "verbose": false
 }

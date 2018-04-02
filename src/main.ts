@@ -13,6 +13,7 @@ const mongoClient = require('mongodb').MongoClient;
 const pstFolder = config.pstFolder;
 const verbose = config.verbose;
 let col = 0;
+let numEmails = 0;
 let promiseList: Promise<mongoose.Document>[] = [];
 let emailList: PSTMessage[] = [];
 
@@ -45,7 +46,7 @@ async function run() {
         await processPST(pstFolder + folder);
 
         const end = Date.now();
-        console.log('\nprocessed in ' + (end - start) + ' ms');
+        Log.debug1(pstFolder + folder + ', ' + numEmails + ' emails processed in ' + (end - start) + ' ms');
     }
 
     if (config['createIndexes']) {
@@ -92,7 +93,6 @@ function createIndexes() {
  * @returns
  */
 export function processPST(filename: string) {
-    const start = Date.now();
 
     promiseList = [];
     emailList = [];
@@ -106,8 +106,7 @@ export function processPST(filename: string) {
     // walk list and save to MongoDB
     saveEmails(emailList, promiseList);
 
-    const end = Date.now();
-    console.log('\n' + emailList.length + ' emails processed in ' + (end - start) + ' ms');
+    numEmails = emailList.length;
 
     return Promise.all(promiseList);
 }
@@ -174,7 +173,7 @@ function saveEmails(emailList: PSTMessage[], promiseList: Promise<mongoose.Docum
             body: email.body
         });
         try {
-            Log.debug1('saveEmails: ' + email.subject);
+            Log.debug2('saveEmails: ' + email.subject);
             promiseList.push(mongoEmail.create());
         } catch (err) {
             console.log(err);

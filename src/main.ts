@@ -69,7 +69,7 @@ function msString(numDocs: number, msStart: number, msEnd: number) {
     const sec = ms / 1000;
     const min = sec / 60;
     let s = ` ${numDocs} docs`;
-    s += `, ${ms} ms (${sec} sec)`;
+    s += `, ${ms} ms (~ ${Math.trunc(sec)} sec)`;
     if (min > 1) {
         s += ` (~ ${Math.trunc(min)} min)`;
     }

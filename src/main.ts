@@ -39,15 +39,19 @@ let logUpdateIdx = 0;
             console.log(`processing ${file}\n`);
             const processStart = Date.now();
             const docList = processPST(pstFolder + file);
-            Log.debug1(file + ': processing complete, ' + msString(docList.length, processStart, Date.now()));
+            if (docList.length > 0) {
+                Log.debug1(file + ': processing complete, ' + msString(docList.length, processStart, Date.now()));
 
-            // insert into db
-            const dbInsertStart = Date.now();
-            console.log(`inserting ${docList.length} documents into MongoDB`);
-            const res = await db.collection(config.dbCollection).insertMany(docList);
-            Log.debug1(file + ': insertion complete, ' + msString(docList.length, dbInsertStart, Date.now()));
-            assert.equal(docList.length, res.insertedCount);
-            numEmails += docList.length;
+                // insert into db
+                const dbInsertStart = Date.now();
+                console.log(`inserting ${docList.length} documents into MongoDB`);
+                const res = await db.collection(config.dbCollection).insertMany(docList);
+                Log.debug1(file + ': insertion complete, ' + msString(docList.length, dbInsertStart, Date.now()));
+                assert.equal(docList.length, res.insertedCount);
+                numEmails += docList.length;
+            } else {
+                Log.debug1(file + ': processing complete, no emails');
+            }
         }
 
         // create indexes if requested

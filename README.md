@@ -1,19 +1,6 @@
 # pst-mongo
 
-![npm](https://img.shields.io/npm/v/pst-mongo.svg) ![license](https://img.shields.io/npm/l/pst-mongo.svg) ![github-issues](https://img.shields.io/github/issues/epfromer/pst-extractor.svg)  ![Circle CI build status](https://circleci.com/gh/epfromer/pst-extractor.svg?style=svg)
-
 Extract objects from MS Outlook/Exchange PST files and stores in MongoDB
-
-![nodei.co](https://nodei.co/npm/pst-mongo.png?downloads=true&downloadRank=true&stars=true)
-
-![travis-status](https://img.shields.io/travis/epfromer/pst-extractor.svg)
-![stars](https://img.shields.io/github/stars/epfromer/pst-extractor.svg)
-![forks](https://img.shields.io/github/forks/epfromer/pst-extractor.svg)
-
-![forks](https://img.shields.io/github/forks/epfromer/pst-extractor.svg)
-
-![](https://david-dm.org/epfromer/pst-extractor/status.svg)
-![](https://david-dm.org/epfromer/pst-extractor/dev-status.svg)
 
 ## Features
 

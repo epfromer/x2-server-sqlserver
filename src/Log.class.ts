@@ -25,11 +25,11 @@ export class Log {
         timestamp: true,
         level: config.LogLevel,
         colorize: true
+      }),
+      new winston.transports.File({
+        filename: 'debug.log',
+        level: 'debug1'
       })
-      // new winston.transports.File({
-      //   filename: 'debug.log',
-      //   level: 'debug1'
-      // })
       // new winston.transports.Loggly({
       //     subdomain: 'epfromer',
       //     token: "5b6ea74c-ba58-4af5-95bc-7a4d2d6207be",

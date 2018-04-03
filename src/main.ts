@@ -1,134 +1,92 @@
 import * as fs from 'fs';
-import * as fsext from 'fs-ext';
-import * as mongoose from 'mongoose';
 import { Log } from './Log.class';
 import { PSTMessage } from 'pst-extractor';
 import { PSTFile } from 'pst-extractor';
 import { PSTFolder } from 'pst-extractor';
-import { PSTAttachment } from 'pst-extractor';
-import { PSTRecipient } from 'pst-extractor';
-import { Email, EmailModel, EmailInterface, EmailSchema } from './Email';
 
+const assert = require('assert');
 const config = require('config');
-const mongoClient = require('mongodb').MongoClient;
-const pstFolder = config.pstFolder;
-const verbose = config.verbose;
-let col = 0;
-let numEmailsThisFile = 0;
-let numEmails = 0;
-let promiseList: Promise<mongoose.Document>[] = [];
-let emailList: PSTMessage[] = [];
-let dbo: any = null;
 const logUpdate = require('log-update');
+const MongoClient = require('mongodb').MongoClient;
+const pstFolder = config.pstFolder;
+let numEmails = 0;
 const logUpdateFrames = ['-', '\\', '|', '/'];
 let logUpdateIdx = 0;
 
-// connect to MongoDB
-if (config.util.getEnv('NODE_ENV') !== 'prod') {
-    mongoose.set('debug', true);
-}
-
-    // mongoClient.connect(config.DBHost, function(err: any, db: any) {
-    //     if (err) throw err;
-    //     dbo = db.db('x2');
-        if (config.util.getEnv('NODE_ENV') !== 'test') {
-            run().catch(error => Log.error(error));
-        }
-        // db.close();
-    // });
-
 /**
  * Main async app that walks list of PSTs and processes them.
- */ 
-async function run() {
-    // if (config['dropDatabase']) {
-    //     await dropDatabase();
-    // }
+ */
+(async function() {
+    try {
+        // connect to db
+        const client = await MongoClient.connect(config.dbHost);
+        console.log(`connected to ${config.dbHost}`);
+        const db = client.db(config.dbName);
+        Log.debug1(`connected to ${config.dbHost}/${config.dbName}`);
 
-    let folderListing = fs.readdirSync(pstFolder);
-    for (let folder of folderListing) {
-        const start = Date.now();
+        // drop database if requested
+        if (config['dropDatabase']) {
+            console.log(`dropping database ${config.dbName}`);
+            await db.dropDatabase();
+        }
 
-        await processPST(pstFolder + folder);
+        // walk folder
+        console.log(`walking folder ${pstFolder}`);
+        let folderListing = fs.readdirSync(pstFolder);
+        for (let file of folderListing) {
 
-        const end = Date.now();
-        console.log(pstFolder + folder + ', ' + numEmailsThisFile + ' emails processed in ' + (end - start) + ' ms');
+            // process a file
+            const start = Date.now();
+            console.log(`starting ${file}\n`);
+            const docList = processPST(pstFolder + file);
+            const res = await db.collection(config.dbCollection).insertMany(docList);
+            assert.equal(docList.length, res.insertedCount);
+            numEmails += docList.length;
+            const end = Date.now();
+            const s = file + ', ' + docList.length + ' emails processed in ' + (end - start) + ' ms';
+            Log.debug1(s);
+            console.log(s);
+        }
+
+        // create indexes if requested
+        if (config['createIndexes']) {
+            console.log(`creating indexes`);
+            await db.collection(config.dbCollection).createIndex({ '$**': 'text' });
+        }
+
+        console.log(`${numEmails} emails processed`);
+        client.close();
+    } catch (err) {
+        console.log(err.stack);
     }
+})();
 
-    // if (config['createIndexes']) {
-    //     createIndexes();
-    // }
-    console.log('\n${numEmails} total emails processed');
-
-}
+//     if (config.util.getEnv('NODE_ENV') !== 'test') {
 
 /**
- * Remove existing emails first.
- */
-// function dropDatabase() {
-//     console.log('drop database');
-//     return new Promise((resolve, reject) => {
-//         dbo.dropDatabase((err: any, obj: any) => {
-//             if (err) {
-//                 reject(err);
-//             } else {
-//                 resolve(obj);
-//             }
-//         });
-//     });
-// }
-
-/**
- * Create indexes.
- */
-// function createIndexes() {
-//     console.log('create indexes');
-//     return new Promise((resolve, reject) => {
-//         dbo.collection('emails').createIndex({ '$**': 'text' }, (err: any, obj: any) => {
-//             if (err) {
-//                 reject(err);
-//             } else {
-//                 resolve(obj);
-//             }
-//         });
-//     });
-// }
-
-/**
- * Processes a PST, storing emails in list and walking list to add to MongoDB.
- * Create promises are stored in list, and Promise.all waits for them to complete.
+ * Processes a PST, storing emails in list.
  * @param {string} filename
  * @returns
  */
-export function processPST(filename: string) {
-    promiseList = [];
-    emailList = [];
-
-    console.log(filename);
+function processPST(filename: string) {
+    let docList: {}[] = [];
     let pstFile = new PSTFile(filename);
 
-    // extract the emails and put into list
-    processFolder(emailList, pstFile.getRootFolder());
+    processFolder(docList, pstFile.getRootFolder());
 
-    // walk list and save to MongoDB
-    saveEmails(emailList, promiseList);
-
-    numEmailsThisFile = emailList.length;
-    numEmails += numEmailsThisFile;
-
-    return Promise.all(promiseList);
+    return docList;
 }
 
 /**
  * Walk the folder tree recursively and process emails, storing in email list.
  * @param {PSTFolder} folder
  */
-async function processFolder(emailList: PSTMessage[], folder: PSTFolder) {
+function processFolder(docList: {}[], folder: PSTFolder) {
     // go through the folders...
     if (folder.hasSubfolders) {
         let childFolders: PSTFolder[] = folder.getSubFolders();
         for (let childFolder of childFolders) {
-            processFolder(emailList, childFolder);
+            processFolder(docList, childFolder);
         }
     }
 
@@ -146,45 +104,27 @@ async function processFolder(emailList: PSTMessage[], folder: PSTFolder) {
 
                 let recipients = email.displayTo;
 
-                if (verbose) {
+                if (config.verbose) {
                     console.log(email.clientSubmitTime + ' From: ' + sender + ', To: ' + recipients + ', Subject: ' + email.subject);
                 } else {
-                    logUpdate(logUpdateFrames[logUpdateIdx = ++logUpdateIdx % logUpdateFrames.length]);
+                    logUpdate(logUpdateFrames[(logUpdateIdx = ++logUpdateIdx % logUpdateFrames.length)]);
                 }
 
-                emailList.push(email);
+                docList.push({
+                    creationTime: email.creationTime,
+                    clientSubmitTime: email.clientSubmitTime,
+                    displayTo: email.displayTo,
+                    displayCC: email.displayCC,
+                    displayBCC: email.displayBCC,
+                    senderEmailAddress: email.senderEmailAddress,
+                    senderName: email.senderName,
+                    subject: email.subject,
+                    body: email.body
+                });
             }
 
             // onto next
             email = folder.getNextChild();
         }
     }
-}
-
-/**
- * Walk email list storing in Mongo and save promise in list.
- * @param {PSTMessage[]} emailList
- * @param {Promise<mongoose.Document>[]} promiseList
- */
-function saveEmails(emailList: PSTMessage[], promiseList: Promise<mongoose.Document>[]) {
-    emailList.forEach(email => {
-        // store in MongoDB
-        let mongoEmail = new Email(<any>{
-            creationTime: email.creationTime,
-            clientSubmitTime: email.clientSubmitTime,
-            displayTo: email.displayTo,
-            displayCC: email.displayCC,
-            displayBCC: email.displayBCC,
-            senderEmailAddress: email.senderEmailAddress,
-            senderName: email.senderName,
-            subject: email.subject,
-            body: email.body
-        });
-        try {
-            Log.debug2('saveEmails: ' + email.subject);
-            promiseList.push(mongoEmail.create());
-        } catch (err) {
-            console.log(err);
-        }
-    });
 }

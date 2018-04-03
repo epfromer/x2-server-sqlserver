@@ -1,7 +1,9 @@
 {
-    "DBHost": "mongodb://localhost/x2",
-    // "DBHost": "mongodb://test:test123@ds231719.mlab.com:31719/x2",
-    // "DBHost": "mongodb://test:test123@cluster0-shard-00-00-vaftj.mongodb.net:27017,cluster0-shard-00-01-vaftj.mongodb.net:27017,cluster0-shard-00-02-vaftj.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin",
+    // "dbHost": "mongodb://test:test123@ds231719.mlab.com:31719/x2",
+    // "dbHost": "mongodb://test:test123@cluster0-shard-00-00-vaftj.mongodb.net:27017,cluster0-shard-00-01-vaftj.mongodb.net:27017,cluster0-shard-00-02-vaftj.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin",
+    "dbHost": "mongodb://localhost",
+    "dbName": "x2",
+    "dbCollection": "emails",
     "dropDatabase": true,
     "createIndexes": true,
     "pstFolder": "/media/sf_Outlook/test/",

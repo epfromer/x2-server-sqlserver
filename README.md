@@ -17,6 +17,7 @@ Extract objects from MS Outlook/Exchange PST files and stores in MongoDB
 
 ## Features
 
+Walks a specified folder of PSTs, processes each and stores the emails in the specified MongoDB database.
 
 ## Install
 
@@ -27,10 +28,9 @@ Extract objects from MS Outlook/Exchange PST files and stores in MongoDB
 
  - **npm run clean** : `rimraf dist`
  - **npm run build** : `tsc`
- - **npm run start** : `NODE_ENV=dev npm-run-all clean --parallel watch:build watch:server --print-label`
+ - **npm run start** : `NODE_ENV=dev npm-run-all clean build --parallel watch:build watch:server --print-label`
  - **npm run watch:build** : `tsc --watch`
  - **npm run watch:server** : `nodemon './dist/index.js' --watch './dist'`
- - **npm run test** : `NODE_ENV=test nyc --reporter=html mocha --opts mocha.opts`
  - **npm run readme** : `node ./node_modules/.bin/node-readme`
 
 ## Dependencies
@@ -38,37 +38,29 @@ Extract objects from MS Outlook/Exchange PST files and stores in MongoDB
 Package | Version | Dev
 --- |:---:|:---:
 [config](https://www.npmjs.com/package/config) | ^1.30.0 | ✖
-[fs-ext](https://www.npmjs.com/package/fs-ext) | ^1.0.0 | ✖
-[long](https://www.npmjs.com/package/long) | ^4.0.0 | ✖
-[math-float64-from-bits](https://www.npmjs.com/package/math-float64-from-bits) | ^1.0.0 | ✖
-[mongoose](https://www.npmjs.com/package/mongoose) | ^5.0.11 | ✖
-[nodemon](https://www.npmjs.com/package/nodemon) | ^1.17.2 | ✖
+[log-update](https://www.npmjs.com/package/log-update) | ^2.3.0 | ✖
+[mongodb](https://www.npmjs.com/package/mongodb) | ^3.0.5 | ✖
+[nodemon](https://www.npmjs.com/package/nodemon) | ^1.17.3 | ✖
 [pst-extractor](https://www.npmjs.com/package/pst-extractor) | ^1.1.0 | ✖
 [rimraf](https://www.npmjs.com/package/rimraf) | ^2.6.2 | ✖
-[uuid-parse](https://www.npmjs.com/package/uuid-parse) | ^1.0.0 | ✖
 [winston](https://www.npmjs.com/package/winston) | ^2.4.1 | ✖
-[winston-loggly](https://www.npmjs.com/package/winston-loggly) | ^1.3.1 | ✖
-[winston-loggly-bulk](https://www.npmjs.com/package/winston-loggly-bulk) | ^2.0.2 | ✖
 [@types/chai](https://www.npmjs.com/package/@types/chai) | ^4.1.2 | ✔
 [@types/config](https://www.npmjs.com/package/@types/config) | 0.0.34 | ✔
-[@types/debug](https://www.npmjs.com/package/@types/debug) | 0.0.30 | ✔
-[@types/fs-ext](https://www.npmjs.com/package/@types/fs-ext) | 0.0.29 | ✔
 [@types/long](https://www.npmjs.com/package/@types/long) | ^3.0.32 | ✔
-[@types/mocha](https://www.npmjs.com/package/@types/mocha) | ^2.2.48 | ✔
-[@types/mongoose](https://www.npmjs.com/package/@types/mongoose) | ^5.0.7 | ✔
-[@types/node](https://www.npmjs.com/package/@types/node) | ^9.6.0 | ✔
+[@types/mocha](https://www.npmjs.com/package/@types/mocha) | ^5.0.0 | ✔
+[@types/mongodb](https://www.npmjs.com/package/@types/mongodb) | ^3.0.9 | ✔
+[@types/node](https://www.npmjs.com/package/@types/node) | ^9.6.1 | ✔
 [@types/typescript](https://www.npmjs.com/package/@types/typescript) | ^2.0.0 | ✔
 [@types/winston](https://www.npmjs.com/package/@types/winston) | ^2.3.8 | ✔
 [chai](https://www.npmjs.com/package/chai) | ^4.1.2 | ✔
 [chai-datetime](https://www.npmjs.com/package/chai-datetime) | ^1.5.0 | ✔
 [debug](https://www.npmjs.com/package/debug) | ^3.1.0 | ✔
-[mocha](https://www.npmjs.com/package/mocha) | ^5.0.5 | ✔
 [node-readme](https://www.npmjs.com/package/node-readme) | ^0.1.9 | ✔
-[nyc](https://www.npmjs.com/package/nyc) | ^11.6.0 | ✔
+[npm-run-all](https://www.npmjs.com/package/npm-run-all) | ^4.1.2 | ✔
 [source-map-support](https://www.npmjs.com/package/source-map-support) | ^0.5.4 | ✔
 [supports-color](https://www.npmjs.com/package/supports-color) | ^5.3.0 | ✔
 [ts-node](https://www.npmjs.com/package/ts-node) | ^5.0.1 | ✔
-[typescript](https://www.npmjs.com/package/typescript) | ^2.7.2 | ✔
+[typescript](https://www.npmjs.com/package/typescript) | ^2.8.1 | ✔
 
 
 ## Contributing

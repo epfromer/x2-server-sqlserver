@@ -3,7 +3,6 @@ import { Log } from './Log.class';
 import { PSTMessage } from 'pst-extractor';
 import { PSTFile } from 'pst-extractor';
 import { PSTFolder } from 'pst-extractor';
-const memwatch = require('memwatch-next');
 const assert = require('assert');
 const config = require('config');
 const logUpdate = require('log-update');

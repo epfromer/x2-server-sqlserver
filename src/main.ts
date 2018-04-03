@@ -36,24 +36,18 @@ let logUpdateIdx = 0;
         for (let file of folderListing) {
 
             // process a file
-            const start = Date.now();
-            console.log(`starting ${file}\n`);
+            console.log(`processing ${file}\n`);
+            const processStart = Date.now();
             const docList = processPST(pstFolder + file);
+            Log.debug1(file + ': processing complete, ' + msString(docList.length, processStart, Date.now()));
 
             // insert into db
-            const dbStart = Date.now();
-            Log.debug1(`starting insert of ${docList.length} documents into MongoDB`);
+            const dbInsertStart = Date.now();
+            console.log(`inserting ${docList.length} documents into MongoDB`);
             const res = await db.collection(config.dbCollection).insertMany(docList);
-            const dbEnd = Date.now();
-            Log.debug1('completed insertion in ' + (dbEnd - dbStart) + ' ms, which is ' + ((dbEnd - dbStart) /  docList.length) + ' ms per doc');
+            Log.debug1(file + ': insertion complete, ' + msString(docList.length, dbInsertStart, Date.now()));
             assert.equal(docList.length, res.insertedCount);
             numEmails += docList.length;
-            
-            // all done for this file
-            const end = Date.now();
-            const s = file + ', ' + docList.length + ' emails processed in ' + (end - start) + ' ms';
-            Log.debug1(s);
-            console.log(s);
         }
 
         // create indexes if requested
@@ -69,7 +63,19 @@ let logUpdateIdx = 0;
     }
 })();
 
-//     if (config.util.getEnv('NODE_ENV') !== 'test') {
+function msString(numDocs: number, msStart: number, msEnd: number) {
+    const ms = msEnd - msStart;
+    const msPerDoc = ms / numDocs;
+    const sec = ms / 1000;
+    const min = sec / 60;
+    let s = ` ${numDocs} docs`;
+    s += `, ${ms} ms (${sec} sec)`;
+    if (min > 1) {
+        s += ` (~ ${Math.trunc(min)} min)`;
+    }
+    s += `, ~ ${Math.trunc(msPerDoc)} ms per doc`;
+    return s;
+}
 
 /**
  * Processes a PST, storing emails in list.

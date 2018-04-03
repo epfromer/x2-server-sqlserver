@@ -8,5 +8,5 @@
     "createIndexes": true,
     "pstFolder": "/media/sf_Outlook/test/",
     "LogLevel": "debug1",
-    "verbose": true
+    "verbose": false
 }

@@ -47,6 +47,7 @@
     "@types/fs-ext": "0.0.29",
     "@types/long": "^3.0.32",
     "@types/mocha": "^2.2.48",
+    "@types/mongodb": "^3.0.9",
     "@types/mongoose": "^5.0.7",
     "@types/node": "^9.6.1",
     "@types/typescript": "^2.0.0",
@@ -66,6 +67,7 @@
   "dependencies": {
     "config": "^1.30.0",
     "fs-ext": "^1.0.0",
+    "log-update": "^2.3.0",
     "long": "^4.0.0",
     "math-float64-from-bits": "^1.0.0",
     "mongoose": "^5.0.12",

@@ -8,36 +8,42 @@ import { PSTFolder } from 'pst-extractor';
 import { PSTAttachment } from 'pst-extractor';
 import { PSTRecipient } from 'pst-extractor';
 import { Email, EmailModel, EmailInterface, EmailSchema } from './Email';
+
 const config = require('config');
 const mongoClient = require('mongodb').MongoClient;
 const pstFolder = config.pstFolder;
 const verbose = config.verbose;
 let col = 0;
+let numEmailsThisFile = 0;
 let numEmails = 0;
 let promiseList: Promise<mongoose.Document>[] = [];
 let emailList: PSTMessage[] = [];
+let dbo: any = null;
+const logUpdate = require('log-update');
+const logUpdateFrames = ['-', '\\', '|', '/'];
+let logUpdateIdx = 0;
 
 // connect to MongoDB
 if (config.util.getEnv('NODE_ENV') !== 'prod') {
     mongoose.set('debug', true);
 }
-mongoose.connect(config.DBHost);
 
-try {
-    if (config.util.getEnv('NODE_ENV') !== 'test') {
-        run().catch(error => Log.error(error));
-    }
-} catch (error) {
-    Log.error(error);
-}
+    // mongoClient.connect(config.DBHost, function(err: any, db: any) {
+    //     if (err) throw err;
+    //     dbo = db.db('x2');
+        if (config.util.getEnv('NODE_ENV') !== 'test') {
+            run().catch(error => Log.error(error));
+        }
+        // db.close();
+    // });
 
 /**
  * Main async app that walks list of PSTs and processes them.
- */
+ */ 
 async function run() {
-    if (config['dropDatabase']) {
-        dropDatabase();
-    }
+    // if (config['dropDatabase']) {
+    //     await dropDatabase();
+    // }
 
     let folderListing = fs.readdirSync(pstFolder);
     for (let folder of folderListing) {
@@ -46,45 +52,47 @@ async function run() {
         await processPST(pstFolder + folder);
 
         const end = Date.now();
-        Log.debug1(pstFolder + folder + ', ' + numEmails + ' emails processed in ' + (end - start) + ' ms');
+        console.log(pstFolder + folder + ', ' + numEmailsThisFile + ' emails processed in ' + (end - start) + ' ms');
     }
 
-    if (config['createIndexes']) {
-        createIndexes();
-    }
+    // if (config['createIndexes']) {
+    //     createIndexes();
+    // }
+    console.log('\n${numEmails} total emails processed');
+
 }
 
 /**
  * Remove existing emails first.
  */
-function dropDatabase() {
-    console.log('drop database first');
-    mongoClient.connect(config.DBHost, function(err: any, db: any) {
-        if (err) throw err;
-        const dbo = db.db('x2');
-        dbo.dropDatabase(function(err: any, obj: any) {
-            if (err) throw err;
-            db.close();
-            console.log('database dropped');
-        });
-    });
-}
+// function dropDatabase() {
+//     console.log('drop database');
+//     return new Promise((resolve, reject) => {
+//         dbo.dropDatabase((err: any, obj: any) => {
+//             if (err) {
+//                 reject(err);
+//             } else {
+//                 resolve(obj);
+//             }
+//         });
+//     });
+// }
 
 /**
  * Create indexes.
  */
-function createIndexes() {
-    console.log('create indexes');
-    mongoClient.connect(config.DBHost, function(err: any, db: any) {
-        if (err) throw err;
-        const dbo = db.db('x2');
-        dbo.collection('emails').createIndex({ '$**': 'text' }, function(err: any, obj: any) {
-            if (err) throw err;
-            db.close();
-            console.log('index creation started');
-        });
-    });
-}
+// function createIndexes() {
+//     console.log('create indexes');
+//     return new Promise((resolve, reject) => {
+//         dbo.collection('emails').createIndex({ '$**': 'text' }, (err: any, obj: any) => {
+//             if (err) {
+//                 reject(err);
+//             } else {
+//                 resolve(obj);
+//             }
+//         });
+//     });
+// }
 
 /**
  * Processes a PST, storing emails in list and walking list to add to MongoDB.
@@ -93,7 +101,6 @@ function createIndexes() {
  * @returns
  */
 export function processPST(filename: string) {
-
     promiseList = [];
     emailList = [];
 
@@ -106,7 +113,8 @@ export function processPST(filename: string) {
     // walk list and save to MongoDB
     saveEmails(emailList, promiseList);
 
-    numEmails = emailList.length;
+    numEmailsThisFile = emailList.length;
+    numEmails += numEmailsThisFile;
 
     return Promise.all(promiseList);
 }
@@ -141,7 +149,7 @@ async function processFolder(emailList: PSTMessage[], folder: PSTFolder) {
                 if (verbose) {
                     console.log(email.clientSubmitTime + ' From: ' + sender + ', To: ' + recipients + ', Subject: ' + email.subject);
                 } else {
-                    printDot();
+                    logUpdate(logUpdateFrames[logUpdateIdx = ++logUpdateIdx % logUpdateFrames.length]);
                 }
 
                 emailList.push(email);
@@ -179,15 +187,4 @@ function saveEmails(emailList: PSTMessage[], promiseList: Promise<mongoose.Docum
             console.log(err);
         }
     });
-}
-
-/**
- * Print a dot representing a message.
- */
-function printDot() {
-    process.stdout.write('.');
-    if (col++ > 80) {
-        console.log('');
-        col = 0;
-    }
 }

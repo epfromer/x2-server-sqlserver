@@ -3,6 +3,9 @@
   "configurations": [
     {
       "name": "main.ts",
+      "env": {
+        "NODE_ENV": "dev"
+      },
       "type": "node",
       "request": "launch",
       "args": ["src/main.ts"],

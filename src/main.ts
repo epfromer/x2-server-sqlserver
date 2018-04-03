@@ -3,7 +3,7 @@ import { Log } from './Log.class';
 import { PSTMessage } from 'pst-extractor';
 import { PSTFile } from 'pst-extractor';
 import { PSTFolder } from 'pst-extractor';
-
+const memwatch = require('memwatch-next');
 const assert = require('assert');
 const config = require('config');
 const logUpdate = require('log-update');
@@ -39,9 +39,17 @@ let logUpdateIdx = 0;
             const start = Date.now();
             console.log(`starting ${file}\n`);
             const docList = processPST(pstFolder + file);
+
+            // insert into db
+            const dbStart = Date.now();
+            Log.debug1(`starting insert of ${docList.length} documents into MongoDB`);
             const res = await db.collection(config.dbCollection).insertMany(docList);
+            const dbEnd = Date.now();
+            Log.debug1('completed insertion in ' + (dbEnd - dbStart) + ' ms, which is ' + ((dbEnd - dbStart) /  docList.length) + ' ms per doc');
             assert.equal(docList.length, res.insertedCount);
             numEmails += docList.length;
+            
+            // all done for this file
             const end = Date.now();
             const s = file + ', ' + docList.length + ' emails processed in ' + (end - start) + ' ms';
             Log.debug1(s);

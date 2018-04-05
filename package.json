@@ -43,7 +43,7 @@
     "log-update": "^2.3.0",
     "mongodb": "^3.0.5",
     "nodemon": "^1.17.3",
-    "pst-extractor": "^1.1.0",
+    "pst-extractor": "^1.2.2",
     "rimraf": "^2.6.2",
     "winston": "^2.4.1"
   }

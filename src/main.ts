@@ -1,13 +1,15 @@
+import * as assert from 'assert';
+import * as config from 'config';
 import * as fs from 'fs';
-import { Log } from './Log.class';
+import * as logUpdate from 'log-update';
+import * as mongodb from 'mongodb';
 import { PSTMessage } from 'pst-extractor';
 import { PSTFile } from 'pst-extractor';
 import { PSTFolder } from 'pst-extractor';
-const assert = require('assert');
-const config = require('config');
-const logUpdate = require('log-update');
-const MongoClient = require('mongodb').MongoClient;
-const pstFolder = config.pstFolder;
+import { Log } from './Log.class';
+
+const MongoClient = mongodb.MongoClient;
+const pstFolder: string = config.get('pstFolder');
 let numEmails = 0;
 const logUpdateFrames = ['-', '\\', '|', '/'];
 let logUpdateIdx = 0;
@@ -15,24 +17,24 @@ let logUpdateIdx = 0;
 /**
  * Main async app that walks list of PSTs and processes them.
  */
-(async function() {
+(async () => {
     try {
         // connect to db
-        const client = await MongoClient.connect(config.dbHost);
-        console.log(`connected to ${config.dbHost}`);
-        const db = client.db(config.dbName);
-        Log.debug1(`connected to ${config.dbHost}/${config.dbName}`);
+        const client = await MongoClient.connect(config.get('dbHost'));
+        console.log(`connected to ${config.get('dbHost')}`);
+        const db = client.db(config.get('dbName'));
+        Log.debug1(`connected to ${config.get('dbHost')}/${config.get('dbName')}`);
 
         // drop database if requested
-        if (config['dropDatabase']) {
-            console.log(`dropping database ${config.dbName}`);
+        if (config.get('dropDatabase')) {
+            console.log(`dropping database ${config.get('dbName')}`);
             await db.dropDatabase();
         }
 
         // walk folder
         console.log(`walking folder ${pstFolder}`);
-        let folderListing = fs.readdirSync(pstFolder);
-        for (let file of folderListing) {
+        const folderListing = fs.readdirSync(pstFolder);
+        for (const file of folderListing) {
 
             // process a file
             console.log(`processing ${file}\n`);
@@ -44,7 +46,7 @@ let logUpdateIdx = 0;
                 // insert into db
                 const dbInsertStart = Date.now();
                 console.log(`inserting ${docList.length} documents into MongoDB`);
-                const res = await db.collection(config.dbCollection).insertMany(docList);
+                const res = await db.collection(config.get('dbCollection')).insertMany(docList);
                 Log.debug1(file + ': insertion complete, ' + msString(docList.length, dbInsertStart, Date.now()));
                 assert.equal(docList.length, res.insertedCount);
                 numEmails += docList.length;
@@ -54,9 +56,9 @@ let logUpdateIdx = 0;
         }
 
         // create indexes if requested
-        if (config['createIndexes']) {
-            console.log(`creating indexes`);
-            await db.collection(config.dbCollection).createIndex({ '$**': 'text' });
+        if (config.get('createIndexes')) {
+            console.log('creating indexes');
+            await db.collection(config.get('dbCollection')).createIndex({ '$**': 'text' });
         }
 
         console.log(`${numEmails} emails processed`);
@@ -86,8 +88,8 @@ function msString(numDocs: number, msStart: number, msEnd: number) {
  * @returns
  */
 function processPST(filename: string) {
-    let docList: {}[] = [];
-    let pstFile = new PSTFile(filename);
+    const docList: Array<{}> = [];
+    const pstFile = new PSTFile(filename);
 
     processFolder(docList, pstFile.getRootFolder());
 
@@ -98,11 +100,11 @@ function processPST(filename: string) {
  * Walk the folder tree recursively and process emails, storing in email list.
  * @param {PSTFolder} folder
  */
-function processFolder(docList: {}[], folder: PSTFolder) {
+function processFolder(docList: Array<{}>, folder: PSTFolder) {
     // go through the folders...
     if (folder.hasSubfolders) {
-        let childFolders: PSTFolder[] = folder.getSubFolders();
-        for (let childFolder of childFolders) {
+        const childFolders: PSTFolder[] = folder.getSubFolders();
+        for (const childFolder of childFolders) {
             processFolder(docList, childFolder);
         }
     }
@@ -119,24 +121,24 @@ function processFolder(docList: {}[], folder: PSTFolder) {
                     sender += ' (' + email.senderEmailAddress + ')';
                 }
 
-                let recipients = email.displayTo;
+                const recipients = email.displayTo;
 
-                if (config.verbose) {
+                if (config.get('verbose')) {
                     console.log(email.clientSubmitTime + ' From: ' + sender + ', To: ' + recipients + ', Subject: ' + email.subject);
                 } else {
                     logUpdate(logUpdateFrames[(logUpdateIdx = ++logUpdateIdx % logUpdateFrames.length)]);
                 }
 
                 docList.push({
-                    creationTime: email.creationTime,
+                    body: email.body,
                     clientSubmitTime: email.clientSubmitTime,
-                    displayTo: email.displayTo,
-                    displayCC: email.displayCC,
+                    creationTime: email.creationTime,
                     displayBCC: email.displayBCC,
+                    displayCC: email.displayCC,
+                    displayTo: email.displayTo,
                     senderEmailAddress: email.senderEmailAddress,
                     senderName: email.senderName,
                     subject: email.subject,
-                    body: email.body
                 });
             }
 

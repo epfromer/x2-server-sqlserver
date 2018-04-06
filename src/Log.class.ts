@@ -1,30 +1,30 @@
-const winston = require('winston');
-const config = require('config');
+import * as config from 'config';
+import * as winston from 'winston';
 // const loggly = require('winston-loggly-bulk');
 
 export class Log {
-  static logLevels = {
-    error: 0,
-    info: 1,
+  public static logLevels = {
     debug1: 2,
-    debug2: 3
+    debug2: 3,
+    error: 0,
+    info: 1
   };
 
-  static logColors = {
-    error: 'red',
-    info: 'yellow',
+  public static logColors = {
     debug1: 'blue',
-    debug2: 'green'
+    debug2: 'green',
+    error: 'red',
+    info: 'yellow'
   };
 
-  static logger = new winston.Logger({
-    levels: Log.logLevels,
+  public static logger = new winston.Logger({
     colors: Log.logColors,
+    levels: Log.logLevels,
     transports: [
       new winston.transports.Console({
-        timestamp: true,
-        level: config.LogLevel,
-        colorize: true
+        colorize: true,
+        level: config.get('LogLevel'),
+        timestamp: true
       }),
       new winston.transports.File({
         filename: 'debug.log',
@@ -39,23 +39,23 @@ export class Log {
     ]
   });
 
-  static error(s: any) {
+  public static error(s: any) {
     Log.logger.error(s);
   }
 
-  static info(s: any) {
+  public static info(s: any) {
     Log.logger.info(s);
   }
 
-  static debug1(s: any) {
-    Log.logger.debug1(s);
+  public static debug1(s: any) {
+    Log.logger.debug1(s); 
   }
 
-  static debug2(s: any) {
+  public static debug2(s: any) {
     Log.logger.debug2(s);
   }
 
-  static flushLogsAndExit() {
-    // loggly.flushLogsAndExit();
-  }
+  // public static flushLogsAndExit() {
+  //   // loggly.flushLogsAndExit();
+  // }
 }

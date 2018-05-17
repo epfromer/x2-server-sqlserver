@@ -32,52 +32,51 @@ export interface IEmailDoc {
  * Main async app that walks list of PSTs and processes them.
  */
 (async () => {
-  // connect to db
-  client = await MongoClient.connect(config.get('dbHost'));
-  console.log(`connected to ${config.get('dbHost')}`);
-  db = client.db(config.get('dbName'));
-  Log.debug(`connected to ${config.get('dbHost')}/${config.get('dbName')}`);
+  try {
+    // connect to db
+    client = await MongoClient.connect(config.get('dbHost'));
+    console.log(`connected to ${config.get('dbHost')}`);
+    db = client.db(config.get('dbName'));
+    Log.debug(`connected to ${config.get('dbHost')}/${config.get('dbName')}`);
 
-  // drop database if requested
-  if (config.get('dropDatabase')) {
-    console.log(`dropping database ${config.get('dbName')}`);
-    await db.dropDatabase();
-  }
-
-  // walk folder
-  console.log(`walking folder ${pstFolder}`);
-  const folderListing = fs.readdirSync(pstFolder);
-  for (const file of folderListing) {
-    // process a file
-    console.log(`processing ${file}\n`);
-    const processStart = Date.now();
-    const docList = processPST(pstFolder + file);
-    Log.debug(file + ': processing complete, ' + msString(docList.length, processStart, Date.now()));
-    if (docList.length > 0) {
-      // insert into db
-      const dbInsertStart = Date.now();
-      console.log(`inserting ${docList.length} documents`);
-      processEmailList(docList);
-      Log.debug(file + ': insertion complete, ' + msString(docList.length, dbInsertStart, Date.now()));
-      numEmails += docList.length;
-    } else {
-      Log.debug(file + ': processing complete, no emails');
+    // drop database if requested
+    if (config.get('dropDatabase')) {
+      console.log(`dropping database ${config.get('dbName')}`);
+      await db.dropDatabase();
     }
-  }
 
-  // create indexes if requested
-  if (config.get('createIndexes')) {
+    // walk folder
+    console.log(`walking folder ${pstFolder}`);
+    const folderListing = fs.readdirSync(pstFolder);
+    for (const file of folderListing) {
+      // process a file
+      console.log(`processing ${file}\n`);
+      const processStart = Date.now();
+      const docList = processPST(pstFolder + file);
+      Log.debug(file + ': processing complete, ' + msString(docList.length, processStart, Date.now()));
+      if (docList.length > 0) {
+        // insert into db
+        const dbInsertStart = Date.now();
+        console.log(`inserting ${docList.length} documents`);
+        processEmailList(docList);
+        Log.debug(file + ': insertion complete, ' + msString(docList.length, dbInsertStart, Date.now()));
+        numEmails += docList.length;
+      } else {
+        Log.debug(file + ': processing complete, no emails');
+      }
+    }
+
+    // create indexes
     console.log('creating indexes');
     await db.collection(config.get('dbCollection')).createIndex({ '$**': 'text' });
-  }
-})()
-  .catch(err => {
-    Log.error(err);
-  })
-  .then(() => {
+
     console.log(`${numEmails} emails processed`);
-    client.close();
-  });
+    // client.close();
+  } catch (error) {
+    Log.error(error);
+  }
+})();
+
 
 function msString(numDocs: number, msStart: number, msEnd: number) {
   const ms = msEnd - msStart;
@@ -171,5 +170,5 @@ function processFolder(docList: IEmailDoc[], folder: PSTFolder) {
  * @param {IEmailDoc[]} emailList
  */
 async function processEmailList(emailList: IEmailDoc[]) {
-    const res = await db.collection(config.get('dbCollection')).insertMany(emailList);
+  const res = await db.collection(config.get('dbCollection')).insertMany(emailList);
 }

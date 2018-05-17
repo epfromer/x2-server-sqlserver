@@ -3,23 +3,14 @@ import * as winston from 'winston';
 // const loggly = require('winston-loggly-bulk');
 
 export class Log {
-  public static logLevels = {
-    debug1: 2,
-    debug2: 3,
-    error: 0,
-    info: 1
-  };
-
   public static logColors = {
-    debug1: 'blue',
-    debug2: 'green',
+    debug: 'blue',
     error: 'red',
     info: 'yellow'
   };
 
   public static logger = new winston.Logger({
     colors: Log.logColors,
-    levels: Log.logLevels,
     transports: [
       new winston.transports.Console({
         colorize: true,
@@ -28,7 +19,7 @@ export class Log {
       }),
       new winston.transports.File({
         filename: 'debug.log',
-        level: 'debug1'
+        level: 'debug'
       })
       // new winston.transports.Loggly({
       //     subdomain: 'epfromer',
@@ -47,12 +38,8 @@ export class Log {
     Log.logger.info(s);
   }
 
-  public static debug1(s: any) {
-    Log.logger.debug1(s); 
-  }
-
-  public static debug2(s: any) {
-    Log.logger.debug2(s);
+  public static debug(s: any) {
+    Log.logger.debug(s);
   }
 
   // public static flushLogsAndExit() {

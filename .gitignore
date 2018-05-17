@@ -43,3 +43,4 @@ testem.log
 Thumbs.db
 errors.log
 debug.log
+package-lock.json

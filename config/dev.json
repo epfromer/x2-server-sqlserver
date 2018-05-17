@@ -7,6 +7,6 @@
     "dropDatabase": true,
     "createIndexes": true,
     "pstFolder": "/media/sf_Outlook/test/",
-    "LogLevel": "debug1",
+    "LogLevel": "debug",
     "verbose": false
 }

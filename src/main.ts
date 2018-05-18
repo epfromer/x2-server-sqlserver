@@ -1,5 +1,5 @@
 /*
-  Pulls email out of PSTs and stores in AWS CloudSearch.
+  Pulls email out of PSTs and stores in MongoDB.
 */
 import * as assert from 'assert';
 import * as config from 'config';

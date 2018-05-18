@@ -14,15 +14,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/epfromer/pst-extractor.git"
+    "url": "git+https://github.com/epfromer/pst-mongodb.git"
   },
   "keywords": [],
   "author": "Ed Pfromer (epfromer@gmail.com)",
   "license": "(Apache-2.0 OR GPL-3.0)",
   "bugs": {
-    "url": "https://github.com/epfromer/pst-extractor/issues"
+    "url": "https://github.com/epfromer/pst-mongodb/issues"
   },
-  "homepage": "https://github.com/epfromer/pst-extractor#readme",
+  "homepage": "https://github.com/epfromer/pst-mongodb#readme",
   "devDependencies": {
     "@types/config": "0.0.34",
     "@types/log-update": "^2.0.0",

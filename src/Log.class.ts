@@ -1,6 +1,5 @@
 import * as config from 'config';
 import * as winston from 'winston';
-// const loggly = require('winston-loggly-bulk');
 
 export class Log {
   public static logColors = {
@@ -21,12 +20,6 @@ export class Log {
         filename: 'debug.log',
         level: 'debug'
       })
-      // new winston.transports.Loggly({
-      //     subdomain: 'epfromer',
-      //     token: "5b6ea74c-ba58-4af5-95bc-7a4d2d6207be",
-      //     tags: ["Winston-NodeJS"],
-      //     json: true
-      // })
     ]
   });
 
@@ -41,8 +34,4 @@ export class Log {
   public static debug(s: any) {
     Log.logger.debug(s);
   }
-
-  // public static flushLogsAndExit() {
-  //   // loggly.flushLogsAndExit();
-  // }
 }

@@ -6,7 +6,7 @@
     "dbCollection": "emails",
     "dropDatabase": true,
     "createIndexes": true,
-    "pstFolder": "/media/sf_Outlook/test/",
+    "pstFolder": "/media/sf_Outlook/ain/",
     "LogLevel": "debug",
     "verbose": false
 }

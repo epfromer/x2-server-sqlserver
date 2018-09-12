@@ -9,7 +9,6 @@ import * as mongodb from 'mongodb';
 import { PSTMessage } from 'pst-extractor';
 import { PSTFile } from 'pst-extractor';
 import { PSTFolder } from 'pst-extractor';
-import { Log } from './Log.class';
 
 const MongoClient = mongodb.MongoClient;
 const pstFolder: string = config.get('pstFolder');
@@ -37,7 +36,7 @@ export interface IEmailDoc {
     client = await MongoClient.connect(config.get('dbHost'));
     console.log(`connected to ${config.get('dbHost')}`);
     db = client.db(config.get('dbName'));
-    Log.debug(`connected to ${config.get('dbHost')}/${config.get('dbName')}`);
+    console.log(`connected to ${config.get('dbHost')}/${config.get('dbName')}`);
 
     // drop database if requested
     if (config.get('dropDatabase')) {
@@ -53,16 +52,16 @@ export interface IEmailDoc {
       console.log(`processing ${file}\n`);
       const processStart = Date.now();
       const docList = processPST(pstFolder + file);
-      Log.debug(file + ': processing complete, ' + msString(docList.length, processStart, Date.now()));
+      console.log(file + ': processing complete, ' + msString(docList.length, processStart, Date.now()));
       if (docList.length > 0) {
         // insert into db
         const dbInsertStart = Date.now();
         console.log(`inserting ${docList.length} documents`);
         processEmailList(docList);
-        Log.debug(file + ': insertion complete, ' + msString(docList.length, dbInsertStart, Date.now()));
+        console.log(file + ': insertion complete, ' + msString(docList.length, dbInsertStart, Date.now()));
         numEmails += docList.length;
       } else {
-        Log.debug(file + ': processing complete, no emails');
+        console.log(file + ': processing complete, no emails');
       }
     }
 
@@ -73,7 +72,7 @@ export interface IEmailDoc {
     console.log(`${numEmails} emails processed`);
     // client.close();
   } catch (error) {
-    Log.error(error);
+    console.error(error);
   }
 })();
 

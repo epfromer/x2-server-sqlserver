@@ -1,0 +1,9 @@
+{
+  "dbHost": "mongodb://localhost/x2",
+  "dbName": "x2",
+  "dbCollection": "emails",
+  "dropDatabase": true,
+  "createIndexes": true,
+  "pstFolder": "C:/outlook/",
+  "verbose": false
+}

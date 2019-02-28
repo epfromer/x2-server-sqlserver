@@ -1,14 +1,10 @@
 /*
   Pulls email out of PSTs and stores in MongoDB.
 */
-import * as assert from 'assert';
 import * as config from 'config';
 import * as fs from 'fs';
 import * as mongodb from 'mongodb';
-
-import { PSTMessage } from 'pst-extractor';
-import { PSTFile } from 'pst-extractor';
-import { PSTFolder } from 'pst-extractor';
+import { PSTFile, PSTFolder, PSTMessage } from 'pst-extractor';
 
 const MongoClient = mongodb.MongoClient;
 const pstFolder: string = config.get('pstFolder');
@@ -33,14 +29,14 @@ export interface IEmailDoc {
 (async () => {
   try {
     // connect to db
+    console.log(`connecting to ${config.get('dbHost')}`);
     client = await MongoClient.connect(config.get('dbHost'));
-    console.log(`connected to ${config.get('dbHost')}`);
     db = client.db(config.get('dbName'));
-    console.log(`connected to ${config.get('dbHost')}/${config.get('dbName')}`);
+    console.log(`connected to ${config.get('dbHost')}`);
 
     // drop database if requested
     if (config.get('dropDatabase')) {
-      console.log(`dropping database ${config.get('dbName')}`);
+      console.log(`dropping database ${config.get('dbHost')}`);
       await db.dropDatabase();
     }
 
@@ -52,13 +48,17 @@ export interface IEmailDoc {
       console.log(`processing ${file}\n`);
       const processStart = Date.now();
       const docList = processPST(pstFolder + file);
-      console.log(file + ': processing complete, ' + msString(docList.length, processStart, Date.now()));
+      console.log(
+        file + ': processing complete, ' + msString(docList.length, processStart, Date.now())
+      );
       if (docList.length > 0) {
         // insert into db
         const dbInsertStart = Date.now();
         console.log(`inserting ${docList.length} documents`);
         processEmailList(docList);
-        console.log(file + ': insertion complete, ' + msString(docList.length, dbInsertStart, Date.now()));
+        console.log(
+          file + ': insertion complete, ' + msString(docList.length, dbInsertStart, Date.now())
+        );
         numEmails += docList.length;
       } else {
         console.log(file + ': processing complete, no emails');
@@ -76,7 +76,6 @@ export interface IEmailDoc {
   }
 })();
 
-
 function msString(numDocs: number, msStart: number, msEnd: number) {
   const ms = msEnd - msStart;
   const msPerDoc = ms / numDocs;
@@ -93,8 +92,6 @@ function msString(numDocs: number, msStart: number, msEnd: number) {
 
 /**
  * Processes a PST, storing emails in list.
- * @param {string} filename
- * @returns
  */
 function processPST(filename: string) {
   const docList: IEmailDoc[] = [];
@@ -107,7 +104,6 @@ function processPST(filename: string) {
 
 /**
  * Walk the folder tree recursively and process emails, storing in email list.
- * @param {PSTFolder} folder
  */
 function processFolder(docList: IEmailDoc[], folder: PSTFolder) {
   // go through the folders...
@@ -133,7 +129,15 @@ function processFolder(docList: IEmailDoc[], folder: PSTFolder) {
         const recipients = email.displayTo;
 
         if (config.get('verbose')) {
-          console.log(email.clientSubmitTime + ' From: ' + sender + ', To: ' + recipients + ', Subject: ' + email.subject);
+          console.log(
+            email.clientSubmitTime +
+              ' From: ' +
+              sender +
+              ', To: ' +
+              recipients +
+              ', Subject: ' +
+              email.subject
+          );
         }
 
         // trap bad dates (should do this in pst-extractor)
@@ -165,8 +169,7 @@ function processFolder(docList: IEmailDoc[], folder: PSTFolder) {
 }
 
 /**
- * Process email list to store in AWS.
- * @param {IEmailDoc[]} emailList
+ * Process email list to store in db.
  */
 async function processEmailList(emailList: IEmailDoc[]) {
   const res = await db.collection(config.get('dbCollection')).insertMany(emailList);

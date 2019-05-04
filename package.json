@@ -1,28 +1,28 @@
 {
-  "name": "pst-mongo",
-  "version": "1.0.0",
+  "dependencies": {
+    "config": "^3.1.0",
+    "mongodb": "^3.2.3",
+    "pst-extractor": "^1.5.0"
+  },
   "description": "Extract objects from MS Outlook/Exchange PST files and stores in MongoDB",
+  "devDependencies": {
+    "@types/config": "^0.0.34",
+    "@types/long": "^4.0.0",
+    "@types/mongodb": "^3.1.26",
+    "@types/node": "^12.0.0",
+    "nodemon": "^1.19.0",
+    "prettier": "^1.17.0",
+    "ts-node": "^8.1.0",
+    "tslint": "^5.16.0",
+    "tslint-config-prettier": "^1.18.0",
+    "tslint-eslint-rules": "^5.4.0",
+    "tslint-plugin-prettier": "^2.0.1",
+    "typescript": "^3.4.5"
+  },
+  "name": "pst-mongo",
   "scripts": {
     "devstart": "nodemon",
     "start": "ts-node src/index.ts"
   },
-  "devDependencies": {
-    "@types/config": "^0.0.34",
-    "@types/long": "^4.0.0",
-    "@types/mongodb": "^3.1.19",
-    "@types/node": "^11.9.6",
-    "nodemon": "^1.18.10",
-    "prettier": "^1.16.4",
-    "ts-node": "^8.0.2",
-    "tslint": "^5.13.0",
-    "tslint-config-prettier": "^1.18.0",
-    "tslint-eslint-rules": "^5.4.0",
-    "tslint-plugin-prettier": "^2.0.1",
-    "typescript": "^3.3.3333"
-  },
-  "dependencies": {
-    "config": "^3.0.1",
-    "mongodb": "^3.1.13",
-    "pst-extractor": "^1.5.0"
-  }
+  "version": "1.0.0"
 }

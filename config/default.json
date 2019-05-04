@@ -1,5 +1,5 @@
 {
-  "dbHost": "mongodb://localhost/x2",
+  "dbHost": "mongodb://test:test123@ds231719.mlab.com:31719/x2",
   "dbName": "x2",
   "dbCollection": "emails",
   "dropDatabase": true,

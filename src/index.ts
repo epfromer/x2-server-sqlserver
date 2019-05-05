@@ -49,7 +49,9 @@ export interface IEmailDoc {
       const processStart = Date.now();
       const docList = processPST(pstFolder + file);
       console.log(
-        file + ': processing complete, ' + msString(docList.length, processStart, Date.now())
+        file +
+          ': processing complete, ' +
+          msString(docList.length, processStart, Date.now())
       );
       if (docList.length > 0) {
         // insert into db
@@ -57,7 +59,9 @@ export interface IEmailDoc {
         console.log(`inserting ${docList.length} documents`);
         processEmailList(docList);
         console.log(
-          file + ': insertion complete, ' + msString(docList.length, dbInsertStart, Date.now())
+          file +
+            ': insertion complete, ' +
+            msString(docList.length, dbInsertStart, Date.now())
         );
         numEmails += docList.length;
       } else {
@@ -67,7 +71,9 @@ export interface IEmailDoc {
 
     // create indexes
     console.log('creating indexes');
-    await db.collection(config.get('dbCollection')).createIndex({ '$**': 'text' });
+    await db
+      .collection(config.get('dbCollection'))
+      .createIndex({ '$**': 'text' });
 
     console.log(`${numEmails} emails processed`);
     // client.close();
@@ -172,5 +178,7 @@ function processFolder(docList: IEmailDoc[], folder: PSTFolder) {
  * Process email list to store in db.
  */
 async function processEmailList(emailList: IEmailDoc[]) {
-  const res = await db.collection(config.get('dbCollection')).insertMany(emailList);
+  const res = await db
+    .collection(config.get('dbCollection'))
+    .insertMany(emailList);
 }

@@ -1,31 +1,59 @@
 {
-  "dependencies": {
-    "config": "^3.1.0",
-    "mongodb": "^3.2.3",
-    "pst-extractor": "^1.5.0"
-  },
-  "description": "Extract objects from MS Outlook/Exchange PST files and stores in MongoDB",
-  "devDependencies": {
-    "@babel/core": "^7.4.4",
-    "@types/config": "^0.0.34",
-    "@types/long": "^4.0.0",
-    "@types/mongodb": "^3.1.26",
-    "@types/node": "^12.0.0",
-    "@typescript-eslint/eslint-plugin": "^1.7.0",
-    "@typescript-eslint/parser": "^1.7.0",
-    "babel-eslint": "^10.0.1",
-    "eslint": "^5.16.0",
-    "eslint-config-prettier": "^4.2.0",
-    "eslint-plugin-prettier": "^3.0.1",
-    "nodemon": "^1.19.0",
-    "prettier": "^1.17.0",
-    "ts-node": "^8.1.0",
-    "typescript": "^3.4.5"
-  },
   "name": "pst-mongo",
+  "description": "Extract objects from MS Outlook/Exchange PST files and stores in MongoDB",
   "scripts": {
-    "devstart": "nodemon",
     "start": "ts-node src/index.ts"
   },
-  "version": "1.0.0"
+  "version": "1.0.0",
+  "dependencies": {
+    "config": "^3.3.1",
+    "mongodb": "^3.5.6",
+    "pst-extractor": "^1.6.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.9.0",
+    "@types/config": "^0.0.36",
+    "@types/long": "^4.0.1",
+    "@types/mongodb": "^3.5.9",
+    "@types/node": "^13.13.2",
+    "@typescript-eslint/eslint-plugin": "^2.29.0",
+    "@typescript-eslint/parser": "^2.29.0",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-config-standard": "^14.1.1",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^3.1.3",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "prettier": "^2.0.5",
+    "ts-node": "^8.9.0",
+    "typescript": "^3.8.3"
+  },
+  "eslintConfig": {
+    "extends": [
+      "plugin:@typescript-eslint/recommended",
+      "prettier/@typescript-eslint",
+      "plugin:prettier/recommended"
+    ],
+    "parserOptions": {
+      "ecmaVersion": 2018,
+      "sourceType": "module"
+    }
+  },
+  "prettier": {
+    "semi": false,
+    "singleQuote": true,
+    "endOfLine": "auto"
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-env",
+      "@babel/preset-typescript"
+    ],
+    "plugins": [
+      "@babel/plugin-proposal-class-properties"
+    ]
+  }
 }

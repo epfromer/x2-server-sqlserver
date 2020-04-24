@@ -58,7 +58,10 @@ function processFolder(docList: EmailDoc[], folder: PSTFolder): void {
       if (email.messageClass === 'IPM.Note') {
         const sent = email.clientSubmitTime
         let from = email.senderName
-        if (from !== email.senderEmailAddress) {
+        if (
+          from !== email.senderEmailAddress &&
+          email.senderEmailAddress.indexOf('IMCEANOTES') < 0
+        ) {
           from += ' (' + email.senderEmailAddress + ')'
         }
         const to = email.displayTo

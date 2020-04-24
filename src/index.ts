@@ -14,14 +14,13 @@ let client: any
 let db: any
 
 export interface EmailDoc {
-  body: string
-  clientSubmitTime: Date
-  displayBCC: string
-  displayCC: string
-  displayTo: string
-  senderEmailAddress: string
-  senderName: string
+  sent: Date
+  from: string
+  to: string
+  cc: string
+  bcc: string
   subject: string
+  body: string
 }
 
 function msString(numDocs: number, msStart: number, msEnd: number): string {
@@ -55,47 +54,28 @@ function processFolder(docList: EmailDoc[], folder: PSTFolder): void {
     // get first in folder
     let email: PSTMessage = folder.getNextChild()
     while (email != null) {
-      // if an email
+      // if an email and key fields are defined
       if (email.messageClass === 'IPM.Note') {
-        let sender = email.senderName
-        if (sender !== email.senderEmailAddress) {
-          sender += ' (' + email.senderEmailAddress + ')'
+        const sent = email.clientSubmitTime
+        let from = email.senderName
+        if (from !== email.senderEmailAddress) {
+          from += ' (' + email.senderEmailAddress + ')'
         }
+        const to = email.displayTo
+        const bcc = email.displayBCC
+        const cc = email.displayCC
+        const subject = email.subject
+        const body = email.body
 
-        const recipients = email.displayTo
+        if (sent && from && to) {
+          if (config.get('verbose')) {
+            console.log(
+              sent + ' From: ' + from + ', To: ' + to + ', Subject: ' + subject
+            )
+          }
 
-        if (config.get('verbose')) {
-          console.log(
-            email.clientSubmitTime +
-              ' From: ' +
-              sender +
-              ', To: ' +
-              recipients +
-              ', Subject: ' +
-              email.subject
-          )
+          docList.push({ sent, from, to, cc, bcc, subject, body })
         }
-
-        // trap bad dates (should do this in pst-extractor)
-        let clientSubmitTime = email.clientSubmitTime
-        if (!clientSubmitTime) {
-          clientSubmitTime = new Date('1970/01/01')
-        } else if (isNaN(clientSubmitTime.getTime())) {
-          clientSubmitTime = new Date('1970/01/01')
-        } else if (clientSubmitTime.getTime() > Date.now()) {
-          clientSubmitTime = new Date('1970/01/01')
-        }
-
-        docList.push({
-          body: email.body,
-          clientSubmitTime,
-          displayBCC: email.displayBCC,
-          displayCC: email.displayCC,
-          displayTo: email.displayTo,
-          senderEmailAddress: email.senderEmailAddress,
-          senderName: email.senderName,
-          subject: email.subject,
-        })
       }
 
       // onto next

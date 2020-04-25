@@ -54,8 +54,13 @@ function processFolder(docList: EmailDoc[], folder: PSTFolder): void {
     // get first in folder
     let email: PSTMessage = folder.getNextChild()
     while (email != null) {
-      // if an email and key fields are defined
-      if (email.messageClass === 'IPM.Note') {
+      const oldestValidDate = new Date(1990, 0, 1)
+
+      if (
+        email.messageClass === 'IPM.Note' &&
+        email.clientSubmitTime &&
+        email.clientSubmitTime > oldestValidDate
+      ) {
         const sent = email.clientSubmitTime
         let from = email.senderName
         if (

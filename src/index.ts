@@ -12,6 +12,7 @@ const pstFolder: string = config.get('pstFolder')
 let numEmails = 0
 let client: any
 let db: any
+const hashMap = new Map()
 
 export interface EmailDoc {
   sent: Date
@@ -37,6 +38,21 @@ function msString(numDocs: number, msStart: number, msEnd: number): string {
   return s
 }
 
+/*
+  Create has to dedupe.
+*/
+function hash(s: string): number {
+  let h = 0,
+    i,
+    chr
+  for (i = 0; i < s.length; i++) {
+    chr = s.charCodeAt(i)
+    h = (h << 5) - h + chr
+    h |= 0 // Convert to 32bit integer
+  }
+  return h
+}
+
 /**
  * Walk the folder tree recursively and process emails, storing in email list.
  */
@@ -58,31 +74,44 @@ function processFolder(docList: EmailDoc[], folder: PSTFolder): void {
 
       if (
         email.messageClass === 'IPM.Note' &&
+        // filter out bad dates
         email.clientSubmitTime &&
         email.clientSubmitTime > oldestValidDate
       ) {
-        const sent = email.clientSubmitTime
-        let from = email.senderName
-        if (
-          from !== email.senderEmailAddress &&
-          email.senderEmailAddress.indexOf('IMCEANOTES') < 0
-        ) {
-          from += ' (' + email.senderEmailAddress + ')'
-        }
-        const to = email.displayTo
-        const bcc = email.displayBCC
-        const cc = email.displayCC
-        const subject = email.subject
-        const body = email.body
+        // create hash to dedupe
+        const h = hash(email.body)
+        if (!hashMap.has(h)) {
+          hashMap.set(h, email.body)
 
-        if (sent && from && to) {
-          if (config.get('verbose')) {
-            console.log(
-              sent + ' From: ' + from + ', To: ' + to + ', Subject: ' + subject
-            )
+          const sent = email.clientSubmitTime
+          let from = email.senderName
+          if (
+            from !== email.senderEmailAddress &&
+            email.senderEmailAddress.indexOf('IMCEANOTES') < 0
+          ) {
+            from += ' (' + email.senderEmailAddress + ')'
           }
+          const to = email.displayTo
+          const bcc = email.displayBCC
+          const cc = email.displayCC
+          const subject = email.subject
+          const body = email.body
 
-          docList.push({ sent, from, to, cc, bcc, subject, body })
+          if (sent && from && to) {
+            if (config.get('verbose')) {
+              console.log(
+                sent +
+                  ' From: ' +
+                  from +
+                  ', To: ' +
+                  to +
+                  ', Subject: ' +
+                  subject
+              )
+            }
+
+            docList.push({ sent, from, to, cc, bcc, subject, body })
+          }
         }
       }
 

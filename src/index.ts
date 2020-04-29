@@ -6,6 +6,8 @@ import * as config from 'config'
 import * as fs from 'fs'
 import * as mongodb from 'mongodb'
 import { PSTFile, PSTFolder, PSTMessage } from 'pst-extractor'
+import { v4 as uuidv4 } from 'uuid'
+import * as moment from 'moment'
 
 const MongoClient = mongodb.MongoClient
 const pstFolder: string = config.get('pstFolder')
@@ -13,8 +15,10 @@ let numEmails = 0
 let client: any
 let db: any
 const hashMap = new Map()
+const statsMap = new Map()
 
 export interface EmailDoc {
+  id: string
   sent: Date
   from: string
   to: string
@@ -56,12 +60,12 @@ function hash(s: string): number {
 /**
  * Walk the folder tree recursively and process emails, storing in email list.
  */
-function processFolder(docList: EmailDoc[], folder: PSTFolder): void {
+function processFolder(emails: EmailDoc[], folder: PSTFolder): void {
   // go through the folders...
   if (folder.hasSubfolders) {
     const childFolders: PSTFolder[] = folder.getSubFolders()
     for (const childFolder of childFolders) {
-      processFolder(docList, childFolder)
+      processFolder(emails, childFolder)
     }
   }
 
@@ -91,6 +95,7 @@ function processFolder(docList: EmailDoc[], folder: PSTFolder): void {
           ) {
             from += ' (' + email.senderEmailAddress + ')'
           }
+          const id = uuidv4()
           const to = email.displayTo
           const bcc = email.displayBCC
           const cc = email.displayCC
@@ -110,7 +115,16 @@ function processFolder(docList: EmailDoc[], folder: PSTFolder): void {
               )
             }
 
-            docList.push({ sent, from, to, cc, bcc, subject, body })
+            // todo: x2-vue, react use emails (not lstDocs) and id not _id
+            // add to stats
+            const day = moment(sent).format().slice(0, 10)
+            if (statsMap.has(day)) {
+              statsMap.get(day).push(id)
+            } else {
+              statsMap.set(day, [id])
+            }
+
+            emails.push({ id, sent, from, to, cc, bcc, subject, body })
           }
         }
       }
@@ -125,19 +139,32 @@ function processFolder(docList: EmailDoc[], folder: PSTFolder): void {
  * Processes a PST, storing emails in list.
  */
 function processPST(filename: string): EmailDoc[] {
-  const docList: EmailDoc[] = []
+  const emails: EmailDoc[] = []
   const pstFile = new PSTFile(filename)
 
-  processFolder(docList, pstFile.getRootFolder())
+  processFolder(emails, pstFile.getRootFolder())
 
-  return docList
+  return emails
 }
 
 /**
  * Process email list to store in db.
  */
 async function processEmailList(emailList: EmailDoc[]): Promise<any> {
-  await db.collection(config.get('dbCollection')).insertMany(emailList)
+  await db.collection(config.get('dbEmailCollection')).insertMany(emailList)
+}
+
+/**
+ * Process stats list to store in db.
+ */
+interface StatsDoc {
+  sent: string
+  ids: string[]
+}
+async function processStatsMap(): Promise<any> {
+  const arr: StatsDoc[] = []
+  statsMap.forEach((value, key) => arr.push({ sent: key, ids: value }))
+  await db.collection(config.get('dbStatsCollection')).insertMany(arr)
 }
 
 /**
@@ -164,32 +191,35 @@ async function processEmailList(emailList: EmailDoc[]): Promise<any> {
       // process a file
       console.log(`processing ${file}\n`)
       const processStart = Date.now()
-      const docList = processPST(pstFolder + file)
+      const emails = processPST(pstFolder + file)
       console.log(
         file +
           ': processing complete, ' +
-          msString(docList.length, processStart, Date.now())
+          msString(emails.length, processStart, Date.now())
       )
-      if (docList.length > 0) {
+      if (emails.length > 0) {
         // insert into db
         const dbInsertStart = Date.now()
-        console.log(`inserting ${docList.length} documents`)
-        processEmailList(docList)
+        console.log(`inserting ${emails.length} documents`)
+        processEmailList(emails)
         console.log(
           file +
             ': insertion complete, ' +
-            msString(docList.length, dbInsertStart, Date.now())
+            msString(emails.length, dbInsertStart, Date.now())
         )
-        numEmails += docList.length
+        numEmails += emails.length
       } else {
         console.log(file + ': processing complete, no emails')
       }
     }
 
+    // process stats
+    processStatsMap()
+
     // create indexes
     console.log('creating indexes')
     await db
-      .collection(config.get('dbCollection'))
+      .collection(config.get('dbEmailCollection'))
       .createIndex({ '$**': 'text' })
 
     console.log(`${numEmails} emails processed`)

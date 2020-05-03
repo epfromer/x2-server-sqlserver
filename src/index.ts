@@ -117,7 +117,7 @@ function processFolder(emails: EmailDoc[], folder: PSTFolder): void {
 
             // todo: x2-vue, react use emails (not lstDocs) and id not _id
             // add to stats
-            const day = moment(sent).format().slice(0, 10)
+            const day = sent.toISOString().slice(0, 10)
             if (statsMap.has(day)) {
               statsMap.get(day).push(id)
             } else {

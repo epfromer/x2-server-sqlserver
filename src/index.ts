@@ -155,7 +155,7 @@ async function processEmailList(emailList: EmailDoc[]): Promise<any> {
 }
 
 /**
- * Process stats list to store in db.
+ * Process stats list for email sent and store in db.
  */
 interface StatsDoc {
   sent: string
@@ -164,7 +164,7 @@ interface StatsDoc {
 async function processStatsMap(): Promise<any> {
   const arr: StatsDoc[] = []
   statsMap.forEach((value, key) => arr.push({ sent: key, ids: value }))
-  await db.collection(config.get('dbStatsCollection')).insertMany(arr)
+  await db.collection(config.get('dbStatsEmailSentCollection')).insertMany(arr)
 }
 
 /**

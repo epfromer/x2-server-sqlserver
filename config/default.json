@@ -2,7 +2,7 @@
   "dbHost": "mongodb://test:test123@ds231719.mlab.com:31719/x2",
   "dbName": "x2",
   "dbEmailCollection": "emails",
-  "dbStatsCollection": "stats",
+  "dbStatsEmailSentCollection": "statsemailsent",
   "dropDatabase": true,
   "createIndexes": true,
   "pstFolder": "C:/outlook/",

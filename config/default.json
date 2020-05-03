@@ -3,6 +3,7 @@
   "dbName": "x2",
   "dbEmailCollection": "emails",
   "dbStatsEmailSentCollection": "statsemailsent",
+  "dbStatsWordCloudCollection": "statswordcloud",
   "dropDatabase": true,
   "createIndexes": true,
   "pstFolder": "C:/outlook/",

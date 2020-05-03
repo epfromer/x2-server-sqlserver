@@ -157,14 +157,64 @@ async function processEmailList(emailList: EmailDoc[]): Promise<any> {
 /**
  * Process stats list for email sent and store in db.
  */
-interface StatsDoc {
+interface StatsEmailSentDoc {
   sent: string
   ids: string[]
 }
-async function processStatsMap(): Promise<any> {
-  const arr: StatsDoc[] = []
+async function processStatsEmailSentMap(): Promise<any> {
+  const arr: StatsEmailSentDoc[] = []
   statsMap.forEach((value, key) => arr.push({ sent: key, ids: value }))
   await db.collection(config.get('dbStatsEmailSentCollection')).insertMany(arr)
+}
+
+/**
+ * Process stats list for word cloud and store in db.
+ */
+interface StatsWordCloudDoc {
+  tag: string
+  weight: number
+}
+async function processStatsWordCloudMap(): Promise<any> {
+  const arr: StatsWordCloudDoc[] = [
+    {
+      tag: 'Breaking News',
+      weight: 60,
+    },
+    {
+      tag: 'Environment',
+      weight: 80,
+    },
+    {
+      tag: 'Politics',
+      weight: 90,
+    },
+    {
+      tag: 'Business',
+      weight: 25,
+    },
+    {
+      tag: 'Lifestyle',
+      weight: 30,
+    },
+    {
+      tag: 'World',
+      weight: 45,
+    },
+    {
+      tag: 'Sports',
+      weight: 160,
+    },
+    {
+      tag: 'Fashion',
+      weight: 20,
+    },
+    {
+      tag: 'Education',
+      weight: 78,
+    },
+  ]
+  // statsMap.forEach((value, key) => arr.push({ sent: key, ids: value }))
+  await db.collection(config.get('dbStatsWordCloudCollection')).insertMany(arr)
 }
 
 /**
@@ -214,7 +264,9 @@ async function processStatsMap(): Promise<any> {
     }
 
     // process stats
-    processStatsMap()
+    console.log('processing stats')
+    processStatsEmailSentMap()
+    processStatsWordCloudMap()
 
     // create indexes
     console.log('creating indexes')

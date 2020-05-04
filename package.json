@@ -4,11 +4,10 @@
   "scripts": {
     "start": "ts-node src/index.ts"
   },
+  "license": "MIT",
   "version": "1.0.0",
   "dependencies": {
-    "@types/moment": "^2.13.0",
     "config": "^3.3.1",
-    "moment": "^2.24.0",
     "mongodb": "^3.5.7",
     "occurences": "^2.2.2",
     "pst-extractor": "^1.6.0",
@@ -16,14 +15,14 @@
     "uuid": "^7.0.3"
   },
   "devDependencies": {
-    "@babel/core": "^7.9.0",
+    "@babel/core": "^7.9.6",
     "@types/config": "^0.0.36",
     "@types/long": "^4.0.1",
-    "@types/mongodb": "^3.5.14",
+    "@types/mongodb": "^3.5.15",
     "@types/node": "^13.13.4",
     "@types/uuid": "^7.0.3",
-    "@typescript-eslint/eslint-plugin": "^2.30.0",
-    "@typescript-eslint/parser": "^2.30.0",
+    "@typescript-eslint/eslint-plugin": "^2.31.0",
+    "@typescript-eslint/parser": "^2.31.0",
     "babel-eslint": "^10.1.0",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.11.0",
@@ -34,7 +33,7 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
     "prettier": "^2.0.5",
-    "ts-node": "^8.9.1",
+    "ts-node": "^8.10.1",
     "typescript": "^3.8.3"
   },
   "eslintConfig": {

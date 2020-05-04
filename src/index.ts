@@ -20,6 +20,111 @@ const hashMap = new Map()
 const statsEmailSentMap = new Map()
 const statsWordCloudMap = new Map()
 
+const WORD_CLOUD_THRESHOLD = 200
+
+// todo: get smarter at TS to put this into other file
+const commonWords = [
+  'plan',
+  'office',
+  'technology',
+  'communications',
+  'use',
+  'team',
+  'several',
+  'its',
+  'read',
+  "don't",
+  'give',
+  'give',
+  'need',
+  'full',
+  'does',
+  'and',
+  'fax',
+  'list',
+  'html',
+  'let',
+  'regards',
+  'good',
+  'great',
+  'month',
+  'around',
+  'just',
+  'off',
+  'university',
+  'will',
+  'newsletter',
+  'keep',
+  'meeting',
+  'when',
+  'made',
+  'mail',
+  'yahoo',
+  "company's",
+  'receive',
+  'able',
+  'name',
+  'development@enron',
+  'ect@ect',
+  'website',
+  'not',
+  'sincerely',
+  'find',
+  "enron's",
+  'enron@enron',
+  'images',
+  'reach',
+  'however',
+  'www',
+  'http',
+  'com',
+  'monday',
+  'tuesday',
+  'wednesday',
+  'thursday',
+  'friday',
+  'saturday',
+  'one',
+  'two',
+  'three',
+  'four',
+  'january',
+  'february',
+  'march',
+  'april',
+  'may',
+  'june',
+  'july',
+  'august',
+  'september',
+  'october',
+  'november',
+  'december',
+  'day',
+  'week',
+  'next',
+  'internet',
+  'work',
+  'company',
+  'using',
+  'send',
+  'email',
+  'sent',
+  'across',
+  'non',
+  "it's",
+  "i'm",
+  'unsubscribe',
+  'asp',
+  'say',
+  'better',
+  'please',
+  'year',
+  'set',
+  "can't",
+  'org',
+]
+
 export interface EmailDoc {
   id: string
   sent: Date
@@ -76,7 +181,7 @@ function tokenize(body: string): void {
   cleanBody = sw.removeStopwords(cleanArr).join(' ')
 
   // tokenize to terms, ignoring common
-  const ignored = ['http']
+  const ignored = commonWords
   const tokens = new occurrences(cleanBody, { ignored })
 
   // console.log(tokens)
@@ -208,7 +313,6 @@ interface StatsWordCloudDoc {
 }
 async function processStatsWordCloudMap(): Promise<any> {
   const arr: StatsWordCloudDoc[] = []
-  const WORD_CLOUD_THRESHOLD = 6
 
   statsWordCloudMap.forEach((v, k) => {
     if (v > WORD_CLOUD_THRESHOLD) arr.push({ tag: k, weight: v })

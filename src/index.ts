@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /*
   Pulls email out of PSTs and stores in MongoDB.
@@ -7,7 +8,8 @@ import * as fs from 'fs'
 import * as mongodb from 'mongodb'
 import { PSTFile, PSTFolder, PSTMessage } from 'pst-extractor'
 import { v4 as uuidv4 } from 'uuid'
-import * as moment from 'moment'
+const occurrences = require('occurences')
+const sw = require('stopword')
 
 const MongoClient = mongodb.MongoClient
 const pstFolder: string = config.get('pstFolder')
@@ -15,7 +17,8 @@ let numEmails = 0
 let client: any
 let db: any
 const hashMap = new Map()
-const statsMap = new Map()
+const statsEmailSentMap = new Map()
+const statsWordCloudMap = new Map()
 
 export interface EmailDoc {
   id: string
@@ -43,7 +46,7 @@ function msString(numDocs: number, msStart: number, msEnd: number): string {
 }
 
 /*
-  Create has to dedupe.
+  Create hash to dedupe.
 */
 function hash(s: string): number {
   let h = 0,
@@ -55,6 +58,38 @@ function hash(s: string): number {
     h |= 0 // Convert to 32bit integer
   }
   return h
+}
+
+/*
+  Tokenize body for word cloud
+*/
+function tokenize(body: string): void {
+  // remove EDRM sig
+  const zlSig = '***********'
+  let cleanBody = body.slice(0, body.indexOf(zlSig))
+
+  // remove CR/LF
+  cleanBody = cleanBody.replace(/[\r\n]/g, ' ')
+
+  // remove stopwords (common words that don't afffect meaning)
+  const cleanArr = cleanBody.split(' ')
+  cleanBody = sw.removeStopwords(cleanArr).join(' ')
+
+  // tokenize to terms, ignoring common
+  const ignored = ['http']
+  const tokens = new occurrences(cleanBody, { ignored })
+
+  // console.log(tokens)
+  // throw 'foo'
+
+  // put into word cloud map
+  Object.entries(tokens._stats).map(([k, v]) => {
+    if (statsWordCloudMap.has(k)) {
+      statsWordCloudMap.set(k, statsWordCloudMap.get(k) + v)
+    } else {
+      statsWordCloudMap.set(k, v)
+    }
+  })
 }
 
 /**
@@ -105,26 +140,21 @@ function processFolder(emails: EmailDoc[], folder: PSTFolder): void {
           if (sent && from && to) {
             if (config.get('verbose')) {
               console.log(
-                sent +
-                  ' From: ' +
-                  from +
-                  ', To: ' +
-                  to +
-                  ', Subject: ' +
-                  subject
+                `${sent} From: ${from}, To: ${to}, Subject: ${subject}`
               )
             }
 
             // todo: x2-vue, react use emails (not lstDocs) and id not _id
             // add to stats
             const day = sent.toISOString().slice(0, 10)
-            if (statsMap.has(day)) {
-              statsMap.get(day).push(id)
+            if (statsEmailSentMap.has(day)) {
+              statsEmailSentMap.get(day).push(id)
             } else {
-              statsMap.set(day, [id])
+              statsEmailSentMap.set(day, [id])
             }
 
-            // tokenize 
+            // tokenize for word cloud
+            tokenize(body)
 
             emails.push({ id, sent, from, to, cc, bcc, subject, body })
           }
@@ -165,7 +195,7 @@ interface StatsEmailSentDoc {
 }
 async function processStatsEmailSentMap(): Promise<any> {
   const arr: StatsEmailSentDoc[] = []
-  statsMap.forEach((value, key) => arr.push({ sent: key, ids: value }))
+  statsEmailSentMap.forEach((value, key) => arr.push({ sent: key, ids: value }))
   await db.collection(config.get('dbStatsEmailSentCollection')).insertMany(arr)
 }
 
@@ -177,47 +207,14 @@ interface StatsWordCloudDoc {
   weight: number
 }
 async function processStatsWordCloudMap(): Promise<any> {
-  const zlSig = '***********'
+  const arr: StatsWordCloudDoc[] = []
+  const WORD_CLOUD_THRESHOLD = 6
 
-  const arr: StatsWordCloudDoc[] = [
-    {
-      tag: 'Breaking News',
-      weight: 60,
-    },
-    {
-      tag: 'Environment',
-      weight: 80,
-    },
-    {
-      tag: 'Politics',
-      weight: 90,
-    },
-    {
-      tag: 'Business',
-      weight: 25,
-    },
-    {
-      tag: 'Lifestyle',
-      weight: 30,
-    },
-    {
-      tag: 'World',
-      weight: 45,
-    },
-    {
-      tag: 'Sports',
-      weight: 160,
-    },
-    {
-      tag: 'Fashion',
-      weight: 20,
-    },
-    {
-      tag: 'Education',
-      weight: 78,
-    },
-  ]
-  // statsMap.forEach((value, key) => arr.push({ sent: key, ids: value }))
+  statsWordCloudMap.forEach((v, k) => {
+    if (v > WORD_CLOUD_THRESHOLD) arr.push({ tag: k, weight: v })
+  })
+  console.log('processStatsWordCloudMap: ' + arr.length + ' terms')
+
   await db.collection(config.get('dbStatsWordCloudCollection')).insertMany(arr)
 }
 

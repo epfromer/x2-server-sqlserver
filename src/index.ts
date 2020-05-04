@@ -124,6 +124,8 @@ function processFolder(emails: EmailDoc[], folder: PSTFolder): void {
               statsMap.set(day, [id])
             }
 
+            // tokenize 
+
             emails.push({ id, sent, from, to, cc, bcc, subject, body })
           }
         }
@@ -175,6 +177,8 @@ interface StatsWordCloudDoc {
   weight: number
 }
 async function processStatsWordCloudMap(): Promise<any> {
+  const zlSig = '***********'
+
   const arr: StatsWordCloudDoc[] = [
     {
       tag: 'Breaking News',

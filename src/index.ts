@@ -20,10 +20,26 @@ const hashMap = new Map()
 const statsEmailSentMap = new Map()
 const statsWordCloudMap = new Map()
 
-const WORD_CLOUD_THRESHOLD = 200
+const WORD_CLOUD_THRESHOLD = 250
 
 // todo: get smarter at TS to put this into other file
 const commonWords = [
+  'nbsp',
+  'want',
+  'contact',
+  'thanks',
+  'time',
+  'attached',
+  'report',
+  'know',
+  'going',
+  'top',
+  'meet',
+  'long',
+  'john',
+  'provide',
+  'visit',
+  'review',
   'plan',
   'office',
   'technology',

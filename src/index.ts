@@ -1,200 +1,21 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/*
-  Pulls email out of PSTs and stores in MongoDB.
-*/
 import * as config from 'config'
 import * as fs from 'fs'
 import * as mongodb from 'mongodb'
 import { PSTFile, PSTFolder, PSTMessage } from 'pst-extractor'
 import { v4 as uuidv4 } from 'uuid'
-const occurrences = require('occurences')
-const sw = require('stopword')
+import { addToStatsEmailSent, processStatsEmailSentMap } from './statsEmailSent'
+import { addToStatsWordCloud, processStatsWordCloudMap } from './statsWordCloud'
+import { hash } from './hash'
+import { processFrom } from './processFrom'
 
 const MongoClient = mongodb.MongoClient
 const pstFolder: string = config.get('pstFolder')
 let numEmails = 0
 let client: any
-let db: any
+export let db: any
 const hashMap = new Map()
-const statsEmailSentMap = new Map()
-const statsWordCloudMap = new Map()
-
-const WORD_CLOUD_THRESHOLD = 250
-
-// todo: get smarter at TS to put this into other file
-const commonWords = [
-  'international',
-  'available',
-  'opportunity',
-  'program',
-  'available',
-  'number',
-  'again',
-  'working',
-  'compaq',
-  'new',
-  'part',
-  'first',
-  'few',
-  'david',
-  'center',
-  'best',
-  'today',
-  'corp',
-  'news',
-  'during',
-  'web',
-  'york',
-  'michael',
-  'the',
-  'reports',
-  'mark',
-  'place',
-  'street',
-  'committee',
-  'attend',
-  'you',
-  'subject',
-  'address',
-  'home',
-  'members',
-  'look',
-  'think',
-  'issues',
-  'issue',
-  'date',
-  'jeff',
-  'thank',
-  'continue',
-  'process',
-  'believe',
-  'doc',
-  'current',
-  'low',
-  'possible',
-  'hou',
-  'wpo',
-  'admin',
-  'https',
-  'indeed',
-  'enewsletter',
-  'nbsp',
-  'want',
-  'contact',
-  'thanks',
-  'time',
-  'attached',
-  'report',
-  'know',
-  'going',
-  'top',
-  'meet',
-  'long',
-  'john',
-  'provide',
-  'visit',
-  'review',
-  'plan',
-  'office',
-  'technology',
-  'communications',
-  'use',
-  'team',
-  'several',
-  'its',
-  'read',
-  "don't",
-  'give',
-  'give',
-  'need',
-  'full',
-  'does',
-  'and',
-  'fax',
-  'list',
-  'html',
-  'let',
-  'regards',
-  'good',
-  'great',
-  'month',
-  'around',
-  'just',
-  'off',
-  'university',
-  'will',
-  'newsletter',
-  'keep',
-  'meeting',
-  'when',
-  'made',
-  'mail',
-  'yahoo',
-  "company's",
-  'receive',
-  'able',
-  'name',
-  'development@enron',
-  'ect@ect',
-  'website',
-  'not',
-  'sincerely',
-  'find',
-  "enron's",
-  'enron@enron',
-  'images',
-  'reach',
-  'however',
-  'www',
-  'http',
-  'com',
-  'monday',
-  'tuesday',
-  'wednesday',
-  'thursday',
-  'friday',
-  'saturday',
-  'one',
-  'two',
-  'three',
-  'four',
-  'january',
-  'february',
-  'march',
-  'april',
-  'may',
-  'june',
-  'july',
-  'august',
-  'september',
-  'october',
-  'november',
-  'december',
-  'day',
-  'week',
-  'next',
-  'internet',
-  'work',
-  'company',
-  'using',
-  'send',
-  'email',
-  'sent',
-  'across',
-  'non',
-  "it's",
-  "i'm",
-  'unsubscribe',
-  'asp',
-  'say',
-  'better',
-  'please',
-  'year',
-  'set',
-  "can't",
-  'org',
-]
+export const statsEmailSentMap = new Map()
 
 export interface EmailDoc {
   id: string
@@ -207,6 +28,75 @@ export interface EmailDoc {
   body: string
 }
 
+// Processes individual email and stores in list.
+function processEmail(email: PSTMessage, emails: EmailDoc[]): void {
+  const isValidEmail = (email: PSTMessage): boolean | null =>
+    email.messageClass === 'IPM.Note' &&
+    email.clientSubmitTime != null &&
+    email.clientSubmitTime > new Date(1990, 0, 1) &&
+    email.senderName.trim() != '' &&
+    email.displayTo.trim() != ''
+
+  if (!isValidEmail(email)) return
+
+  // dedupe
+  const h = hash(email.body)
+  if (hashMap.has(h)) return
+  hashMap.set(h, email.body)
+
+  const id = uuidv4()
+  const to = email.displayTo
+  const bcc = email.displayBCC
+  const cc = email.displayCC
+  const subject = email.subject
+  const body = email.body
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const sent = email.clientSubmitTime!
+  const from = processFrom(email)
+
+  if (config.get('verbose')) {
+    console.log(`${sent} From: ${from}, To: ${to}, Subject: ${subject}`)
+  }
+
+  // add to stats
+  addToStatsEmailSent(sent, id)
+  addToStatsWordCloud(body)
+
+  emails.push({ id, sent, from, to, cc, bcc, subject, body })
+}
+
+// Walk the folder tree recursively and process emails, storing in email list.
+function walkFolder(emails: EmailDoc[], folder: PSTFolder): void {
+  if (folder.hasSubfolders) {
+    const childFolders: PSTFolder[] = folder.getSubFolders()
+    for (const childFolder of childFolders) {
+      walkFolder(emails, childFolder)
+    }
+  }
+
+  if (folder.contentCount > 0) {
+    let email: PSTMessage = folder.getNextChild()
+    while (email != null) {
+      processEmail(email, emails)
+      email = folder.getNextChild()
+    }
+  }
+}
+
+// Processes a PST, storing emails in list.
+function walkPST(filename: string): EmailDoc[] {
+  const emails: EmailDoc[] = []
+  const pstFile = new PSTFile(filename)
+  walkFolder(emails, pstFile.getRootFolder())
+  return emails
+}
+
+// Process email list to store in db.
+async function processEmailList(emailList: EmailDoc[]): Promise<any> {
+  await db.collection(config.get('dbEmailCollection')).insertMany(emailList)
+}
+
+// creates log string with times
 function msString(numDocs: number, msStart: number, msEnd: number): string {
   const ms = msEnd - msStart
   const msPerDoc = ms / numDocs
@@ -221,181 +111,7 @@ function msString(numDocs: number, msStart: number, msEnd: number): string {
   return s
 }
 
-/*
-  Create hash to dedupe.
-*/
-function hash(s: string): number {
-  let h = 0,
-    i,
-    chr
-  for (i = 0; i < s.length; i++) {
-    chr = s.charCodeAt(i)
-    h = (h << 5) - h + chr
-    h |= 0 // Convert to 32bit integer
-  }
-  return h
-}
-
-/*
-  Tokenize body for word cloud
-*/
-function tokenize(body: string): void {
-  // remove EDRM sig
-  const zlSig = '***********'
-  let cleanBody = body.slice(0, body.indexOf(zlSig))
-
-  // remove CR/LF
-  cleanBody = cleanBody.replace(/[\r\n\t]/g, ' ')
-
-  // remove stopwords (common words that don't afffect meaning)
-  const cleanArr = cleanBody.split(' ')
-  cleanBody = sw.removeStopwords(cleanArr).join(' ')
-
-  // tokenize to terms, ignoring common
-  const ignored = commonWords
-  const tokens = new occurrences(cleanBody, { ignored })
-
-  // console.log(tokens)
-  // throw 'foo'
-
-  // put into word cloud map
-  Object.entries(tokens._stats).map(([k, v]) => {
-    if (statsWordCloudMap.has(k)) {
-      statsWordCloudMap.set(k, statsWordCloudMap.get(k) + v)
-    } else {
-      statsWordCloudMap.set(k, v)
-    }
-  })
-}
-
-/**
- * Walk the folder tree recursively and process emails, storing in email list.
- */
-function processFolder(emails: EmailDoc[], folder: PSTFolder): void {
-  // go through the folders...
-  if (folder.hasSubfolders) {
-    const childFolders: PSTFolder[] = folder.getSubFolders()
-    for (const childFolder of childFolders) {
-      processFolder(emails, childFolder)
-    }
-  }
-
-  // and now the emails for this folder
-  if (folder.contentCount > 0) {
-    // get first in folder
-    let email: PSTMessage = folder.getNextChild()
-    while (email != null) {
-      const oldestValidDate = new Date(1990, 0, 1)
-
-      if (
-        email.messageClass === 'IPM.Note' &&
-        // filter out bad dates
-        email.clientSubmitTime &&
-        email.clientSubmitTime > oldestValidDate
-      ) {
-        // create hash to dedupe
-        const h = hash(email.body)
-        if (!hashMap.has(h)) {
-          hashMap.set(h, email.body)
-
-          const sent = email.clientSubmitTime
-          let from = email.senderName
-          if (
-            from !== email.senderEmailAddress &&
-            email.senderEmailAddress.indexOf('IMCEANOTES') < 0
-          ) {
-            from += ' (' + email.senderEmailAddress + ')'
-          }
-          const id = uuidv4()
-          const to = email.displayTo
-          const bcc = email.displayBCC
-          const cc = email.displayCC
-          const subject = email.subject
-          const body = email.body
-
-          if (sent && from && to) {
-            if (config.get('verbose')) {
-              console.log(
-                `${sent} From: ${from}, To: ${to}, Subject: ${subject}`
-              )
-            }
-
-            // todo: x2-vue, react use emails (not lstDocs) and id not _id
-            // add to stats
-            const day = sent.toISOString().slice(0, 10)
-            if (statsEmailSentMap.has(day)) {
-              statsEmailSentMap.get(day).push(id)
-            } else {
-              statsEmailSentMap.set(day, [id])
-            }
-
-            // tokenize for word cloud
-            tokenize(body)
-
-            emails.push({ id, sent, from, to, cc, bcc, subject, body })
-          }
-        }
-      }
-
-      // onto next
-      email = folder.getNextChild()
-    }
-  }
-}
-
-/**
- * Processes a PST, storing emails in list.
- */
-function processPST(filename: string): EmailDoc[] {
-  const emails: EmailDoc[] = []
-  const pstFile = new PSTFile(filename)
-
-  processFolder(emails, pstFile.getRootFolder())
-
-  return emails
-}
-
-/**
- * Process email list to store in db.
- */
-async function processEmailList(emailList: EmailDoc[]): Promise<any> {
-  await db.collection(config.get('dbEmailCollection')).insertMany(emailList)
-}
-
-/**
- * Process stats list for email sent and store in db.
- */
-interface StatsEmailSentDoc {
-  sent: string
-  ids: string[]
-}
-async function processStatsEmailSentMap(): Promise<any> {
-  const arr: StatsEmailSentDoc[] = []
-  statsEmailSentMap.forEach((value, key) => arr.push({ sent: key, ids: value }))
-  await db.collection(config.get('dbStatsEmailSentCollection')).insertMany(arr)
-}
-
-/**
- * Process stats list for word cloud and store in db.
- */
-interface StatsWordCloudDoc {
-  tag: string
-  weight: number
-}
-async function processStatsWordCloudMap(): Promise<any> {
-  const arr: StatsWordCloudDoc[] = []
-
-  statsWordCloudMap.forEach((v, k) => {
-    if (v > WORD_CLOUD_THRESHOLD) arr.push({ tag: k, weight: v })
-  })
-  console.log('processStatsWordCloudMap: ' + arr.length + ' terms')
-
-  await db.collection(config.get('dbStatsWordCloudCollection')).insertMany(arr)
-}
-
-/**
- * Main async app that walks list of PSTs and processes them.
- */
+// Main async app that walks list of PSTs and processes them.
 ;(async (): Promise<any> => {
   try {
     // connect to db
@@ -414,10 +130,9 @@ async function processStatsWordCloudMap(): Promise<any> {
     console.log(`walking folder ${pstFolder}`)
     const folderListing = fs.readdirSync(pstFolder)
     for (const file of folderListing) {
-      // process a file
       console.log(`processing ${file}\n`)
       const processStart = Date.now()
-      const emails = processPST(pstFolder + file)
+      const emails = walkPST(pstFolder + file)
       console.log(
         file +
           ': processing complete, ' +

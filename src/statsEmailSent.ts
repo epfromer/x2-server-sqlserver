@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as config from 'config'
-import { db, statsEmailSentMap } from './index'
+import { db } from './index'
+
+export const statsEmailSentMap = new Map()
 
 interface StatsEmailSentDoc {
   sent: string

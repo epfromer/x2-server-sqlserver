@@ -1,0 +1,8 @@
+[
+  { name: 'kenneth lay', aliases: ['kenneth.lay@enron.com', 'klay@enron.com'] },
+  { name: 'jeff skilling', aliases: [] },
+  { name: 'joseph w sutton', aliases: [] },
+  { name: 'mark koenig', aliases: [] },
+  { name: 'paula rieker', aliases: [] },
+  { name: 'david w delainey', aliases: [] },
+]

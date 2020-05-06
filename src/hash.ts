@@ -1,4 +1,6 @@
 // Create hash to dedupe.
+export const hashMap = new Map()
+
 export function hash(s: string): number {
   let h = 0,
     i,

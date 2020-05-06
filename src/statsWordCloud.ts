@@ -8,6 +8,7 @@ const sw = require('stopword')
 
 const statsWordCloudMap = new Map()
 
+// mininum number of mentions to warrant place in cloud
 const WORD_CLOUD_THRESHOLD = 250
 
 interface StatsWordCloudDoc {

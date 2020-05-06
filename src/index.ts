@@ -4,18 +4,17 @@ import * as fs from 'fs'
 import * as mongodb from 'mongodb'
 import { PSTFile, PSTFolder, PSTMessage } from 'pst-extractor'
 import { v4 as uuidv4 } from 'uuid'
+import { hash, hashMap } from './hash'
+import { msString } from './msString'
+import { addToStatsContacts } from './statsContacts'
 import { addToStatsEmailSent, processStatsEmailSentMap } from './statsEmailSent'
 import { addToStatsWordCloud, processStatsWordCloudMap } from './statsWordCloud'
-import { hash } from './hash'
-import { processFrom } from './processFrom'
 
 const MongoClient = mongodb.MongoClient
 const pstFolder: string = config.get('pstFolder')
 let numEmails = 0
 let client: any
 export let db: any
-const hashMap = new Map()
-export const statsEmailSentMap = new Map()
 
 export interface EmailDoc {
   id: string
@@ -30,6 +29,17 @@ export interface EmailDoc {
 
 // Processes individual email and stores in list.
 function processEmail(email: PSTMessage, emails: EmailDoc[]): void {
+  const massageFrom = (email: PSTMessage): string => {
+    let from = email.senderName
+    if (
+      from !== email.senderEmailAddress &&
+      email.senderEmailAddress.indexOf('IMCEANOTES') < 0
+    ) {
+      from += ' (' + email.senderEmailAddress + ')'
+    }
+    return from
+  }
+
   const isValidEmail = (email: PSTMessage): boolean | null =>
     email.messageClass === 'IPM.Note' &&
     email.clientSubmitTime != null &&
@@ -45,20 +55,21 @@ function processEmail(email: PSTMessage, emails: EmailDoc[]): void {
   hashMap.set(h, email.body)
 
   const id = uuidv4()
-  const to = email.displayTo
   const bcc = email.displayBCC
   const cc = email.displayCC
   const subject = email.subject
   const body = email.body
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const sent = email.clientSubmitTime!
-  const from = processFrom(email)
+  const to = email.displayTo
+  const from = massageFrom(email)
 
   if (config.get('verbose')) {
     console.log(`${sent} From: ${from}, To: ${to}, Subject: ${subject}`)
   }
 
   // add to stats
+  addToStatsContacts(to, from, id)
   addToStatsEmailSent(sent, id)
   addToStatsWordCloud(body)
 
@@ -76,9 +87,11 @@ function walkFolder(emails: EmailDoc[], folder: PSTFolder): void {
 
   if (folder.contentCount > 0) {
     let email: PSTMessage = folder.getNextChild()
+    let i = 0
     while (email != null) {
       processEmail(email, emails)
       email = folder.getNextChild()
+      if (++i > 15) throw 'foo'
     }
   }
 }
@@ -94,21 +107,6 @@ function walkPST(filename: string): EmailDoc[] {
 // Process email list to store in db.
 async function processEmailList(emailList: EmailDoc[]): Promise<any> {
   await db.collection(config.get('dbEmailCollection')).insertMany(emailList)
-}
-
-// creates log string with times
-function msString(numDocs: number, msStart: number, msEnd: number): string {
-  const ms = msEnd - msStart
-  const msPerDoc = ms / numDocs
-  const sec = ms / 1000
-  const min = sec / 60
-  let s = ` ${numDocs} docs`
-  s += `, ${ms} ms (~ ${Math.trunc(sec)} sec)`
-  if (min > 1) {
-    s += ` (~ ${Math.trunc(min)} min)`
-  }
-  s += `, ~ ${Math.trunc(msPerDoc)} ms per doc`
-  return s
 }
 
 // Main async app that walks list of PSTs and processes them.

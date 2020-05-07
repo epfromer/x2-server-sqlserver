@@ -87,11 +87,9 @@ function walkFolder(emails: EmailDoc[], folder: PSTFolder): void {
 
   if (folder.contentCount > 0) {
     let email: PSTMessage = folder.getNextChild()
-    let i = 0
     while (email != null) {
       processEmail(email, emails)
       email = folder.getNextChild()
-      if (++i > 15) throw 'foo'
     }
   }
 }

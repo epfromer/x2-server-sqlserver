@@ -1,0 +1,65 @@
+/* eslint-disable prettier/prettier */
+export const contacts = [
+{ name: '@enron', aliases: ['dl-ga-all_enron_worldwide1','dl-ga-all_enron_houston_employees','allemployees','Worldwide@enron, All Enron','Houston@enron, All Enron','Group@enron, All Enron Employees United States',] },
+{ name: 'Bannantine, James M', aliases: ['jbannan@enron.com'] },
+{ name: 'Baxter, Cliff', aliases: ['Cliff, Baxter'] },    
+{ name: 'Bhatnagar, Sanjay', aliases: [] },
+{ name: 'Bibi, Philippe A', aliases: [] },
+{ name: 'Blachman, Jeremy', aliases: [] },
+{ name: 'Brown, Katherine', aliases: [] },
+{ name: 'Buy, Rick', aliases: [] },        
+{ name: 'Causey, Richard', aliases: ['Richard, Causey',] },  
+{ name: 'Chase, Anthony R', aliases: [] },
+{ name: 'Cindy, Olson', aliases: [] },
+{ name: 'Cliff, Baxter', aliases: [] },
+{ name: 'Craven, Judy', aliases: [] },
+{ name: 'Delainey, David W', aliases: [] },
+{ name: 'Fastow, Andrew S', aliases: ['Andrew, Fastow',] },
+{ name: 'Fitzgerald, Jay', aliases: [] },
+{ name: 'Fleming, Rosalee', aliases: [] },
+{ name: 'Frevert, Mark', aliases: ['Mark, Frevert',] },
+{ name: 'Frevert, Mark', aliases: [] },
+{ name: 'Greg, Whalley', aliases: [] },
+{ name: 'Groscrand, Vanessa', aliases: [] },
+{ name: 'Heilmeier, George', aliases: ['Heilmeier, Dr George',] },
+{ name: 'Herrold, Beau', aliases: [] },
+{ name: 'Hillings, Joe', aliases: [] },
+{ name: 'Hughes, James', aliases: ['A, Hughes James'] },
+{ name: 'James, Willerson', aliases: [] },
+{ name: 'Jeffrey, Mcmahon', aliases: [] },
+{ name: 'Jr, Bowen', aliases: [] },
+{ name: 'Kean, Steven J', aliases: [] },
+{ name: 'Keepers, Sally', aliases: [] },
+{ name: 'Koenig, Mark', aliases: [] },     
+{ name: 'Lay, Kenneth', aliases: ['lay', 'kennethlay@enron.com', 'kenneth_lay@enron.net','kenneth.l.lay@enron.com', 'kenneth', 'ken_lay@enron.net', 'ken.lay@enron.com', 'Ken, Lay','ken_lay@enron.com', 'Lay@enron, Kenneth','Lay, Kenneth L','Chairman, Ken Lay - Office Of The','kenneth.lay@enron.com', 'kenneth_lay@enron.com', 'layk@enron.com', 'klay@enron.com', 'Lay, Ken', 'Kenneth, Lay'], },
+{ name: 'Lay, Linda', aliases: ['Linda, Lay', 'Lay, Linda P', 'mrslinda@lplpi.com',] },
+{ name: 'Mark, Koenig', aliases: [] },
+{ name: 'Mccarty, Arlene', aliases: [] },
+{ name: 'Mcconnell, Mike', aliases: [] },
+{ name: 'Milken, Michael', aliases: [] },
+{ name: 'Moore, Charles', aliases: [] },
+{ name: 'Piernot, William W', aliases: [] },
+{ name: 'Rieker, Paula', aliases: [] },    
+{ name: 'Skilling, Jeff', aliases: ['Skilling@enron, Jeff','Jeff, Skilling', 'Skilling, Jeffrey'] },
+{ name: 'Smith, Linda', aliases: [] },
+{ name: 'Sunil, Abraham', aliases: [] },
+{ name: 'Sutton, Joseph W', aliases: [] },
+{ name: 'Treas, Hou Ir', aliases: [] },
+{ name: 'Trulove, William G', aliases: [] },
+{ name: 'Vermeil, Christophe', aliases: [] },
+{ name: 'Wells, Tori L', aliases: [] },
+{ name: 'alfred.gilman@email.swmed.edu', aliases: ['alfred.gilman@utsouthwestern.edu',] },
+{ name: 'allstudents@howard.edu', aliases: ['allstudents',] },
+{ name: 'babbio@verizon.com', aliases: ['babbio@bellatlantic.com',] },
+{ name: 'george.fisher@kodak.com', aliases: [] },
+{ name: 'jterzuoli@ibjwhitehall.com', aliases: [] },
+
+]
+
+export const aliasMap = new Map()
+contacts.map((contact) => {
+  contact.aliases.map((alias) => {
+    aliasMap.set(alias, contact.name)
+  })
+  aliasMap.set(contact.name, contact.name)
+})

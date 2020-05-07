@@ -1,9 +1,9 @@
-import { PSTMessage } from 'pst-extractor'
-import { v4 as uuidv4 } from 'uuid'
-import { contacts, aliasMap } from './contacts'
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { aliasMap, contacts } from './contacts'
 
 export const contactsMap = new Map()
 
+// prettify name as best we can
 const processName = (name: string): string => {
   let names = name.split(' ')
 
@@ -13,7 +13,7 @@ const processName = (name: string): string => {
 
   // if 1 item (like email address) just return it
   if (names.length === 1) return name
-  
+
   names = names.map((name) => name[0].toUpperCase() + name.slice(1))
   const lastName = names.pop() + ','
   names.unshift(lastName)
@@ -25,38 +25,49 @@ const processName = (name: string): string => {
   return fullName
 }
 
-//
+// walk to and from and store in contacts
 export function addToStatsContacts(
-  to: string,
   from: string,
-  emailId: string
+  to: string,
+  id: string,
+  sent: Date
 ): void {
-  // console.log(to)
+  // start with 'from' / sender, punt if not in our interest list
+  const sender = processName(from)
+  if (!aliasMap.has(sender)) return
+
+  // process 'to' / receivers, storing ones in our interest list
   let arrTo = to.toLowerCase().split(';')
   arrTo = arrTo.map((s) => s.trim())
+  const receivers: string[] = []
   arrTo.map((s) => {
-    const name = processName(s)
-    if (!aliasMap.has(name)) {
-      console.log(`{ name: '${name}', aliases: [] },`)
+    const toName = processName(s)
+    if (aliasMap.has(toName)) {
+      receivers.push(aliasMap.get(toName))
+      // console.log(`{ name: '${toName}', aliases: [] },`)
     }
   })
 
-  // if (nameToFromMap.has(from)) {
-  //   // get and add to from list
-  // } else {
-  //   const toFromId = uuidv4()
-  //   nameToFromMap.set(from, toFromId)
-  //   toFromMap.set(toFromId, {
-  //     id: toFromId,
-  //     name: from,
-  //     sender: true,
-  //     receiver: false,
-  //     to: [
-  //       {
-  //         // list of recipients/to
-  //       },
-  //     ],
-  //     from: [],
-  //   })
-  // }
+  // for the sender, add EmailSent
+  const i = contacts.findIndex((c) => c.name === aliasMap.get(sender))
+  // console.log(contacts[i].name)
+  contacts[i].asSender.push({ id, to: receivers, sent })
+
+  // for each receiver, add EmailReceived
+  receivers.forEach((r) => {
+    const j = contacts.findIndex((c) => c.name === r)
+    contacts[j].asReceiver.push({ id, from: sender, sent })
+  })
+}
+
+// Process stats list for word cloud and store in db.
+export async function processStatsContacts(): Promise<any> {
+  console.log(contacts[1])
+  throw 'foo'
+  // const arr: StatsWordCloudDoc[] = []
+  // statsWordCloudMap.forEach((v, k) => {
+  //   if (v > WORD_CLOUD_THRESHOLD) arr.push({ tag: k, weight: v })
+  // })
+  // console.log('processStatsWordCloudMap: ' + arr.length + ' terms')
+  // await db.collection(config.get('dbStatsWordCloudCollection')).insertMany(arr)
 }

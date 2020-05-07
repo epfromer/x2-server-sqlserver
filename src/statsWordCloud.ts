@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import * as config from 'config'
 import { db } from './index'
-import { commonWords } from './statsCommonWords'
+import { commonWords } from './commonWords'
 const occurrences = require('occurences')
 const sw = require('stopword')
 

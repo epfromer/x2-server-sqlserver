@@ -6,7 +6,7 @@ import { PSTFile, PSTFolder, PSTMessage } from 'pst-extractor'
 import { v4 as uuidv4 } from 'uuid'
 import { hash, hashMap } from './hash'
 import { msString } from './msString'
-import { addToStatsContacts } from './statsContacts'
+import { addToStatsContacts, processStatsContacts } from './statsContacts'
 import { addToStatsEmailSent, processStatsEmailSentMap } from './statsEmailSent'
 import { addToStatsWordCloud, processStatsWordCloudMap } from './statsWordCloud'
 
@@ -27,8 +27,17 @@ export interface EmailDoc {
   body: string
 }
 
+// let i = 0
+
 // Processes individual email and stores in list.
 function processEmail(email: PSTMessage, emails: EmailDoc[]): void {
+  // if (email.messageClass !== 'IPM.Note') return
+  // console.log('--------------')
+  // console.log('senderName', email.senderName)
+  // console.log('senderEmailAddress', email.senderEmailAddress)
+  // console.log('displayTo', email.displayTo)
+  // if (++i > 15) throw 'foo'
+
   const massageFrom = (email: PSTMessage): string => {
     let from = email.senderName
     if (
@@ -69,7 +78,7 @@ function processEmail(email: PSTMessage, emails: EmailDoc[]): void {
   }
 
   // add to stats
-  addToStatsContacts(to, from, id)
+  addToStatsContacts(from, to, id, sent)
   addToStatsEmailSent(sent, id)
   addToStatsWordCloud(body)
 
@@ -152,6 +161,7 @@ async function processEmailList(emailList: EmailDoc[]): Promise<any> {
 
     // process stats
     console.log('processing stats')
+    processStatsContacts()
     processStatsEmailSentMap()
     processStatsWordCloudMap()
 

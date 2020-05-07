@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import * as config from 'config'
 import { aliasMap, contacts } from './contacts'
+import { db } from './index'
 
 export const contactsMap = new Map()
 
@@ -62,12 +64,8 @@ export function addToStatsContacts(
 
 // Process stats list for word cloud and store in db.
 export async function processStatsContacts(): Promise<any> {
-  console.log(contacts[1])
-  throw 'foo'
-  // const arr: StatsWordCloudDoc[] = []
-  // statsWordCloudMap.forEach((v, k) => {
-  //   if (v > WORD_CLOUD_THRESHOLD) arr.push({ tag: k, weight: v })
-  // })
-  // console.log('processStatsWordCloudMap: ' + arr.length + ' terms')
-  // await db.collection(config.get('dbStatsWordCloudCollection')).insertMany(arr)
+  console.log('processStatsContacts: ' + contacts.length + ' contacts')
+  await db
+    .collection(config.get('dbStatsContactsCollection'))
+    .insertMany(contacts)
 }

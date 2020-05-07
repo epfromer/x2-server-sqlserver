@@ -23,5 +23,6 @@ export function addToStatsEmailSent(sent: Date, id: string): void {
 export async function processStatsEmailSentMap(): Promise<any> {
   const arr: StatsEmailSentDoc[] = []
   statsEmailSentMap.forEach((value, key) => arr.push({ sent: key, ids: value }))
+  console.log('processStatsEmailSentMap: ' + arr.length + ' records')
   await db.collection(config.get('dbStatsEmailSentCollection')).insertMany(arr)
 }

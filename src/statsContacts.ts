@@ -50,6 +50,8 @@ export function addToStatsContacts(
     }
   })
 
+  if (!receivers.length) return
+
   // for the sender, add EmailSent
   const i = contacts.findIndex((c) => c.name === aliasMap.get(sender))
   // console.log(contacts[i].name)

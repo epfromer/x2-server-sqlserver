@@ -52,7 +52,7 @@ export const contacts: Contact[] = [
 { asSender: [], asReceiver: [], name: 'Clark, Mary', aliases: ['Mary, Clark',] },
 { asSender: [], asReceiver: [], name: 'Culver, Anne', aliases: [] },
 { asSender: [], asReceiver: [], name: 'Delainey, David W', aliases: [] },
-{ asSender: [], asReceiver: [], name: 'Fastow, Andrew S', aliases: ['Fastow, Andy','Andrew, Fastow',] },
+{ asSender: [], asReceiver: [], name: 'Fastow, Andrew', aliases: ['Fastow, Andy','Fastow, Andrew S', 'Andrew, Fastow',] },
 { asSender: [], asReceiver: [], name: 'Fitch, Gary', aliases: [] },
 { asSender: [], asReceiver: [], name: 'Fitzgerald, Jay', aliases: [] },
 { asSender: [], asReceiver: [], name: 'Fleming, Rosalee', aliases: ['Rosalee, Fleming', ] },

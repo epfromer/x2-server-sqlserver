@@ -3,6 +3,8 @@ import * as config from 'config'
 import { aliasMap, contacts } from './contacts'
 import { db } from './index'
 
+// TODO handle CC, BCC interactions (see /emails for examples)
+
 export const contactsMap = new Map()
 
 // prettify name as best we can
@@ -28,12 +30,16 @@ const processName = (name: string): string => {
 }
 
 // walk to and from and store in contacts
+export interface ContactsInteraction {
+  fromContact: string
+  toContact: string[]
+}
 export function addToStatsContacts(
   from: string,
   to: string,
   id: string,
   sent: Date
-): void {
+): ContactsInteraction | void {
   // start with 'from' / sender, punt if not in our interest list
   const sender = processName(from)
   if (!aliasMap.has(sender)) return
@@ -52,6 +58,8 @@ export function addToStatsContacts(
 
   if (!receivers.length) return
 
+  const contactsInteraction = { fromContact: sender, toContact: receivers }
+
   // for the sender, add EmailSent
   const i = contacts.findIndex((c) => c.name === aliasMap.get(sender))
   // console.log(contacts[i].name)
@@ -62,6 +70,8 @@ export function addToStatsContacts(
     const j = contacts.findIndex((c) => c.name === r)
     contacts[j].asReceiver.push({ id, from: sender, sent })
   })
+
+  return contactsInteraction
 }
 
 // Process stats list for word cloud and store in db.

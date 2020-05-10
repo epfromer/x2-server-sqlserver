@@ -7,7 +7,7 @@
   "dbStatsWordCloudCollection": "statswordcloud",
   "dropDatabase": true,
   "createIndexes": true,
-  "pstFolder": "C:/outlook/",
+  "pstFolder": "d:/github/outlook/",
   "verbose": false,
   "web": "https://mlab.com/databases/x2"
 }

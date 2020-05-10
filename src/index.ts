@@ -17,7 +17,7 @@ export interface EmailDoc {
   from: string
   fromContact?: string
   to: string
-  toContact?: string[]
+  toContact?: string
   cc: string
   bcc: string
   subject: string

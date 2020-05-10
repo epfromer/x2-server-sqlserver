@@ -59,7 +59,7 @@ export function processEmail(email: PSTMessage, emails: EmailDoc[]): void {
   // add to contacts
   const contactsInteraction = addToStatsContacts(from, to, id, sent)
   let fromContact = ''
-  let toContact: string[] = []
+  let toContact = ''
   if (contactsInteraction) {
     fromContact = contactsInteraction.fromContact
     toContact = contactsInteraction.toContact

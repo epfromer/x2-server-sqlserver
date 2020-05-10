@@ -32,7 +32,7 @@ const processName = (name: string): string => {
 // walk to and from and store in contacts
 export interface ContactsInteraction {
   fromContact: string
-  toContact: string[]
+  toContact: string
 }
 export function addToStatsContacts(
   from: string,
@@ -58,7 +58,10 @@ export function addToStatsContacts(
 
   if (!receivers.length) return
 
-  const contactsInteraction = { fromContact: sender, toContact: receivers }
+  const contactsInteraction = {
+    fromContact: sender,
+    toContact: receivers.join('; '),
+  }
 
   // for the sender, add EmailSent
   const i = contacts.findIndex((c) => c.name === aliasMap.get(sender))

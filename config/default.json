@@ -5,6 +5,7 @@
   "dbStatsContactsCollection": "statscontacts",
   "dbStatsEmailSentCollection": "statsemailsent",
   "dbStatsWordCloudCollection": "statswordcloud",
+  "onlyContacts": true,
   "dropDatabase": true,
   "createIndexes": true,
   "pstFolder": "d:/github/outlook/",

@@ -6,6 +6,7 @@ import { EmailDoc } from './index'
 import { addToStatsContacts } from './statsContacts'
 import { addToStatsEmailSent } from './statsEmailSent'
 import { addToStatsWordCloud } from './statsWordCloud'
+import * as config from 'config'
 
 export const ignoredContacts = new Set()
 export const possibleContacts = new Set()
@@ -61,16 +62,17 @@ export function processEmail(email: PSTMessage, emails: EmailDoc[]): void {
     .concat(displayCCContacts, displayBCCContacts)
     .join('; ')
 
-  const id = uuidv4()
-
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const sent = email.clientSubmitTime!
+  // load only email involving contacts?
+  if (config.get('onlyContacts') && !fromContact && !toContact) return
 
   // if (config.get('verbose')) {
   //   log.info(`${sent} From: ${from}, To: ${to}, Subject: ${subject}`)
   // }
 
   // add to stats
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const sent = email.clientSubmitTime!
+  const id = uuidv4()
   if (fromContact && toContact) {
     addToStatsContacts(fromContact, toContact, id, sent)
   }

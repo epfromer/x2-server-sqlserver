@@ -32,7 +32,6 @@ export interface Alias {
 
 const aliases: Alias[] = [
   { name: 'Fleming, Rosalee', aliases: ['Rosalee Fleming'] },
-  { name: 'Keepers, Sally', aliases: ['sally keepers'] },
   {
     name: 'Baxter, Cliff',
     aliases: [

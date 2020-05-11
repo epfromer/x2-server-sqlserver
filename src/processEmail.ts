@@ -1,12 +1,11 @@
-import * as config from 'config'
 import { PSTMessage } from 'pst-extractor'
 import { v4 as uuidv4 } from 'uuid'
+import { aliasMap, possibleHits } from './contacts'
 import { hash, hashMap } from './hash'
-import { EmailDoc, log } from './index'
+import { EmailDoc } from './index'
 import { addToStatsContacts } from './statsContacts'
 import { addToStatsEmailSent } from './statsEmailSent'
 import { addToStatsWordCloud } from './statsWordCloud'
-import { aliasMap, contacts, possibleHits } from './contacts'
 
 export const ignoredContacts = new Set()
 export const possibleContacts = new Set()
@@ -14,11 +13,10 @@ export const possibleContacts = new Set()
 // Processes individual email and stores in list.
 export function processEmail(email: PSTMessage, emails: EmailDoc[]): void {
   const isValidEmail = (email: PSTMessage): boolean | null =>
-    email.messageClass === 'IPM.Note'
-  // email.clientSubmitTime != null &&
-  // email.clientSubmitTime > new Date(1990, 0, 1) &&
-  // email.senderName.trim() != '' &&
-  // email.displayTo.trim() != ''
+    email.messageClass === 'IPM.Note' &&
+    email.clientSubmitTime !== null &&
+    email.clientSubmitTime > new Date(1990, 0, 1) &&
+    (email.senderName.trim() !== '' || email.senderEmailAddress.trim() !== '')
   if (!isValidEmail(email)) return
 
   // dedupe

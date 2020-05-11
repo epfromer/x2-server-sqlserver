@@ -22,6 +22,10 @@ Stepped down as CEO in February 2001 when Jeffrey Skilling took over; resumed th
 
 Appeared before Congress in 2002 and invoked the Fifth Amendment. Alleged to have sold more than 4 million shares of stock for \$184 million from 1996-2001. Received bonuses of \$18.1 million in 1997-2000. Lives in a \$7.4 million penthouse near downtown Houston.
 
+### Rosalee Fleming
+
+Assistant to Kenneth L. Lay.
+
 ### Jeffrey K. Skilling
 
 CAREER: Former CEO and director. Holds an MBA from Harvard and worked for McKinsey & Co. before joining Enron in 1990. Became president and chief operating officer in 1996, then succeeded Lay as CEO in February 2001. Resigned on Aug. 14, 2001, citing personal reasons.

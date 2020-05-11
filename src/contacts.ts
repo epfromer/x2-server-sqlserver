@@ -42,12 +42,19 @@ const aliases: Alias[] = [
       'cliff baxter@ect',
       'baxter  cliff  aep',
       'baxter  cliff',
+      'baxter',
     ],
   },
   { name: 'Boyle, Dan', aliases: [] },
   {
     name: 'Belden, Tim',
-    aliases: ['belden', 'belden  tim', 'tim.belden@enron.com'],
+    aliases: [
+      'belden',
+      'belden  tim',
+      'tim.belden@enron.com',
+      'tim belden',
+      'tim belden/hou/ect@ect',
+    ],
   },
   { name: 'Bennett, Robert', aliases: [] },
   { name: 'Berardino, Joseph', aliases: [] },
@@ -62,8 +69,11 @@ const aliases: Alias[] = [
       'causey  richard',
     ],
   },
-  { name: 'Dasovich, Jeff', aliases: [] },
-  { name: 'Ellen, Philip', aliases: [] },
+  {
+    name: 'Dasovich, Jeff',
+    aliases: ['dasovich', 'dasovich  jeff', 'jeff.dasovich@enron.com'],
+  },
+  { name: 'Ellen, Philip', aliases: ['ellen'] },
   {
     name: 'Fastow, Andrew',
     aliases: [
@@ -95,9 +105,22 @@ const aliases: Alias[] = [
       'Glisan, Ben F',
       'Ben, Glisan',
       'ben f glisan',
+      'ben glisan',
+      'ben glisan/hou/ect@ect',
     ],
   },
-  { name: 'Kitchen, Louise', aliases: ['lkitchen@enron.com'] },
+  {
+    name: 'Kitchen, Louise',
+    aliases: [
+      'kitchen  louise',
+      'lkitchen@enron.com',
+      'louise kitchen',
+      'kitchen',
+      'louise.kitchen@enron.com',
+      'louise kitchen (e-mail)',
+      'louise kitchen/hou/ect@ect',
+    ],
+  },
   { name: 'Kopper, Michael', aliases: [] },
   { name: 'Lavoreto, John', aliases: [] },
   {
@@ -158,6 +181,8 @@ const aliases: Alias[] = [
       'ken lay- chairman of the board@enron',
       'ken .lay@enron.com',
       'ken lay - office of the chairman',
+      'mbx_klayofficechair@enron.com ',
+      'ken lay-@enron',
     ],
   },
   {
@@ -169,9 +194,19 @@ const aliases: Alias[] = [
       'jeffrey mcmahon@ect',
       'jeff mcmahon - president & coo',
       'mbx_anncjmcmahon@enron.com',
+      'mcmahon',
     ],
   },
-  { name: 'Presto, Kevin', aliases: ['presto'] },
+  {
+    name: 'Presto, Kevin',
+    aliases: [
+      'presto',
+      'presto  kevin m.',
+      'kevin.m.presto@enron.com',
+      'kevin m presto',
+      'kevin m. presto',
+    ],
+  },
   {
     name: 'Skilling, Jeff',
     aliases: [
@@ -185,11 +220,20 @@ const aliases: Alias[] = [
       'jeff skilling',
       'jeffrey skilling',
       'skilling  jeff',
+      'jeffreyskilling@yahoo.com',
+      'ken lay and jeff skilling',
+      'ken lay and jeff skilling@enron',
     ],
   },
   {
     name: 'Symes, Kate',
-    aliases: ['symes  kate', 'kate.symes@enron.com', 'symes'],
+    aliases: [
+      'symes  kate',
+      'kate.symes@enron.com',
+      'symes',
+      'kate symes',
+      'kate symes/pdx/ect@ect',
+    ],
   },
   {
     name: 'Whalley, Greg',
@@ -199,6 +243,7 @@ const aliases: Alias[] = [
       'gwhalley@enron.com',
       'Greg, Whalley',
       'whalley  greg',
+      'whalley',
     ],
   },
 ]
@@ -206,7 +251,6 @@ const aliases: Alias[] = [
 // set up contacts list from aliases, and map for quick access to contact
 export const possibleHits = [
   'baxter',
-  'cliff',
   'boyle',
   'belden',
   'bennett',

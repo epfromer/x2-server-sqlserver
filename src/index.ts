@@ -35,9 +35,10 @@ export interface EmailDoc {
 
     // connect to db
     log.info(`connecting to ${config.get('dbHost')}`)
-    const client = await mongodb.MongoClient.connect(config.get('dbHost'), {
-      useUnifiedTopology: true,
-    })
+    // const client = await mongodb.MongoClient.connect(config.get('dbHost'), {
+    //   useUnifiedTopology: true,
+    // })
+    const client = await mongodb.MongoClient.connect(config.get('dbHost'))
     db = client.db(config.get('dbName'))
     log.info(`connected to ${config.get('dbHost')}`)
 

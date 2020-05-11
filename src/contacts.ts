@@ -45,7 +45,10 @@ const aliases: Alias[] = [
     ],
   },
   { name: 'Boyle, Dan', aliases: [] },
-  { name: 'Belden, Tim', aliases: [] },
+  {
+    name: 'Belden, Tim',
+    aliases: ['belden', 'belden  tim', 'tim.belden@enron.com'],
+  },
   { name: 'Bennett, Robert', aliases: [] },
   { name: 'Berardino, Joseph', aliases: [] },
   {
@@ -164,9 +167,11 @@ const aliases: Alias[] = [
       'mcmahon  jeffrey',
       'jeffrey mcmahon',
       'jeffrey mcmahon@ect',
+      'jeff mcmahon - president & coo',
+      'mbx_anncjmcmahon@enron.com',
     ],
   },
-  { name: 'Presto, Kevin', aliases: [] },
+  { name: 'Presto, Kevin', aliases: ['presto'] },
   {
     name: 'Skilling, Jeff',
     aliases: [
@@ -182,7 +187,10 @@ const aliases: Alias[] = [
       'skilling  jeff',
     ],
   },
-  { name: 'Symes, Kate', aliases: [] },
+  {
+    name: 'Symes, Kate',
+    aliases: ['symes  kate', 'kate.symes@enron.com', 'symes'],
+  },
   {
     name: 'Whalley, Greg',
     aliases: [
@@ -190,6 +198,7 @@ const aliases: Alias[] = [
       'gwhalle@enron.com',
       'gwhalley@enron.com',
       'Greg, Whalley',
+      'whalley  greg',
     ],
   },
 ]

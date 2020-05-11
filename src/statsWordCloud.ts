@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-var-requires */
 import * as config from 'config'
+import { PSTMessage } from 'pst-extractor'
 import { commonWords } from './commonWords'
 import { db, log } from './index'
 const occurrences = require('occurences')
@@ -17,10 +18,10 @@ interface StatsWordCloudDoc {
 }
 
 // Tokenize body for word cloud
-export function addToStatsWordCloud(body: string): void {
+export function addToStatsWordCloud(email: PSTMessage): void {
   // remove EDRM sig
   const zlSig = '***********'
-  let cleanBody = body.slice(0, body.indexOf(zlSig))
+  let cleanBody = email.body.slice(0, email.body.indexOf(zlSig))
 
   // remove CR/LF
   cleanBody = cleanBody.replace(/[\r\n\t]/g, ' ')

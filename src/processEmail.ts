@@ -6,34 +6,19 @@ import { EmailDoc, log } from './index'
 import { addToStatsContacts } from './statsContacts'
 import { addToStatsEmailSent } from './statsEmailSent'
 import { addToStatsWordCloud } from './statsWordCloud'
+import { aliasMap, contacts, possibleHits } from './contacts'
 
-// let i = 0
+export const ignoredContacts = new Set()
+export const possibleContacts = new Set()
+
 // Processes individual email and stores in list.
 export function processEmail(email: PSTMessage, emails: EmailDoc[]): void {
-  // if (email.messageClass !== 'IPM.Note') return
-  // log.info('--------------')
-  // log.info('senderName', email.senderName)
-  // log.info('senderEmailAddress', email.senderEmailAddress)
-  // log.info('displayTo', email.displayTo)
-  // if (++i > 15) throw 'foo'
-  const massageFrom = (email: PSTMessage): string => {
-    let from = email.senderName
-    if (
-      from !== email.senderEmailAddress &&
-      email.senderEmailAddress.indexOf('IMCEANOTES') < 0
-    ) {
-      from += ' (' + email.senderEmailAddress + ')'
-    }
-    return from
-  }
-
   const isValidEmail = (email: PSTMessage): boolean | null =>
-    email.messageClass === 'IPM.Note' &&
-    email.clientSubmitTime != null &&
-    email.clientSubmitTime > new Date(1990, 0, 1) &&
-    email.senderName.trim() != '' &&
-    email.displayTo.trim() != ''
-
+    email.messageClass === 'IPM.Note'
+  // email.clientSubmitTime != null &&
+  // email.clientSubmitTime > new Date(1990, 0, 1) &&
+  // email.senderName.trim() != '' &&
+  // email.displayTo.trim() != ''
   if (!isValidEmail(email)) return
 
   // dedupe
@@ -41,45 +26,70 @@ export function processEmail(email: PSTMessage, emails: EmailDoc[]): void {
   if (hashMap.has(h)) return
   hashMap.set(h, email.body)
 
+  // check for key contacts
+  const getContacts = (s: string): string[] => {
+    let potentialContacts = s.toLowerCase().trim().split(';')
+    potentialContacts = potentialContacts.map((contact) => contact.trim())
+    potentialContacts = potentialContacts.filter((contact) => contact !== '')
+    const foundContacts: string[] = []
+    potentialContacts.forEach((contact) => {
+      if (aliasMap.has(contact)) {
+        foundContacts.push(aliasMap.get(contact))
+      } else {
+        ignoredContacts.add(contact)
+        possibleHits.forEach((h) => {
+          if (contact.indexOf(h) >= 0) possibleContacts.add(contact)
+        })
+      }
+    })
+    return foundContacts
+  }
+
+  // get contacts for to/from fields
+  const senderNameContacts = getContacts(email.senderName)
+  const senderEmailAddressContacts = getContacts(email.senderEmailAddress)
+  const displayToContacts = getContacts(email.displayTo)
+  const displayCCContacts = getContacts(email.displayCC)
+  const displayBCCContacts = getContacts(email.displayBCC)
+
+  // combine into strings
+  let fromContact = ''
+  if (senderNameContacts.length) {
+    fromContact = senderNameContacts[0]
+  } else if (senderEmailAddressContacts.length) {
+    fromContact = senderEmailAddressContacts[0]
+  }
+  const toContact = displayToContacts
+    .concat(displayCCContacts, displayBCCContacts)
+    .join('; ')
+
   const id = uuidv4()
-  const bcc = email.displayBCC
-  const cc = email.displayCC
-  const subject = email.subject
-  const body = email.body
 
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const sent = email.clientSubmitTime!
-  const to = email.displayTo
-  const from = massageFrom(email)
 
-  if (config.get('verbose')) {
-    log.info(`${sent} From: ${from}, To: ${to}, Subject: ${subject}`)
-  }
-
-  // add to contacts
-  const contactsInteraction = addToStatsContacts(from, to, id, sent)
-  let fromContact = ''
-  let toContact = ''
-  if (contactsInteraction) {
-    fromContact = contactsInteraction.fromContact
-    toContact = contactsInteraction.toContact
-  }
+  // if (config.get('verbose')) {
+  //   log.info(`${sent} From: ${from}, To: ${to}, Subject: ${subject}`)
+  // }
 
   // add to stats
+  if (fromContact && toContact) {
+    addToStatsContacts(fromContact, toContact, id, sent)
+  }
   addToStatsEmailSent(sent, id)
-  addToStatsWordCloud(body)
+  addToStatsWordCloud(email)
 
   // add to list to be inserted later
   emails.push({
     id,
     sent,
-    from,
+    from: email.senderName,
     fromContact,
-    to,
+    to: email.displayTo,
     toContact,
-    cc,
-    bcc,
-    subject,
-    body,
+    cc: email.displayCC,
+    bcc: email.displayBCC,
+    subject: email.subject,
+    body: email.body,
   })
 }

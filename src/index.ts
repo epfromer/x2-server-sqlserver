@@ -3,6 +3,7 @@ import * as config from 'config'
 import * as fs from 'fs'
 import * as mongodb from 'mongodb'
 import { msString } from './msString'
+import { ignoredContacts, possibleContacts } from './processEmail'
 import { processEmailList } from './processEmailList'
 import { processStatsContacts } from './statsContacts'
 import { processStatsEmailSentMap } from './statsEmailSent'
@@ -74,6 +75,10 @@ export interface EmailDoc {
         log.info(file + ': processing complete, no emails')
       }
     }
+
+    // ignored contacts
+    ignoredContacts.forEach((c) => log.warn('ignored: ' + c))
+    possibleContacts.forEach((c) => log.warn('possible: ' + c))
 
     // process stats
     log.info('processing stats')

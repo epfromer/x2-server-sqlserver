@@ -2,8 +2,8 @@ import * as config from 'config'
 import { PSTMessage } from 'pst-extractor'
 import { v4 as uuidv4 } from 'uuid'
 import { hash, hashMap } from './hash'
-import { EmailDoc } from './index'
-import { addToStatsContacts, ContactsInteraction } from './statsContacts'
+import { EmailDoc, log } from './index'
+import { addToStatsContacts } from './statsContacts'
 import { addToStatsEmailSent } from './statsEmailSent'
 import { addToStatsWordCloud } from './statsWordCloud'
 
@@ -11,10 +11,10 @@ import { addToStatsWordCloud } from './statsWordCloud'
 // Processes individual email and stores in list.
 export function processEmail(email: PSTMessage, emails: EmailDoc[]): void {
   // if (email.messageClass !== 'IPM.Note') return
-  // console.log('--------------')
-  // console.log('senderName', email.senderName)
-  // console.log('senderEmailAddress', email.senderEmailAddress)
-  // console.log('displayTo', email.displayTo)
+  // log.info('--------------')
+  // log.info('senderName', email.senderName)
+  // log.info('senderEmailAddress', email.senderEmailAddress)
+  // log.info('displayTo', email.displayTo)
   // if (++i > 15) throw 'foo'
   const massageFrom = (email: PSTMessage): string => {
     let from = email.senderName
@@ -53,7 +53,7 @@ export function processEmail(email: PSTMessage, emails: EmailDoc[]): void {
   const from = massageFrom(email)
 
   if (config.get('verbose')) {
-    console.log(`${sent} From: ${from}, To: ${to}, Subject: ${subject}`)
+    log.info(`${sent} From: ${from}, To: ${to}, Subject: ${subject}`)
   }
 
   // add to contacts

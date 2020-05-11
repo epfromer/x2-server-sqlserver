@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-var-requires */
 import * as config from 'config'
-import { db } from './index'
 import { commonWords } from './commonWords'
+import { db, log } from './index'
 const occurrences = require('occurences')
 const sw = require('stopword')
 
@@ -33,7 +33,7 @@ export function addToStatsWordCloud(body: string): void {
   const ignored = commonWords
   const tokens = new occurrences(cleanBody, { ignored })
 
-  // console.log(tokens)
+  // log.info(tokens)
   // throw 'foo'
 
   // put into word cloud map
@@ -52,6 +52,6 @@ export async function processStatsWordCloudMap(): Promise<any> {
   statsWordCloudMap.forEach((v, k) => {
     if (v > WORD_CLOUD_THRESHOLD) arr.push({ tag: k, weight: v })
   })
-  console.log('processStatsWordCloudMap: ' + arr.length + ' terms')
+  log.info('processStatsWordCloudMap: ' + arr.length + ' terms')
   await db.collection(config.get('dbStatsWordCloudCollection')).insertMany(arr)
 }

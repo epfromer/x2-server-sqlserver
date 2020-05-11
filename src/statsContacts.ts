@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as config from 'config'
 import { aliasMap, contacts } from './contacts'
-import { db } from './index'
+import { db, log } from './index'
 
 // TODO handle CC, BCC interactions (see /emails for examples)
 
@@ -52,7 +52,7 @@ export function addToStatsContacts(
     const toName = processName(s)
     if (aliasMap.has(toName)) {
       receivers.push(aliasMap.get(toName))
-      // console.log(`{ name: '${toName}', aliases: [] },`)
+      // log.info(`{ name: '${toName}', aliases: [] },`)
     }
   })
 
@@ -65,7 +65,7 @@ export function addToStatsContacts(
 
   // for the sender, add EmailSent
   const i = contacts.findIndex((c) => c.name === aliasMap.get(sender))
-  // console.log(contacts[i].name)
+  // log.info(contacts[i].name)
   contacts[i].asSender.push({ id, to: receivers, sent })
 
   // for each receiver, add EmailReceived
@@ -79,7 +79,7 @@ export function addToStatsContacts(
 
 // Process stats list for word cloud and store in db.
 export async function processStatsContacts(): Promise<any> {
-  console.log('processStatsContacts: ' + contacts.length + ' contacts')
+  log.info('processStatsContacts: ' + contacts.length + ' contacts')
   await db
     .collection(config.get('dbStatsContactsCollection'))
     .insertMany(contacts)

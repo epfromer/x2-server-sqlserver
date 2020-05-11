@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as config from 'config'
-import { db } from './index'
+import { db, log } from './index'
 
 export const statsEmailSentMap = new Map()
 
@@ -23,6 +23,6 @@ export function addToStatsEmailSent(sent: Date, id: string): void {
 export async function processStatsEmailSentMap(): Promise<any> {
   const arr: StatsEmailSentDoc[] = []
   statsEmailSentMap.forEach((value, key) => arr.push({ sent: key, ids: value }))
-  console.log('processStatsEmailSentMap: ' + arr.length + ' records')
+  log.info('processStatsEmailSentMap: ' + arr.length + ' records')
   await db.collection(config.get('dbStatsEmailSentCollection')).insertMany(arr)
 }

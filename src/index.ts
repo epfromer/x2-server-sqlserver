@@ -10,6 +10,7 @@ import { processStatsWordCloudMap } from './statsWordCloud'
 import { walkPST } from './walkPST'
 
 export let db: any
+export let log: any
 
 export interface EmailDoc {
   id: string
@@ -29,29 +30,31 @@ export interface EmailDoc {
   let numEmails = 0
 
   try {
+    log = require('simple-node-logger').createSimpleLogger('output.log')
+
     // connect to db
-    console.log(`connecting to ${config.get('dbHost')}`)
+    log.info(`connecting to ${config.get('dbHost')}`)
     const client = await mongodb.MongoClient.connect(config.get('dbHost'), {
       useUnifiedTopology: true,
     })
     db = client.db(config.get('dbName'))
-    console.log(`connected to ${config.get('dbHost')}`)
+    log.info(`connected to ${config.get('dbHost')}`)
 
     // drop database if requested
     if (config.get('dropDatabase')) {
-      console.log(`dropping database ${config.get('dbHost')}`)
+      log.info(`dropping database ${config.get('dbHost')}`)
       await db.dropDatabase()
     }
 
     // walk folder
     const pstFolder: string = config.get('pstFolder')
-    console.log(`walking folder ${pstFolder}`)
+    log.info(`walking folder ${pstFolder}`)
     const folderListing = fs.readdirSync(pstFolder)
     for (const file of folderListing) {
-      console.log(`processing ${file}\n`)
+      log.info(`processing ${file}\n`)
       const processStart = Date.now()
       const emails = walkPST(pstFolder + file)
-      console.log(
+      log.info(
         file +
           ': processing complete, ' +
           msString(emails.length, processStart, Date.now())
@@ -59,32 +62,32 @@ export interface EmailDoc {
       if (emails.length > 0) {
         // insert into db
         const dbInsertStart = Date.now()
-        console.log(`inserting ${emails.length} documents`)
+        log.info(`inserting ${emails.length} documents`)
         processEmailList(emails)
-        console.log(
+        log.info(
           file +
             ': insertion complete, ' +
             msString(emails.length, dbInsertStart, Date.now())
         )
         numEmails += emails.length
       } else {
-        console.log(file + ': processing complete, no emails')
+        log.info(file + ': processing complete, no emails')
       }
     }
 
     // process stats
-    console.log('processing stats')
+    log.info('processing stats')
     processStatsContacts()
     processStatsEmailSentMap()
     processStatsWordCloudMap()
 
     // create indexes
-    console.log('creating indexes')
+    log.info('creating indexes')
     await db
       .collection(config.get('dbEmailCollection'))
       .createIndex({ '$**': 'text' })
 
-    console.log(`${numEmails} emails processed`)
+    log.info(`${numEmails} emails processed`)
     // client.close();
   } catch (error) {
     console.error(error)

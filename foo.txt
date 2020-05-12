@@ -1,0 +1,255 @@
+possible: laynie east
+possible: laynie
+possible: daryl kitchen
+possible: bryce baxter
+possible: layers_99@yahoo.com
+possible: ken lay- chairman of the board & ceo@enron
+possible: mbx_klayofficechair@enron.com
+possible: group1.10.a1@relay1.gin.ru
+possible: ellen_r_dailey@reliantenergy.com
+possible: ellen_r_dailey@reliantenergy.com@enron
+possible: baxter  char  ptte
+possible: baxter  charlotte
+possible: ellen wallumrod
+possible: lisa mellencamp
+possible: jennifer blay
+possible: stacey barclay
+possible: mary ellenberger
+possible: ellenberger
+possible: ellenberger  mary
+possible: mary.ellenberger@enron.com
+possible: cook  clay
+possible: wallumrod  ellen
+possible: ellen.wallumrod@enron.com
+possible: baxter  bryce
+possible: bryce.baxter@enron.com
+possible: east  laynie
+possible: laynie.east@enron.com
+possible: clay@ectisp.net
+possible: paul clayton
+possible: claycb@bp.com
+possible: elwanda bennett
+possible: john blaylock
+possible: clay spears
+possible: christi l nicolay
+possible: jeffery.mcmahon@enron.com
+possible: layykarl@ftpc.fpcusa.com
+possible: bennett  andrea
+possible: cclayton@telusplanet.net
+possible: nicolay  christi l.
+possible: nicolay
+possible: christi.l.nicolay@enron.com
+possible: mbennett@epsa.org
+possible: ellen.clardy@ipgdirect.com
+possible: ellen clardy
+possible: ellen r. clardy
+possible: clay dryden (e-mail)
+possible: christi l nicolay/hou/ect@ect
+possible: nicolay  christi
+possible: play4cash wincash@play4keeps.com@enron
+possible: imceanotes-play4cash+20+3cwincash+40play4keeps+2ecom+3e+40enron@enron.com
+possible: protect your family wincash@play4keeps.com@enron
+possible: imceanotes-protect+20your+20family+20+3cwincash+40play4keeps+2ecom+3e+40enron@enron.com
+possible: free silver bracelet wincash@play4keeps.com@enron
+possible: imceanotes-free+20silver+20bracelet+20+3cwincash+40play4keeps+2ecom+3e+40enron@enron.com      
+possible: free antenna booster wincash@play4keeps.com@enron
+possible: imceanotes-free+20antenna+20booster+20+3cwincash+40play4keeps+2ecom+3e+40enron@enron.com      
+possible: car buyer wincash@play4keeps.com@enron
+possible: imceanotes-car+20buyer+20+3cwincash+40play4keeps+2ecom+3e+40enron@enron.com
+possible: free cell phone wincash@play4keeps.com@enron
+possible: imceanotes-free+20cell+20phone+20+3cwincash+40play4keeps+2ecom+3e+40enron@enron.com
+possible: jeff dasovich
+possible: mary ellen miller
+possible: mary ellen miller <mary ellen>
+possible: jbennett
+possible: jeff.dasovich@enron.com@enron
+possible: ellen arthur earthur@hupk.com@enron
+possible: imceanotes-ellen+20arthur+20+3cearthur+40hupk+2ecom+3e+40enron@enron.com
+possible: bennett young byoung@llgm.com@enron
+possible: imceanotes-+22bennett+20young+22+20+3cbyoung+40llgm+2ecom+3e+40enron@enron.com
+possible: mellencamp  lisa
+possible: mellencamp
+possible: lisa.mellencamp@enron.com
+possible: ellen arthur @enron
+possible: bennett young @enron
+possible: jason p mcmahon
+possible: clay  monica
+possible: monica.clay@enron.com
+possible: clay
+possible: clayton
+possible: louise kitchen & philippe bibi@enron
+possible: peter bennett
+possible: monica.clay@luminant.com
+possible: kpresto@enron.com
+possible: clayton vernon
+possible: ellen andersen ellen.andersen@huseby-as.no@enron
+possible: imceanotes-ellen+20andersen+20+3cellen+2eandersen+40huseby-as+2eno+3e+40enron@enron.com       
+possible: ernie.j.zavaleta@fritolay.com
+possible: ernie.j.zavaleta@fritolay.com@enron
+possible: bennett  peter
+possible: peter.bennett@enron.com
+possible: zavaleta  ernie ernie.j.zavaleta@fritolay.com@enron
+possible: imceanotes-+22zavaleta+2c+20ernie+22+20+3cernie+2ej+2ezavaleta+40fritolay+2ecom+3e+40enron@enron.com
+possible: imceanotes-ernie+2ej+2ezavaleta+40fritolay+2ecom+40enron@enron.com
+possible: suzanne.m.bennett@dynegy.com
+possible: baxter  jean
+possible: katie mcmahon
+possible: katiemcmahon99@hotmail.com
+possible: donald tencellent jr. dtencellent@prebon.com@enron
+possible: imceanotes-+22donald+20tencellent+20jr+2e+22+20+3cdtencellent+40prebon+2ecom+3e+40enron@enron.com
+possible: donald tencellent jr.
+possible: dtencellent@prebon.com
+possible: ken lay and jeff skilling/corp/enron@enron
+possible: imceanotes-ken+20lay+20and+20jeff+20skilling_corp_enron+40enron@enron.com
+possible: carlos.chan@barclayscapital.com
+possible: nikolay
+possible: tim.belden@enron.com tim.belden@enron.com@enron
+possible: imceanotes-+22tim+2ebelden+40enron+2ecom+22+20+3ctim+2ebelden+40enron+2ecom+3e+40enron@enron.com
+possible: kraltchev  nikolay
+possible: nikolay.kraltchev@enron.com
+possible: barker-bennett  robina
+possible: presto  kevin
+possible: bennett  stephen
+possible: stephen.bennett@enron.com
+possible: junellen pearsall
+possible: clay albers
+possible: harris  clay
+possible: frevert
+possible: glisan
+possible: tbattle@mitchellenergy.com
+possible: wallace  preston
+possible: preston.wallace@enron.com
+possible: vernon  clayton
+possible: clayton.vernon@enron.com
+possible: skilling
+possible: clayton  paul
+possible: cliff baxter/hou/ect@enron
+possible: jbennett @enron
+possible: ellen wolfe (e-mail)
+possible: kevin wellenius (e-mail)
+possible: mbennett
+possible: christi l nicolay <christi l>
+possible: christi l nicolay/enron@enronxgate
+possible: nicolay, christi l.
+possible: francoeur  ellen efrancoeur@iso-ne.com@enron
+possible: imceanotes-+22francoeur+2c+20ellen+22+20+3cefrancoeur+40iso-ne+2ecom+3e+40enron@enron.com     
+possible: francoeur  ellen
+possible: gina mcmahon gmcmahon@btuwatch.com@enron
+possible: imceanotes-+22gina+20mcmahon+22+20+3cgmcmahon+40btuwatch+2ecom+3e+40enron@enron.com
+possible: jdasovic@enron.com
+possible: jbennett@gmssr.com
+possible: jbennett jbennett@gmssr.com@enron
+possible: imceanotes-jbennett+20+3cjbennett+40gmssr+2ecom+3e+40enron@enron.com
+possible: jeff dasovich (e-mail)
+possible: kaplan  don (dc) donk@prestongates.com@enron
+possible: imceanotes-+22kaplan+2c+20don+20+28dc+29+22+20+3cdonk+40prestongates+2ecom+3e+40enron@enron.com
+possible: ochsner  preston
+possible: christi l nicolay/hou/ect@enron
+possible: mark bennett mbennett@epsa.org@enron communications
+possible: christi l. nicolay
+possible: jeff dasovich/na/enron@enron
+possible: jeff.dasovich
+possible: realplayer news
+possible: boyle  sean
+possible: samuel blaylock
+possible: clay.f.guinn@exxonmobil.com
+possible: clay.f.guinn@exxonmobil.com@enron
+possible: imceanotes-clay+2ef+2eguinn+40exxonmobil+2ecom+40enron@enron.com
+possible: support@theplacetoplay.ea.com
+possible: dasovich@haas.berkeley.edu
+possible: jeff_dasovich@enron.com
+possible: jeffrey dasovich
+possible: jeff. dasovich@enron. com (e-mail)
+possible: dasovich  jeff jeff.dasovich@enron.com@enron
+possible: imceanotes-+22dasovich+2c+20jeff+22+20+3cjeff+2edasovich+40enron+2ecom+3e+40enron@enron.com   
+possible: jeff_dasovich@ees.enron.com
+possible: nancy dasovich
+possible: dasovich63@hotmail.com
+possible: jeff dasovich  enron sf
+possible: whalley@enron.com
+possible: clay harris
+possible: clayton seigle
+possible: lea fastow
+possible: gallay  hillary
+possible: lfastow@pdq.net
+possible: preston head
+possible: seigle  clayton
+possible: clayton.seigle@enron.com
+possible: jeff dasovich/sfo/ees@enron
+possible: jeff.skilling
+possible: jdasovic
+possible: dasovichd@home.com
+possible: jdasovi@ect.enron.com
+possible: ziad alaywan
+possible: tim belden@ect
+possible: jdasovic@enron.com@enron
+possible: jdasovic@ees.enron.com
+possible: dasovichd@aol.com
+possible: 'jeff dasovich enron
+possible: jeff dasovich enron sf
+possible: jeff dasovich@ees
+possible: jdasovi@ect
+possible: dasovich@inhale.com
+possible: dasovich@wco.com
+possible: dasovich.nancy@gene.com
+possible: dasovich  jeff (enron)
+possible: ellen@tca-us.com
+possible: bellenger  geoffrey
+possible: dasovich@ees
+possible: jdasovic@ees.enron.com@ect
+possible: mr. jeff dasovich
+possible: jdasovic@.enron.com
+possible: jeff dasovich@enron
+possible: jdasovic%.enron.com@enron.com
+possible: jeff dasovich@ees@enron_development
+possible: dasovich jeff (e-mail)
+possible: jbennett@gmssr.com@smtp@enronxgate
+possible: jbennett <jbennett@gmssr.com>@enron @smtp@enronxgate
+possible: 'jeff dasovich
+possible: jeffdasovich
+possible: sboyle@haas.berkeley.edu
+possible: dasovich  jeffrey
+possible: donna_clayson@enron.net
+possible: ellen [banaghan] wolfe (e-mail)
+possible: ellen wolfe
+possible: tskilling
+possible: masrkskilling@hotmail.com
+possible: mark skilling
+possible: markskilling@hotmail.com
+possible: jeff_skilling
+possible: jeff.skilling@enron.com
+possible: jeff skilling (e-mail)
+possible: mark skilling markskilling@hotmail.com@enron
+possible: imceanotes-+22mark+20skilling+22+20+3cmarkskilling+40hotmail+2ecom+3e+40enron@enron.com       
+possible: jeff_skilling@enron.com
+possible: skilling  tom tskilling@tribune.com@enron
+possible: imceanotes-+22skilling+2c+20tom+22+20+3ctskilling+40tribune+2ecom+3e+40enron@enron.com        
+possible: clay coburn  jr. ccoburn@kc.rr.com@enron
+possible: imceanotes-+22clay+20coburn+2c+20jr+2e+22+20+3cccoburn+40kc+2err+2ecom+3e+40enron@enron.com   
+possible: greg.whalley@enron.com
+possible: mark.ellenberg@cwt.com
+possible: elliott  clay
+possible: mark ellenberg mark.ellenberg@cwt.com@enron
+possible: k.presto@enron.com
+possible: clayton iii  lawrence lawrence.clayton@constellation.com@enron
+possible: imceanotes-+22clayton+20iii+2c+20lawrence+22+20+3clawrence+2eclayton+40constellation+2ecom+3e+40enron@enron.com
+possible: blay
+possible: preston
+possible: preston.ochsner@enron.com
+possible: phil layton
+possible: sean boyle
+possible: bennett  joel
+possible: joel.bennett@enron.com
+possible: lmellencamp@enron.com
+possible: kevin presto
+possible: kevin m presto/hou/ect@ect
+possible: richard.c.glover@fritolay.com@enron
+possible: imceanotes-richard+2ec+2eglover+40fritolay+2ecom+40enron@enron.com
+possible: gregwhalley
+possible: clayton rondeau
+possible: lawrence clayton
+processing stats
+processStatsContacts: 22 contacts
+processStatsEmailSentMap: 1070 records
+processStatsWordCloudMap: 4713 terms
+creating indexes

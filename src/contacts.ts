@@ -183,6 +183,7 @@ const aliases: Alias[] = [
       'ken lay - office of the chairman',
       'mbx_klayofficechair@enron.com ',
       'ken lay-@enron',
+      'ken lay- chairman of the board & ceo@enron'
     ],
   },
   {

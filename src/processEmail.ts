@@ -1,6 +1,6 @@
 import { PSTMessage } from 'pst-extractor'
 import { v4 as uuidv4 } from 'uuid'
-import { aliasMap, possibleHits } from './contacts'
+import { aliasMap, possibleHits, filteredSenders } from './contacts'
 import { hash, hashMap } from './hash'
 import { EmailDoc } from './index'
 import { addToStatsContacts } from './statsContacts'
@@ -17,7 +17,9 @@ export function processEmail(email: PSTMessage, emails: EmailDoc[]): void {
     email.messageClass === 'IPM.Note' &&
     email.clientSubmitTime !== null &&
     email.clientSubmitTime > new Date(1990, 0, 1) &&
-    (email.senderName.trim() !== '' || email.senderEmailAddress.trim() !== '')
+    (email.senderName.trim() !== '' ||
+      email.senderEmailAddress.trim() !== '') &&
+    filteredSenders.indexOf(email.senderName.trim()) < 0
   if (!isValidEmail(email)) return
 
   // dedupe

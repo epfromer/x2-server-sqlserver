@@ -61,9 +61,7 @@ const aliases: Alias[] = [
       'tim belden tbelden@nwlink.com@enron',
       'tim belden/enron@enronxgate@enron',
       'timothy belden (e-mail),',
-      'tim belden (e-mail 2),',
-      'timothy belden (e-mail),',
-      'tim belden (e-mail 2),',
+      'tim belden (e-mail 2)',
     ],
   },
   {
@@ -149,12 +147,9 @@ const aliases: Alias[] = [
       'andrew.fastow@enron.com',
       'andrew s fastow/enron@enronxgate@enron',
       'fastow,',
-      'fastow  andrew s.,',
-      'andrew fastow,',
-      'fastow,',
-      'fastow  andrew s.,',
-      'andrew fastow,',
-      'andrew.s.fastow@enron.com,',
+      'fastow  andrew s.',
+      'andrew fastow',
+      'andrew.s.fastow@enron.com',
     ],
   },
   { name: 'Fastow, Lea', aliases: ['lea fastow', 'lfastow@pdq.net'] },
@@ -421,3 +416,5 @@ aliases.map((contact) => {
   })
   aliasMap.set(contact.name.toLowerCase(), contact.name)
 })
+
+export const filteredSenders = ['HotWebCash Newsletter']

@@ -43,6 +43,7 @@ const aliases: Alias[] = [
       'baxter  cliff  aep',
       'baxter  cliff',
       'baxter',
+      'cliff baxter/hou/ect@enron',
     ],
   },
   { name: 'Boyle, Dan', aliases: [] },
@@ -54,6 +55,9 @@ const aliases: Alias[] = [
       'tim.belden@enron.com',
       'tim belden',
       'tim belden/hou/ect@ect',
+      'tim.belden@enron.com tim.belden@enron.com@enron',
+      'imceanotes-+22tim+2ebelden+40enron+2ecom+22+20+3ctim+2ebelden+40enron+2ecom+3e+40enron@enron.com',
+
     ],
   },
   { name: 'Bennett, Robert', aliases: [] },
@@ -71,7 +75,7 @@ const aliases: Alias[] = [
   },
   {
     name: 'Dasovich, Jeff',
-    aliases: ['dasovich', 'dasovich  jeff', 'jeff.dasovich@enron.com'],
+    aliases: ['jdasovi@ect.enron.com', 'dasovichd@home.com', 'jdasovic', 'jeff dasovich/sfo/ees@enron', 'jeff dasovich  enron sf', 'dasovich63@hotmail.com', 'jeff_dasovich@ees.enron.com', 'dasovich  jeff jeff.dasovich@enron.com@enron', 'jeff. dasovich@enron. com (e-mail)', 'jeffrey dasovich', 'jeff_dasovich@enron.com', 'dasovich@haas.berkeley.edu', 'jeff dasovich (e-mail)', 'jeff.dasovich@enron.com@enron', 'dasovich', 'dasovich  jeff', 'jeff.dasovich@enron.com', 'jeff dasovich'],
   },
   { name: 'Ellen, Philip', aliases: ['ellen'] },
   {
@@ -86,7 +90,7 @@ const aliases: Alias[] = [
       'andrew.fastow@enron.com',
     ],
   },
-  { name: 'Fastow, Lea', aliases: [] },
+  { name: 'Fastow, Lea', aliases: ['lea fastow','lfastow@pdq.net' ] },
   {
     name: 'Frevert, Mark',
     aliases: [
@@ -95,6 +99,7 @@ const aliases: Alias[] = [
       'Mark, Frevert',
       'mark frevert',
       'mark.frevert@enron.com',
+      'frevert',
     ],
   },
   {
@@ -107,6 +112,7 @@ const aliases: Alias[] = [
       'ben f glisan',
       'ben glisan',
       'ben glisan/hou/ect@ect',
+      'glisan',
     ],
   },
   {
@@ -119,6 +125,7 @@ const aliases: Alias[] = [
       'louise.kitchen@enron.com',
       'louise kitchen (e-mail)',
       'louise kitchen/hou/ect@ect',
+      'louise kitchen & philippe bibi@enron',
     ],
   },
   { name: 'Kopper, Michael', aliases: [] },
@@ -206,6 +213,8 @@ const aliases: Alias[] = [
       'kevin.m.presto@enron.com',
       'kevin m presto',
       'kevin m. presto',
+      'kpresto@enron.com',
+      'presto  kevin',
     ],
   },
   {
@@ -224,6 +233,10 @@ const aliases: Alias[] = [
       'jeffreyskilling@yahoo.com',
       'ken lay and jeff skilling',
       'ken lay and jeff skilling@enron',
+      'mbx_klayofficechair@enron.com',
+      'ken lay and jeff skilling/corp/enron@enron',
+      'imceanotes-ken+20lay+20and+20jeff+20skilling_corp_enron+40enron@enron.com',
+      'skilling',
     ],
   },
   {
@@ -245,6 +258,7 @@ const aliases: Alias[] = [
       'Greg, Whalley',
       'whalley  greg',
       'whalley',
+      'whalley@enron.com',
     ],
   },
 ]

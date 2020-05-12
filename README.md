@@ -88,6 +88,24 @@ Enron chief financial officer.
 
 ### Tim Belden
 
+<https://linkurio.us/blog/investigating-the-enron-email-dataset/>
+
+<https://www.wired.com/2006/01/science-puts-enron-e-mail-to-use/>
+
+<https://caraellison.wordpress.com/tag/tim-belden/>
+
+The names for Enron’s west coast energy trading strategies were given a lot of attention in the media and in smear campaigns like The Smartest Guys In The Room, as if the mere names were incantations of evil: Fatboy, Death Star, Wheel Out, Get Shorty, Ricochet.
+
+Though the names were exciting – and they did represent some novel trading ideas – the strategies themselves were legal. Timothy Belden, the former head of trading in Enron’s Portland, Oregon office and generally credited as the architect of these strategies, was – and is – an incredibly smart person. To me, personally, he always seemed like one of those incredibly intelligent hacker kids who broke into the Pentagon’s computer networks not to steal anything but because they wanted to know how to break into the Pentagon’s servers. The world in some ways just wasn’t complex enough for him. A few days ago I wrote a satiric post about the California energy crisis and used the metaphor of chess, which I still believe to be a perfect metaphor.  Tim Belden wanted to make money. He didn’t do it by outright stealing or anything as crass as that. Instead, like a master chess champion, he studied. He learned the game. And he found vulnerabilities. They were not vulnerabilities that he created. He just took advantage of them, sort of like seeing a plane ticket to Australia onsale for \$2 and then holding the airline responsible for the mistake.
+
+Ricochet was a name for a strategy used by Enron traders to – as the kids say – “game” the California energy market (it was also called “megawatt laundering”). This strategy was designed to skirt California’s price caps. Traders would buy electricity in California, sell it to an out-of-state buyer, then buy it back at a slightly higher price and resell it to California at an even higher price.
+
+If you never knew anything else about Enron or energy companies in general, this might sound like a sneaky thing to do – but it’s no more sneaky than short selling or arbitraging.
+
+Enron served the entire West Coast, up into Canada. It’s true that power flowed in and out of California, but its true for anywhere. If the power was needed in Oregon, and it was since there had been so little rain that summer to power the dams that created electricity, then it was sent to Oregon, or Washington or Vancouver. Then it was needed back in California and was brought back into California.
+
+The situation in California was worsened by the fact that even in its ‘deregulated’ state, it was still a tightly controlled business environment. Producers were told by the state of California that they had to sell their electricity at a certain rate. Enron was not a producer. They were a marketer. (This puts them one step away from any scandal, by the way.) If producers realized that they could get a better price for their product in, say, Oregon, or Washington, then they would push and/or displace the energy from California and put it elsewhere. California has mild winters but winter in Seattle and Portland and even in Reno can be brutal – so you can understand why the producers would push their electricity to those places. In summer, California needs the energy more (i.e., Portland has very mild winters.) The fact that Enron transferred energy around is NOT indicative of illegality, impropriety, or even bad business judgment. It was exactly what they were being paid to do.
+
 ### John Lavoreto
 
 ### Jeff Dasovich
@@ -105,6 +123,16 @@ Enron chief financial officer.
 An Enron Corporation executive who resigned in May 2001 before committing suicide the following year. Prior to his death he had agreed to testify before Congress in the Enron scandal.
 
 <https://www.seattletimes.com/seattle-news/new-evidence-enron-was-scamming-years-before-energy-crunch/>  
+
+### Sherron Watkins
+
+<https://en.wikipedia.org/wiki/Sherron_Watkins>
+
+Sherron Watkins (born August 28, 1959) is an American former Vice President of Corporate Development at the Enron Corporation. Watkins was called to testify before committees of the U.S. House of Representatives and Senate at the beginning of 2002, primarily about her warnings to Enron's then-CEO Kenneth Lay about accounting irregularities in the financial statements.
+
+In August 2001, Watkins alerted then-Enron CEO Kenneth Lay of accounting irregularities in financial reports. However, Watkins has been criticized for not reporting the fraud to government authorities and not speaking up publicly sooner about her concerns, as her memo did not reach the public until five months after it was written. Ms. Watkins was represented by Houston attorney Philip H. Hilder.
+
+Watkins was selected as one of three "Persons of the Year 2002" by Time.
 
 ## Special Purpose Entities
 

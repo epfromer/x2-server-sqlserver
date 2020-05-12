@@ -266,6 +266,11 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-13.13.5.tgz#96ec3b0afafd64a4ccea9107b75bf8489f0e5765"
   integrity sha512-3ySmiBYJPqgjiHA7oEaIo2Rzz0HrOZ7yrNO5HWyaE5q0lQ3BppDZ3N53Miz8bw2I7gh1/zir2MGVZBvpb1zq9g==
 
+"@types/stopword@^0.3.0":
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/@types/stopword/-/stopword-0.3.0.tgz#d246496ce04fa222b55a926e1166482d8c37606b"
+  integrity sha512-BPQgYJBb+Y7UC3pvU8J0OgF3VMG0kdLHWr10WmYlDUo+EW1ljX6OfTGziiFM3pG5+8a1zdyWtRPXiVldd9DrPA==
+
 "@types/uuid@^7.0.3":
   version "7.0.3"
   resolved "https://registry.yarnpkg.com/@types/uuid/-/uuid-7.0.3.tgz#45cd03e98e758f8581c79c535afbd4fc27ba7ac8"

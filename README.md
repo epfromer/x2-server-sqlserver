@@ -82,14 +82,6 @@ Enron president and chief operating officer.
 
 Enron chief financial officer.
 
-### Robert Bennett
-
-Tthe attorney representing Enron in Washington, who also represented President Bill Clinton in the Paula Jones case.
-
-### Joseph Berardino
-
-CEO of Enron auditor Andersen, testified in December that his firm told Enron's audit committee that some of the company's actions might have been illegal.
-
 <https://linkurio.us/blog/investigating-the-enron-email-dataset/>
 
 ### Tim Belden

@@ -1,16 +1,49 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-var-requires */
 import * as config from 'config'
 import { PSTMessage } from 'pst-extractor'
-import { commonWords } from './commonWords'
 import { db } from './index'
-const occurrences = require('occurences')
 const sw = require('stopword')
 
+const keyTerms = [
+  'Avici',
+  'Azurix',
+  'Braveheart',
+  'Cuiaba',
+  'Merlin',
+  'Osprey',
+  'Osprey1',
+  'Rawhide',
+  'Southampton',
+  'bankrupt',
+  'bankruptcy',
+  'cayman',
+  'chewco',
+  'condor',
+  'death',
+  'deathstar',
+  'enron',
+  'exectricity',
+  'fat',
+  'fraud',
+  'fuck',
+  'jedi',
+  'litigation',
+  'ljm',
+  'ljm2',
+  'monopoly',
+  'raptor',
+  'rocochet',
+  'shorty',
+  'shutdown',
+  'sidewinder',
+  'stanley',
+  'star',
+  'trutta',
+  'velocity',
+  'whitewing',
+  'worthless',
+]
 const statsWordCloudMap = new Map()
-
-// mininum number of mentions to warrant place in cloud
-const WORD_CLOUD_THRESHOLD = 250
 
 interface StatsWordCloudDoc {
   tag: string
@@ -23,26 +56,17 @@ export function addToStatsWordCloud(email: PSTMessage): void {
   const zlSig = '***********'
   let cleanBody = email.body.slice(0, email.body.indexOf(zlSig))
 
-  // remove CR/LF
-  cleanBody = cleanBody.replace(/[\r\n\t]/g, ' ')
+  // remove CR/LF and lowercase
+  cleanBody = cleanBody.replace(/[\r\n\t]/g, ' ').toLowerCase()
 
-  // remove stopwords (common words that don't afffect meaning)
-  const cleanArr = cleanBody.split(' ')
-  cleanBody = sw.removeStopwords(cleanArr).join(' ')
+  // remove stopwords (common words that don't affect meaning)
+  let cleanArr = cleanBody.split(' ')
+  cleanArr = sw.removeStopwords(cleanArr)
 
-  // tokenize to terms, ignoring common
-  const ignored = commonWords
-  const tokens = new occurrences(cleanBody, { ignored })
-
-  // console.log(tokens)
-  // throw 'foo'
-
-  // put into word cloud map
-  Object.entries(tokens._stats).map(([k, v]) => {
-    if (statsWordCloudMap.has(k)) {
-      statsWordCloudMap.set(k, statsWordCloudMap.get(k) + v)
-    } else {
-      statsWordCloudMap.set(k, v)
+  // bump counts for any term in our key terms
+  cleanArr.forEach((term) => {
+    if (statsWordCloudMap.has(term)) {
+      statsWordCloudMap.set(term, statsWordCloudMap.get(term) + 1)
     }
   })
 }
@@ -51,11 +75,11 @@ export function addToStatsWordCloud(email: PSTMessage): void {
 export async function processStatsWordCloudMap(): Promise<any> {
   const arr: StatsWordCloudDoc[] = []
   statsWordCloudMap.forEach((v, k) => {
-    if (v > WORD_CLOUD_THRESHOLD) {
-      console.log(`'${k}',`)
-      arr.push({ tag: k, weight: v })
-    }
+    arr.push({ tag: k, weight: v })
   })
   console.log('processStatsWordCloudMap: ' + arr.length + ' terms')
   await db.collection(config.get('dbStatsWordCloudCollection')).insertMany(arr)
 }
+
+// Initialize key terms map
+keyTerms.forEach((term) => statsWordCloudMap.set(term.toLowerCase(), 0))

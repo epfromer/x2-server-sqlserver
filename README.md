@@ -12,6 +12,8 @@ docker run --name mongodb -p 27017:27017 mongo
 
 For testing I run on the Enron email dataset and focus on the key players outlined in the articles below.
 
+## Key Players
+
 <https://www.foxnews.com/story/fast-facts-key-enron-players>
 
 ### Kenneth L. Lay
@@ -103,6 +105,30 @@ Enron chief financial officer.
 An Enron Corporation executive who resigned in May 2001 before committing suicide the following year. Prior to his death he had agreed to testify before Congress in the Enron scandal.
 
 <https://www.seattletimes.com/seattle-news/new-evidence-enron-was-scamming-years-before-energy-crunch/>  
+
+## Special Purpose Entities
+
+<https://en.wikipedia.org/wiki/Chewco>
+
+### JEDI and Chewco
+
+In 1993, Enron established a joint venture in energy investments with CalPERS, the California state pension fund, called the Joint Energy Development Investments (JEDI). In 1997, Skilling, serving as Chief Operating Officer (COO), asked CalPERS to join Enron in a separate investment. CalPERS was interested in the idea, but only if it could be terminated as a partner in JEDI. However, Enron did not want to show any debt from assuming CalPERS' stake in JEDI on its balance sheet. Chief Financial Officer (CFO) Fastow developed the special purpose entity Chewco Investments limited partnership (L.P.) which raised debt guaranteed by Enron and was used to acquire CalPERS's joint venture stake for $383 million. Because of Fastow's organization of Chewco, JEDI's losses were kept off of Enron's balance sheet.
+
+In autumn 2001, CalPERS and Enron's arrangement was discovered, which required the discontinuation of Enron's prior accounting method for Chewco and JEDI. This disqualification revealed that Enron's reported earnings from 1997 to mid-2001 would need to be reduced by $405 million and that the company's indebtedness would increase by $628 million.
+
+### Whitewing
+
+Whitewing was the name of a special purpose entity used as a financing method by Enron. In December 1997, with funding of $579 million provided by Enron and $500 million by an outside investor, Whitewing Associates L.P. was formed. Two years later, the entity's arrangement was changed so that it would no longer be consolidated with Enron and be counted on the company's balance sheet. Whitewing was used to purchase Enron assets, including stakes in power plants, pipelines, stocks, and other investments. Between 1999 and 2001, Whitewing bought assets from Enron worth $2 billion, using Enron stock as collateral. Although the transactions were approved by the Enron board, the asset transfers were not true sales and should have been treated instead as loans.
+
+### LJM and Raptors
+
+n 1999, Fastow formulated two limited partnerships: LJM Cayman. L.P. (LJM1) and LJM2 Co-Investment L.P. (LJM2), for the purpose of buying Enron's poorly performing stocks and stakes to improve its financial statements. LJM 1 and 2 were created solely to serve as the outside equity investor needed for the special purpose entities that were being used by Enron. Fastow had to go before the board of directors to receive an exemption from Enron's code of ethics (as he had the title of CFO) in order to manage the companies., 197 The two partnerships were funded with around $390 million provided by Wachovia, J.P. Morgan Chase, Credit Suisse First Boston, Citigroup, and other investors. Merrill Lynch, which marketed the equity, also contributed \$22 million to fund the entities.
+
+Enron transferred to "Raptor I-IV", four LJM-related special purpose entities named after the velociraptors in Jurassic Park, more than "\$1.2 billion in assets, including millions of shares of Enron common stock and long term rights to purchase millions more shares, plus \$150 million of Enron notes payable" as disclosed in the company's financial statement footnotes. The special purpose entities had been used to pay for all of this using the entities' debt instruments. The footnotes also declared that the instruments' face amount totaled \$1.5 billion, and the entities notional amount of \$2.1 billion had been used to enter into derivative contracts with Enron.
+
+Enron capitalized the Raptors, and, in a manner similar to the accounting employed when a company issues stock at a public offering, then booked the notes payable issued as assets on its balance sheet while increasing the shareholders' equity for the same amount. This treatment later became an issue for Enron and its auditor Arthur Andersen as removing it from the balance sheet resulted in a \$1.2 billion decrease in net shareholders' equity.
+
+Eventually the derivative contracts worth \$2.1 billion lost significant value. Swaps were established at the time the stock price achieved its maximum. During the ensuing year, the value of the portfolio under the swaps fell by \$1.1 billion as the stock prices decreased (the loss of value meant that the special purpose entities technically now owed Enron \$1.1 billion by the contracts). Enron, which used a "mark-to-market" accounting method, claimed a \$500 million gain on the swap contracts in its 2000 annual report. The gain was responsible for offsetting its stock portfolio losses and was attributed to nearly a third of Enron's earnings for 2000 (before it was properly restated in 2001).
 
 ### "Project Stanley"
 

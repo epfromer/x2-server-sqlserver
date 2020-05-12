@@ -1,3 +1,0 @@
-15:16:27.886 INFO  connecting to mongodb://test:test123@ds231719.mlab.com:31719/x2 
-15:16:28.461 INFO  connected to mongodb://test:test123@ds231719.mlab.com:31719/x2 
-15:16:28.461 INFO  dropping database mongodb://test:test123@ds231719.mlab.com:31719/x2 

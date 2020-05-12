@@ -66,7 +66,7 @@ export function processEmail(email: PSTMessage, emails: EmailDoc[]): void {
   if (config.get('onlyContacts') && !fromContact && !toContact) return
 
   // if (config.get('verbose')) {
-  //   log.info(`${sent} From: ${from}, To: ${to}, Subject: ${subject}`)
+  //   console.log(`${sent} From: ${from}, To: ${to}, Subject: ${subject}`)
   // }
 
   // add to stats

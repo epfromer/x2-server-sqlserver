@@ -2,8 +2,7 @@
   "name": "pst-mongo",
   "description": "Extract objects from MS Outlook/Exchange PST files and stores in MongoDB",
   "scripts": {
-    "start": "npm run removelog & ts-node src/index.ts",
-    "removelog": "rimraf output.log"
+    "start": "ts-node src/index.ts"
   },
   "license": "MIT",
   "version": "1.0.0",
@@ -34,8 +33,6 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
     "prettier": "^2.0.5",
-    "rimraf": "^3.0.2",
-    "simple-node-logger": "^18.12.24",
     "ts-node": "^8.10.1",
     "typescript": "^3.8.3"
   },

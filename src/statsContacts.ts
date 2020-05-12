@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as config from 'config'
-import { aliasMap, contacts } from './contacts'
-import { db, log } from './index'
+import { contacts } from './contacts'
+import { db } from './index'
 
 export const contactsMap = new Map()
 
@@ -27,7 +27,7 @@ export function addToStatsContacts(
 
 // Process stats list for word cloud and store in db.
 export async function processStatsContacts(): Promise<any> {
-  log.info('processStatsContacts: ' + contacts.length + ' contacts')
+  console.log('processStatsContacts: ' + contacts.length + ' contacts')
   await db
     .collection(config.get('dbStatsContactsCollection'))
     .insertMany(contacts)

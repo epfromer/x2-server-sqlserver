@@ -31,32 +31,30 @@ export interface EmailDoc {
   let numEmails = 0
 
   try {
-    log = require('simple-node-logger').createSimpleLogger('output.log')
-
     // connect to db
-    log.info(`connecting to ${config.get('dbHost')}`)
+    console.log(`connecting to ${config.get('dbHost')}`)
     // const client = await mongodb.MongoClient.connect(config.get('dbHost'), {
     //   useUnifiedTopology: true,
     // })
     const client = await mongodb.MongoClient.connect(config.get('dbHost'))
     db = client.db(config.get('dbName'))
-    log.info(`connected to ${config.get('dbHost')}`)
+    console.log(`connected to ${config.get('dbHost')}`)
 
     // drop database if requested
     if (config.get('dropDatabase')) {
-      log.info(`dropping database ${config.get('dbHost')}`)
+      console.log(`dropping database ${config.get('dbHost')}`)
       await db.dropDatabase()
     }
 
     // walk folder
     const pstFolder: string = config.get('pstFolder')
-    log.info(`walking folder ${pstFolder}`)
+    console.log(`walking folder ${pstFolder}`)
     const folderListing = fs.readdirSync(pstFolder)
     for (const file of folderListing) {
-      log.info(`processing ${file}\n`)
+      console.log(`processing ${file}\n`)
       const processStart = Date.now()
       const emails = walkPST(pstFolder + file)
-      log.info(
+      console.log(
         file +
           ': processing complete, ' +
           msString(emails.length, processStart, Date.now())
@@ -64,36 +62,36 @@ export interface EmailDoc {
       if (emails.length > 0) {
         // insert into db
         const dbInsertStart = Date.now()
-        log.info(`inserting ${emails.length} documents`)
+        console.log(`inserting ${emails.length} documents`)
         processEmailList(emails)
-        log.info(
+        console.log(
           file +
             ': insertion complete, ' +
             msString(emails.length, dbInsertStart, Date.now())
         )
         numEmails += emails.length
       } else {
-        log.info(file + ': processing complete, no emails')
+        console.log(file + ': processing complete, no emails')
       }
     }
 
     // ignored contacts
-    // ignoredContacts.forEach((c) => log.warn('ignored: ' + c))
-    possibleContacts.forEach((c) => log.warn('possible: ' + c))
+    // ignoredContacts.forEach((c) => console.log('ignored: ' + c))
+    possibleContacts.forEach((c) => console.log('possible: ' + c))
 
     // process stats
-    log.info('processing stats')
+    console.log('processing stats')
     processStatsContacts()
     processStatsEmailSentMap()
     processStatsWordCloudMap()
 
     // create indexes
-    log.info('creating indexes')
+    console.log('creating indexes')
     await db
       .collection(config.get('dbEmailCollection'))
       .createIndex({ '$**': 'text' })
 
-    log.info(`${numEmails} emails processed`)
+    console.log(`${numEmails} emails processed`)
     // client.close();
   } catch (error) {
     console.error(error)

@@ -3,7 +3,7 @@
 import * as config from 'config'
 import { PSTMessage } from 'pst-extractor'
 import { commonWords } from './commonWords'
-import { db, log } from './index'
+import { db } from './index'
 const occurrences = require('occurences')
 const sw = require('stopword')
 
@@ -34,7 +34,7 @@ export function addToStatsWordCloud(email: PSTMessage): void {
   const ignored = commonWords
   const tokens = new occurrences(cleanBody, { ignored })
 
-  // log.info(tokens)
+  // console.log(tokens)
   // throw 'foo'
 
   // put into word cloud map
@@ -53,6 +53,6 @@ export async function processStatsWordCloudMap(): Promise<any> {
   statsWordCloudMap.forEach((v, k) => {
     if (v > WORD_CLOUD_THRESHOLD) arr.push({ tag: k, weight: v })
   })
-  log.info('processStatsWordCloudMap: ' + arr.length + ' terms')
+  console.log('processStatsWordCloudMap: ' + arr.length + ' terms')
   await db.collection(config.get('dbStatsWordCloudCollection')).insertMany(arr)
 }

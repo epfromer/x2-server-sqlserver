@@ -32,6 +32,7 @@ export interface Alias {
 
 const aliases: Alias[] = [
   // { name: 'Fleming, Rosalee', aliases: ['Rosalee Fleming'] },
+  { name: 'Watkins, Sherron', aliases: ['Sherron Watkins'] },
   {
     name: 'Baxter, Cliff',
     aliases: [
@@ -46,7 +47,6 @@ const aliases: Alias[] = [
       'cliff baxter/hou/ect@enron',
     ],
   },
-  // { name: 'Boyle, Dan', aliases: [] },
   {
     name: 'Belden, Tim',
     aliases: [
@@ -134,7 +134,6 @@ const aliases: Alias[] = [
       'jdasovic@enron.com',
     ],
   },
-  // { name: 'Ellen, Philip', aliases: ['ellen'] },
   {
     name: 'Fastow, Andrew',
     aliases: [
@@ -153,21 +152,21 @@ const aliases: Alias[] = [
     ],
   },
   { name: 'Fastow, Lea', aliases: ['lea fastow', 'lfastow@pdq.net'] },
-  // {
-  //   name: 'Frevert, Mark',
-  //   aliases: [
-  //     'frevert  mark',
-  //     'mark frevert@enron',
-  //     'Mark, Frevert',
-  //     'mark frevert',
-  //     'mark.frevert@enron.com',
-  //     'frevert',
-  //     'office of the chairman - enron wholesale services- mark frevert and greg whalley@enron',
-  //     'mark frevert & dave delainey',
-  //     'mark frevert & dave delainey@enron',
-  //     'mark frevert/enron@enronxgate,',
-  //   ],
-  // },
+  {
+    name: 'Frevert, Mark',
+    aliases: [
+      'frevert  mark',
+      'mark frevert@enron',
+      'Mark, Frevert',
+      'mark frevert',
+      'mark.frevert@enron.com',
+      'frevert',
+      'office of the chairman - enron wholesale services- mark frevert and greg whalley@enron',
+      'mark frevert & dave delainey',
+      'mark frevert & dave delainey@enron',
+      'mark frevert/enron@enronxgate,',
+    ],
+  },
   {
     name: 'Glisan, Ben',
     aliases: [
@@ -204,11 +203,11 @@ const aliases: Alias[] = [
       'lkitchen@enron.co.uk,',
     ],
   },
-  // {
-  //   name: 'Kopper, Michael',
-  //   aliases: ['michael kopper@ect,', 'michael kopper,'],
-  // },
-  // { name: 'Lavoreto, John', aliases: ['john lavorato & louise kitchen@enron'] },
+  {
+    name: 'Kopper, Michael',
+    aliases: ['michael kopper@ect,', 'michael kopper,'],
+  },
+  { name: 'Lavoreto, John', aliases: ['john lavorato & louise kitchen@enron'] },
   {
     name: 'Lay, Kenneth',
     aliases: [
@@ -278,20 +277,20 @@ const aliases: Alias[] = [
       'imceanotes-ken+2elay-+2echairman+2eof+2ethe+2eboard+40enron+2ecom+40enron+20communications@enron.com,',
     ],
   },
-  // {
-  //   name: 'McMahon, Jeffrey',
-  //   aliases: [
-  //     'jeffrey.mcmahon@enron.com',
-  //     'mcmahon  jeffrey',
-  //     'jeffrey mcmahon',
-  //     'jeffrey mcmahon@ect',
-  //     'jeff mcmahon - president & coo',
-  //     'mbx_anncjmcmahon@enron.com',
-  //     'mcmahon',
-  //     'jmcmahon@enron.com,',
-  //     'jmcmahon,',
-  //   ],
-  // },
+  {
+    name: 'McMahon, Jeffrey',
+    aliases: [
+      'jeffrey.mcmahon@enron.com',
+      'mcmahon  jeffrey',
+      'jeffrey mcmahon',
+      'jeffrey mcmahon@ect',
+      'jeff mcmahon - president & coo',
+      'mbx_anncjmcmahon@enron.com',
+      'mcmahon',
+      'jmcmahon@enron.com,',
+      'jmcmahon,',
+    ],
+  },
   {
     name: 'Presto, Kevin',
     aliases: [
@@ -363,27 +362,27 @@ const aliases: Alias[] = [
       'katesymes@microsoft.com',
     ],
   },
-  // {
-  //   name: 'Whalley, Greg',
-  //   aliases: [
-  //     'greg whalley',
-  //     'gwhalle@enron.com',
-  //     'gwhalley@enron.com',
-  //     'Greg, Whalley',
-  //     'whalley  greg',
-  //     'whalley',
-  //     'whalley@enron.com',
-  //     'gregwhalley 8777865122@skytel.com@enron',
-  //     'greg.whalley@enron.com',
-  //     "'gregwhalley",
-  //     'notes:gregwhalley',
-  //     'greg.whalley',
-  //     'greg.whalle',
-  //     'greg whalley/hou/ect@ect',
-  //     'office of the chairman - enron wholesale services- mark frevert and greg whalley',
-  //     'greg whalley@ect,',
-  //   ],
-  // },
+  {
+    name: 'Whalley, Greg',
+    aliases: [
+      'greg whalley',
+      'gwhalle@enron.com',
+      'gwhalley@enron.com',
+      'Greg, Whalley',
+      'whalley  greg',
+      'whalley',
+      'whalley@enron.com',
+      'gregwhalley 8777865122@skytel.com@enron',
+      'greg.whalley@enron.com',
+      "'gregwhalley",
+      'notes:gregwhalley',
+      'greg.whalley',
+      'greg.whalle',
+      'greg whalley/hou/ect@ect',
+      'office of the chairman - enron wholesale services- mark frevert and greg whalley',
+      'greg whalley@ect,',
+    ],
+  },
 ]
 
 // set up contacts list from aliases, and map for quick access to contact
@@ -395,6 +394,8 @@ export const possibleHits = [
   // 'daso',
   // 'ellen',
   'fastow',
+  'watkins',
+  'sherron',
   // 'frevert',
   // 'glisan',
   // 'kitchen',

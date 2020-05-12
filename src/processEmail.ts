@@ -16,7 +16,8 @@ export function processEmail(email: PSTMessage, emails: EmailDoc[]): void {
   const isValidEmail = (email: PSTMessage): boolean | null =>
     email.messageClass === 'IPM.Note' &&
     email.clientSubmitTime !== null &&
-    email.clientSubmitTime > new Date(1990, 0, 1) &&
+    email.clientSubmitTime > new Date(1999, 0, 1) &&
+    email.clientSubmitTime < new Date(2002, 3, 1) &&
     (email.senderName.trim() !== '' ||
       email.senderEmailAddress.trim() !== '') &&
     filteredSenders.indexOf(email.senderName.trim()) < 0

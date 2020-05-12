@@ -51,7 +51,10 @@ export function addToStatsWordCloud(email: PSTMessage): void {
 export async function processStatsWordCloudMap(): Promise<any> {
   const arr: StatsWordCloudDoc[] = []
   statsWordCloudMap.forEach((v, k) => {
-    if (v > WORD_CLOUD_THRESHOLD) arr.push({ tag: k, weight: v })
+    if (v > WORD_CLOUD_THRESHOLD) {
+      console.log(`'${k}',`)
+      arr.push({ tag: k, weight: v })
+    }
   })
   console.log('processStatsWordCloudMap: ' + arr.length + ' terms')
   await db.collection(config.get('dbStatsWordCloudCollection')).insertMany(arr)

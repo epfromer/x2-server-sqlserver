@@ -4,6 +4,8 @@ import { PSTMessage } from 'pst-extractor'
 import { db } from './index'
 const sw = require('stopword')
 
+// TODO investigate https://www.npmjs.com/package/natural
+
 // https://books.google.com/books?id=CeapJz_amLUC&pg=SL1-PA25&lpg=SL1-PA25&dq=enron+glossary&source=bl&ots=ZIvVX780A0&sig=ACfU3U1As4CgzXi4THiPraSuiTeh_vVpjg&hl=en&sa=X&ved=2ahUKEwiVypmsga_pAhWHsJ4KHXCbDfcQ6AEwCHoECAoQAQ#v=onepage&q=enron%20glossary&f=false
 
 const keyTerms = [

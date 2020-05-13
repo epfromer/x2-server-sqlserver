@@ -77,7 +77,7 @@ export interface EmailDoc {
 
     // ignored contacts
     // ignoredContacts.forEach((c) => console.log('ignored: ' + c))
-    possibleContacts.forEach((c) => console.log(`'${c},'`))
+    possibleContacts.forEach((c) => console.log(`'${c}',`))
 
     // process stats
     console.log('processing stats')

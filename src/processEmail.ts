@@ -1,11 +1,12 @@
 import { PSTMessage } from 'pst-extractor'
 import { v4 as uuidv4 } from 'uuid'
-import { aliasMap, possibleHits, filteredSenders } from './contacts'
+import { aliasMap, possibleHits, filteredSenders } from './keyContacts'
 import { hash, hashMap } from './hash'
 import { EmailDoc } from './index'
 import { addToStatsContacts } from './statsContacts'
 import { addToStatsEmailSent } from './statsEmailSent'
 import { addToStatsWordCloud } from './statsWordCloud'
+import { hasKeyTerms } from './keyTerms'
 import * as config from 'config'
 
 export const ignoredContacts = new Set()
@@ -65,8 +66,11 @@ export function processEmail(email: PSTMessage, emails: EmailDoc[]): void {
     .concat(displayCCContacts, displayBCCContacts)
     .join('; ')
 
-  // load only email involving contacts?
-  if (config.get('onlyContacts') && !fromContact && !toContact) return
+  // always load email with any key term
+  if (!hasKeyTerms(email)) {
+    // load only email involving contacts?
+    if (config.get('onlyContacts') && !fromContact && !toContact) return
+  }
 
   // if (config.get('verbose')) {
   //   console.log(`${sent} From: ${from}, To: ${to}, Subject: ${subject}`)

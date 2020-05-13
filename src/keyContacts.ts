@@ -43,7 +43,10 @@ const aliases: Alias[] = [
       'roslee.fleming@enron.com',
     ],
   },
-  { name: 'Watkins, Sherron', aliases: ['Sherron Watkins', 'sherron'] },
+  {
+    name: 'Watkins, Sherron',
+    aliases: ['Sherron Watkins', 'sherron', 'Watkins Sherron'],
+  },
   {
     name: 'Baxter, Cliff',
     aliases: [
@@ -394,34 +397,38 @@ const aliases: Alias[] = [
   },
 ]
 
+// TODO find other contacts associated with key terms
+
 // set up contacts list from aliases, and map for quick access to contact
 export const possibleHits = [
-  'baxter',
-  'boyle',
-  'belden',
-  'causey',
-  'daso',
-  'ellen',
-  'fastow',
-  'fleming',
+  // 'baxter',
+  // 'boyle',
+  // 'belden',
+  // 'causey',
+  // 'daso',
+  // 'ellen',
+  // 'fastow',
+  // 'fleming',
+  // 'watkins',
+  // 'sherron',
+  // 'frevert',
+  // 'glisan',
+  // 'kitchen',
+  // 'kopper',
+  // 'lavoreto',
+  // 'lay',
+  // 'mcmahon',
+  // 'presto',
+  // 'skilling',
+  // 'symes',
+  // 'whalley',
   'watkins',
   'sherron',
-  'frevert',
-  'glisan',
-  'kitchen',
-  'kopper',
-  'lavoreto',
-  'lay',
-  'mcmahon',
-  'presto',
-  'skilling',
-  'symes',
-  'whalley',
 ]
-export const contacts: Contact[] = []
+export const keyContacts: Contact[] = []
 export const aliasMap = new Map()
 aliases.map((contact) => {
-  contacts.push({ asSender: [], asReceiver: [], ...contact })
+  keyContacts.push({ asSender: [], asReceiver: [], ...contact })
   contact.aliases.map((alias) => {
     aliasMap.set(alias.toLowerCase(), contact.name)
   })

@@ -31,7 +31,7 @@ export interface Alias {
 //  { name: '', aliases: [] },
 
 const aliases: Alias[] = [
-  // { name: 'Fleming, Rosalee', aliases: ['Rosalee Fleming'] },
+  { name: 'Fleming, Rosalee', aliases: ['Rosalee Fleming', 'rosalee.fleming@enron.com,', 'rosalee fleming@enron,', 'rfleming@enron.com,', 'fleming  rosalee,', 'fleming,', 'roslee.fleming@enron.com,'] },
   { name: 'Watkins, Sherron', aliases: ['Sherron Watkins'] },
   {
     name: 'Baxter, Cliff',
@@ -394,6 +394,7 @@ export const possibleHits = [
   // 'daso',
   // 'ellen',
   'fastow',
+  'fleming',
   'watkins',
   'sherron',
   // 'frevert',

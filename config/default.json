@@ -9,7 +9,7 @@
   "onlyContacts": true,
   "dropDatabase": true,
   "createIndexes": true,
-  "pstFolder": "c:/github/outlook/",
+  "pstFolder": "d:/github/outlook/",
   "verbose": false,
   "web": "https://mlab.com/databases/x2"
 }

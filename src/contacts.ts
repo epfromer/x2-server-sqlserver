@@ -31,8 +31,19 @@ export interface Alias {
 //  { name: '', aliases: [] },
 
 const aliases: Alias[] = [
-  { name: 'Fleming, Rosalee', aliases: ['Rosalee Fleming', 'rosalee.fleming@enron.com', 'rosalee fleming@enron', 'rfleming@enron.com', 'fleming  rosalee', 'fleming', 'roslee.fleming@enron.com'] },
-  { name: 'Watkins, Sherron', aliases: ['Sherron Watkins'] },
+  {
+    name: 'Fleming, Rosalee',
+    aliases: [
+      'Rosalee Fleming',
+      'rosalee.fleming@enron.com',
+      'rosalee fleming@enron',
+      'rfleming@enron.com',
+      'fleming  rosalee',
+      'fleming',
+      'roslee.fleming@enron.com',
+    ],
+  },
+  { name: 'Watkins, Sherron', aliases: ['Sherron Watkins', 'sherron'] },
   {
     name: 'Baxter, Cliff',
     aliases: [
@@ -149,6 +160,7 @@ const aliases: Alias[] = [
       'fastow  andrew s.',
       'andrew fastow',
       'andrew.s.fastow@enron.com',
+      'fastow',
     ],
   },
   { name: 'Fastow, Lea', aliases: ['lea fastow', 'lfastow@pdq.net'] },

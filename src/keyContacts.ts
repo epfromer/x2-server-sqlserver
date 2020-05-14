@@ -101,7 +101,20 @@ const aliases: Alias[] = [
   {
     name: 'Cash, Michelle',
     title: 'Assistant General Counsel',
-    aliases: ['Cash Michelle', 'Cash', 'Michelle Cash'],
+    aliases: [
+      'Cash Michelle',
+      'Cash',
+      'Michelle Cash',
+      'michelle cash/hou/ect@ect',
+      'michelle.cash@enron.com',
+      'mcash@enron.com',
+      'michelle cash (e-mail)',
+      'mcash@ect.enron.com',
+      'cash michelle (e-mail)',
+      'cash  michelle',
+      'cash@mailman.enron.com',
+      'cash michelle (e-mail)',
+    ],
   },
   {
     name: 'Buy, Richard',
@@ -530,12 +543,13 @@ export const possibleHits = [
   // 'whalley',
   // 'watkins',
   // 'sherron',
-  'buy',
-  'mellencamp',
-  'shackleton',
-  'schwertner',
-  'vargas',
-  'galvan',
+  // 'buy',
+  // 'mellencamp',
+  // 'shackleton',
+  // 'schwertner',
+  // 'vargas',
+  // 'galvan',
+  // 'cash',
 ]
 export const keyContacts: Contact[] = []
 export const aliasMap = new Map()

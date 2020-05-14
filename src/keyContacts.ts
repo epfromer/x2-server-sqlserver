@@ -25,12 +25,111 @@ export interface Contact {
 
 export interface Alias {
   name: string
+  title?: string
   aliases: string[]
 }
 
 //  { name: '', aliases: [] },
 
 const aliases: Alias[] = [
+  {
+    name: 'Shackleton, Sara',
+    aliases: [
+      'sara shackleton',
+      'shackleton  sara',
+      'sara.shackleton@enron.com',
+      'shackleton',
+      'sara shackleton/hou/ect@ect',
+      'sara shackleton@enron_development',
+      'sara shackleton@ect',
+      'sara_shackleton@enron.com',
+      "'sara shackleton' @enron",
+      'sara.shackleton',
+      'sara_shackleton.enron.com@dom.com',
+      'shackleton sara',
+      'shackleton@mailman.enron.com',
+      'shackleton  sara (enron)',
+      'sara shackleton (e-mail)',
+      'sara shackleton @ enron.com',
+      'sara.shackleton@db.com',
+    ],
+  },
+  {
+    name: 'Galvan, Michael',
+    aliases: [
+      'michael s galvan',
+      'galvan',
+      'jgalvan@kpmg.com',
+      'galvan',
+      'galvan  michael s.',
+      'michael.s.galvan@enron.com',
+    ],
+  },
+  {
+    name: 'Vargas, Hope',
+    aliases: [
+      'hope vargas',
+      'vargas',
+      'vargas  hope',
+      'hope.vargas@enron.com',
+      'hope vargas/hou/ect@ect',
+      'hope vargas/enron@enronxgate@enron',
+    ],
+  },
+  {
+    name: 'Schwertner, Brian',
+    aliases: [
+      'brian schwertner',
+      'schwertner',
+      'schwertner  brian',
+      'brian schwertner/na/enron@enron',
+    ],
+  },
+  { name: 'Cook, Mary', aliases: ['Mary Cook', 'Cook'] },
+  {
+    name: 'Mellencamp, Lisa',
+    aliases: [
+      'lisa mellencamp',
+      'mellencamp',
+      'mellencamp  lisa',
+      'lisa.mellencamp@enron.com',
+      'lmellencamp@enron.com',
+      'mellencamp lisa',
+      'lisa mellencamp/hou/ect@ect',
+    ],
+  },
+  {
+    name: 'Cash, Michelle',
+    title: 'Assistant General Counsel',
+    aliases: ['Cash Michelle', 'Cash', 'Michelle Cash'],
+  },
+  {
+    name: 'Buy, Richard',
+    title: 'Chief Risk Officer',
+    aliases: [
+      'Buy, Rick',
+      'Buy Rick',
+      'rick buy- enron corp. chief risk officer@enron',
+      'rick buy- enron corp. chief risk officer@enron',
+      'rick buy and mark haedicke',
+      'rick buy and mark haedicke@enron',
+      'buy  rick',
+      'imceanotes-+3corderdetails+40buy+2ecom+3e+40enron@enron.com',
+      'rick buy',
+      'rick buy@ect',
+      'buy',
+      'rick.buy@enron.com',
+      'rick buy/hou/ect@enron',
+      'rbuy@enron.com',
+      'rbuy@ect.enron.com',
+      'richard buy',
+      'richard b. buy (e-mail)',
+      'rick buy (ene) (e-mail)',
+      'richard b. buy  pe',
+      'buy  richard',
+      'richard b buy',
+    ],
+  },
   {
     name: 'Fleming, Rosalee',
     aliases: [
@@ -45,7 +144,14 @@ const aliases: Alias[] = [
   },
   {
     name: 'Watkins, Sherron',
-    aliases: ['Sherron Watkins', 'sherron', 'Watkins Sherron'],
+    aliases: [
+      'Sherron Watkins',
+      'sherron',
+      'Watkins Sherron',
+      'watkins  sherron',
+      'sherron_watkins@enron.net',
+      'watkins',
+    ],
   },
   {
     name: 'Baxter, Cliff',
@@ -422,8 +528,14 @@ export const possibleHits = [
   // 'skilling',
   // 'symes',
   // 'whalley',
-  'watkins',
-  'sherron',
+  // 'watkins',
+  // 'sherron',
+  'buy',
+  'mellencamp',
+  'shackleton',
+  'schwertner',
+  'vargas',
+  'galvan',
 ]
 export const keyContacts: Contact[] = []
 export const aliasMap = new Map()

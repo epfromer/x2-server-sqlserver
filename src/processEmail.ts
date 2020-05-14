@@ -86,13 +86,17 @@ export function processEmail(email: PSTMessage, emails: EmailDoc[]): void {
   addToStatsEmailSent(sent, id)
   addToStatsWordCloud(email)
 
+  const prettifyAddress = (address: string): string => {
+    return address.split('@').join(' @')
+  }
+
   // add to list to be inserted later
   emails.push({
     id,
     sent,
-    from: email.senderName,
+    from: prettifyAddress(email.senderName),
     fromContact,
-    to: email.displayTo,
+    to: prettifyAddress(email.displayTo),
     toContact,
     cc: email.displayCC,
     bcc: email.displayBCC,

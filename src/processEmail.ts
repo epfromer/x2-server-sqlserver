@@ -3,7 +3,11 @@ import { v4 as uuidv4 } from 'uuid'
 import { aliasMap, possibleHits, filteredSenders } from './keyContacts'
 import { hash, hashMap } from './hash'
 import { EmailDoc } from './index'
-import { addToStatsContacts } from './statsContacts'
+import {
+  addToContactsInteraction,
+  incSenderTotal,
+  incReceiverTotal,
+} from './statsContacts'
 import { addToStatsEmailSent } from './statsEmailSent'
 import { addToStatsWordCloud } from './statsWordCloud'
 import { hasKeyTerms } from './keyTerms'
@@ -81,8 +85,10 @@ export function processEmail(email: PSTMessage, emails: EmailDoc[]): void {
   const sent = email.clientSubmitTime!
   const id = uuidv4()
   if (fromContact && toContact) {
-    addToStatsContacts(fromContact, toContact, id, sent)
+    addToContactsInteraction(fromContact, toContact, id, sent)
   }
+  if (fromContact) incSenderTotal(fromContact)
+  if (toContact) incReceiverTotal(toContact)
   addToStatsEmailSent(sent, id)
   addToStatsWordCloud(email)
 

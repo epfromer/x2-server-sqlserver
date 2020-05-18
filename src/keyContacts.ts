@@ -17,16 +17,21 @@ export interface EmailReceived {
 }
 
 export interface Contact {
-  asSender: EmailSent[]
-  asReceiver: EmailReceived[]
   name: string
   aliases: string[]
+  title: string
+  color: string
+  senderTotal: number
+  receiverTotal: number
+  asSender: EmailSent[]
+  asReceiver: EmailReceived[]
 }
 
 export interface Alias {
   name: string
-  title?: string
   aliases: string[]
+  title: string
+  color: string
 }
 
 //  { name: '', aliases: [] },
@@ -34,6 +39,8 @@ export interface Alias {
 const aliases: Alias[] = [
   {
     name: 'Shackleton, Sara',
+    title: 'VP ENA & Senior Counsel',
+    color: '#494949',
     aliases: [
       'sara shackleton',
       'shackleton  sara',
@@ -56,6 +63,8 @@ const aliases: Alias[] = [
   },
   {
     name: 'Galvan, Michael',
+    title: '',
+    color: '#494949',
     aliases: [
       'michael s galvan',
       'galvan',
@@ -67,6 +76,8 @@ const aliases: Alias[] = [
   },
   {
     name: 'Vargas, Hope',
+    title: '',
+    color: '#494949',
     aliases: [
       'hope vargas',
       'vargas',
@@ -78,6 +89,8 @@ const aliases: Alias[] = [
   },
   {
     name: 'Schwertner, Brian',
+    title: '',
+    color: '#494949',
     aliases: [
       'brian schwertner',
       'schwertner',
@@ -85,9 +98,16 @@ const aliases: Alias[] = [
       'brian schwertner/na/enron@enron',
     ],
   },
-  { name: 'Cook, Mary', aliases: ['Mary Cook', 'Cook'] },
+  {
+    name: 'Cook, Mary',
+    title: '',
+    color: '#494949',
+    aliases: ['Mary Cook', 'Cook'],
+  },
   {
     name: 'Mellencamp, Lisa',
+    title: '',
+    color: '#494949',
     aliases: [
       'lisa mellencamp',
       'mellencamp',
@@ -101,6 +121,7 @@ const aliases: Alias[] = [
   {
     name: 'Cash, Michelle',
     title: 'Assistant General Counsel',
+    color: '#494949',
     aliases: [
       'Cash Michelle',
       'Cash',
@@ -119,6 +140,7 @@ const aliases: Alias[] = [
   {
     name: 'Buy, Richard',
     title: 'Chief Risk Officer',
+    color: '#494949',
     aliases: [
       'Buy, Rick',
       'Buy Rick',
@@ -145,6 +167,8 @@ const aliases: Alias[] = [
   },
   {
     name: 'Fleming, Rosalee',
+    title: '',
+    color: '#494949',
     aliases: [
       'Rosalee Fleming',
       'rosalee.fleming@enron.com',
@@ -157,6 +181,8 @@ const aliases: Alias[] = [
   },
   {
     name: 'Watkins, Sherron',
+    title: '',
+    color: '#494949',
     aliases: [
       'Sherron Watkins',
       'sherron',
@@ -168,6 +194,8 @@ const aliases: Alias[] = [
   },
   {
     name: 'Baxter, Cliff',
+    title: '',
+    color: '#494949',
     aliases: [
       'cliff baxter',
       'cbaxter@enron.com',
@@ -182,6 +210,8 @@ const aliases: Alias[] = [
   },
   {
     name: 'Belden, Tim',
+    title: '',
+    color: '#494949',
     aliases: [
       'belden',
       'belden  tim',
@@ -198,11 +228,9 @@ const aliases: Alias[] = [
     ],
   },
   {
-    name: 'Bennett, Robert',
-    aliases: ['rbennett@skadden.com', 'rbennett@skadden.com'],
-  },
-  {
     name: 'Causey, Richard',
+    title: '',
+    color: '#494949',
     aliases: [
       'richard causey@enron',
       'richard causey',
@@ -220,6 +248,8 @@ const aliases: Alias[] = [
   },
   {
     name: 'Dasovich, Jeff',
+    title: '',
+    color: '#494949',
     aliases: [
       'jdasovic@ees.enron.com',
       'jdasovi@ect.enron.com',
@@ -269,6 +299,8 @@ const aliases: Alias[] = [
   },
   {
     name: 'Fastow, Andrew',
+    title: '',
+    color: '#494949',
     aliases: [
       'andy fastow',
       'andrew s fastow',
@@ -285,9 +317,10 @@ const aliases: Alias[] = [
       'fastow',
     ],
   },
-  { name: 'Fastow, Lea', aliases: ['lea fastow', 'lfastow@pdq.net'] },
   {
     name: 'Frevert, Mark',
+    title: '',
+    color: '#494949',
     aliases: [
       'frevert  mark',
       'mark frevert@enron',
@@ -303,6 +336,8 @@ const aliases: Alias[] = [
   },
   {
     name: 'Glisan, Ben',
+    title: '',
+    color: '#494949',
     aliases: [
       'ben.glisan@enron.com',
       'glisan  ben',
@@ -317,6 +352,8 @@ const aliases: Alias[] = [
   },
   {
     name: 'Kitchen, Louise',
+    title: '',
+    color: '#494949',
     aliases: [
       'kitchen  louise',
       'lkitchen@enron.com',
@@ -338,11 +375,24 @@ const aliases: Alias[] = [
   },
   {
     name: 'Kopper, Michael',
+    title: '',
+    color: '#494949',
     aliases: ['michael kopper@ect', 'michael kopper'],
   },
-  { name: 'Lavoreto, John', aliases: ['john lavorato & louise kitchen@enron'] },
+  {
+    name: 'Lavorato, John',
+    title: '',
+    color: '#494949',
+    aliases: [
+      'lavorato  john',
+      'john j lavorato',
+      'john lavorato & louise kitchen@enron',
+    ],
+  },
   {
     name: 'Lay, Kenneth',
+    title: '',
+    color: '#494949',
     aliases: [
       'kenneth l lay@enron,',
       'kenneth l. lay - enron',
@@ -410,6 +460,8 @@ const aliases: Alias[] = [
   },
   {
     name: 'McMahon, Jeffrey',
+    title: '',
+    color: '#494949',
     aliases: [
       'jeffrey.mcmahon@enron.com',
       'mcmahon  jeffrey',
@@ -424,6 +476,8 @@ const aliases: Alias[] = [
   },
   {
     name: 'Presto, Kevin',
+    title: '',
+    color: '#494949',
     aliases: [
       'presto',
       'presto  kevin m.',
@@ -449,6 +503,8 @@ const aliases: Alias[] = [
   },
   {
     name: 'Skilling, Jeff',
+    title: '',
+    color: '#494949',
     aliases: [
       'jeffrey k skilling@enron',
       'jeff skilling@enron',
@@ -478,6 +534,8 @@ const aliases: Alias[] = [
   },
   {
     name: 'Symes, Kate',
+    title: '',
+    color: '#494949',
     aliases: [
       'symes  kate',
       'kate.symes@enron.com',
@@ -495,6 +553,8 @@ const aliases: Alias[] = [
   },
   {
     name: 'Whalley, Greg',
+    title: '',
+    color: '#494949',
     aliases: [
       'greg whalley',
       'gwhalle@enron.com',
@@ -533,8 +593,8 @@ export const possibleHits = [
   // 'frevert',
   // 'glisan',
   // 'kitchen',
-  // 'kopper',
-  // 'lavoreto',
+  'kopper',
+  'lavorato',
   // 'lay',
   // 'mcmahon',
   // 'presto',
@@ -554,7 +614,13 @@ export const possibleHits = [
 export const keyContacts: Contact[] = []
 export const aliasMap = new Map()
 aliases.map((contact) => {
-  keyContacts.push({ asSender: [], asReceiver: [], ...contact })
+  keyContacts.push({
+    senderTotal: 0,
+    receiverTotal: 0,
+    asSender: [],
+    asReceiver: [],
+    ...contact,
+  })
   contact.aliases.map((alias) => {
     aliasMap.set(alias.toLowerCase(), contact.name)
   })

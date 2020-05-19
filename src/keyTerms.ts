@@ -71,7 +71,6 @@ export const keyTerms = [
   'tonya',
   'trutta',
   'valhalla',
-  'valkyrie',
   'valor',
   'velocity',
   'whitewing',

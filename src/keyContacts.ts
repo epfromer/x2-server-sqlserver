@@ -38,87 +38,6 @@ export interface Alias {
 
 const aliases: Alias[] = [
   {
-    name: 'Shackleton, Sara',
-    title: 'VP ENA & Senior Counsel',
-    color: '#01579b',
-    aliases: [
-      'sara shackleton',
-      'shackleton  sara',
-      'sara.shackleton@enron.com',
-      'shackleton',
-      'sara shackleton/hou/ect@ect',
-      'sara shackleton@enron_development',
-      'sara shackleton@ect',
-      'sara_shackleton@enron.com',
-      "'sara shackleton' @enron",
-      'sara.shackleton',
-      'sara_shackleton.enron.com@dom.com',
-      'shackleton sara',
-      'shackleton@mailman.enron.com',
-      'shackleton  sara (enron)',
-      'sara shackleton (e-mail)',
-      'sara shackleton @ enron.com',
-      'sara.shackleton@db.com',
-    ],
-  },
-  {
-    name: 'Galvan, Michael',
-    title: '',
-    color: '#1b5e20',
-    aliases: [
-      'michael s galvan',
-      'galvan',
-      'jgalvan@kpmg.com',
-      'galvan',
-      'galvan  michael s.',
-      'michael.s.galvan@enron.com',
-    ],
-  },
-  {
-    name: 'Vargas, Hope',
-    title: '',
-    color: '#311b92',
-    aliases: [
-      'hope vargas',
-      'vargas',
-      'vargas  hope',
-      'hope.vargas@enron.com',
-      'hope vargas/hou/ect@ect',
-      'hope vargas/enron@enronxgate@enron',
-    ],
-  },
-  {
-    name: 'Schwertner, Brian',
-    title: '',
-    color: '#827717',
-    aliases: [
-      'brian schwertner',
-      'schwertner',
-      'schwertner  brian',
-      'brian schwertner/na/enron@enron',
-    ],
-  },
-  {
-    name: 'Cook, Mary',
-    title: '',
-    color: '#3e2723',
-    aliases: ['Mary Cook', 'Cook'],
-  },
-  {
-    name: 'Mellencamp, Lisa',
-    title: '',
-    color: '#263238',
-    aliases: [
-      'lisa mellencamp',
-      'mellencamp',
-      'mellencamp  lisa',
-      'lisa.mellencamp@enron.com',
-      'lmellencamp@enron.com',
-      'mellencamp lisa',
-      'lisa mellencamp/hou/ect@ect',
-    ],
-  },
-  {
     name: 'Cash, Michelle',
     title: 'Assistant General Counsel',
     color: '#1a237e',
@@ -167,7 +86,7 @@ const aliases: Alias[] = [
   },
   {
     name: 'Fleming, Rosalee',
-    title: '',
+    title: 'Assistant to Ken Lay',
     color: '#ff4081',
     aliases: [
       'Rosalee Fleming',
@@ -181,7 +100,7 @@ const aliases: Alias[] = [
   },
   {
     name: 'Watkins, Sherron',
-    title: '',
+    title: 'ice President of Corporate Development',
     color: '#6d4c41',
     aliases: [
       'Sherron Watkins',
@@ -194,7 +113,7 @@ const aliases: Alias[] = [
   },
   {
     name: 'Baxter, Cliff',
-    title: '',
+    title: 'Vice Chairman',
     color: '#546e7a',
     aliases: [
       'cliff baxter',
@@ -210,7 +129,7 @@ const aliases: Alias[] = [
   },
   {
     name: 'Belden, Tim',
-    title: '',
+    title: 'Head of Trading, Enron Energy Services',
     color: '#689f38',
     aliases: [
       'belden',
@@ -229,7 +148,7 @@ const aliases: Alias[] = [
   },
   {
     name: 'Causey, Richard',
-    title: '',
+    title: 'Executive Vice President and Chief Accounting Officer',
     color: '#1de9b6',
     aliases: [
       'richard causey@enron',
@@ -248,7 +167,7 @@ const aliases: Alias[] = [
   },
   {
     name: 'Dasovich, Jeff',
-    title: '',
+    title: 'Government Relation Executive',
     color: '#673ab7',
     aliases: [
       'jdasovic@ees.enron.com',
@@ -299,7 +218,7 @@ const aliases: Alias[] = [
   },
   {
     name: 'Fastow, Andrew',
-    title: '',
+    title: 'Chief Financial Officer',
     color: '#b71c1c',
     aliases: [
       'andy fastow',
@@ -319,7 +238,7 @@ const aliases: Alias[] = [
   },
   {
     name: 'Frevert, Mark',
-    title: '',
+    title: 'Chief Executive Officer of Enron Wholesale Services (EWS)',
     color: '#ab47bc',
     aliases: [
       'frevert  mark',
@@ -336,7 +255,7 @@ const aliases: Alias[] = [
   },
   {
     name: 'Glisan, Ben',
-    title: '',
+    title: 'Treasurer',
     color: '#009688',
     aliases: [
       'ben.glisan@enron.com',
@@ -352,7 +271,7 @@ const aliases: Alias[] = [
   },
   {
     name: 'Kitchen, Louise',
-    title: '',
+    title: 'President Enron Online, Senior Trader',
     color: '#424242',
     aliases: [
       'kitchen  louise',
@@ -375,13 +294,13 @@ const aliases: Alias[] = [
   },
   {
     name: 'Kopper, Michael',
-    title: '',
+    title: 'Managing director Enron Global Equities Market Group',
     color: '#ffc107',
     aliases: ['michael kopper@ect', 'michael kopper'],
   },
   {
     name: 'Lavorato, John',
-    title: '',
+    title: 'Senior Trader',
     color: '#dd2c00',
     aliases: [
       'lavorato  john',
@@ -410,7 +329,7 @@ const aliases: Alias[] = [
   },
   {
     name: 'Lay, Kenneth',
-    title: '',
+    title: 'Founder, CEO and Chairman',
     color: '#c51162',
     aliases: [
       'kenneth l lay@enron,',
@@ -479,7 +398,7 @@ const aliases: Alias[] = [
   },
   {
     name: 'McMahon, Jeffrey',
-    title: '',
+    title: 'Chief Financial Officer',
     color: '#7e57c2',
     aliases: [
       'jeffrey.mcmahon@enron.com',
@@ -495,7 +414,7 @@ const aliases: Alias[] = [
   },
   {
     name: 'Presto, Kevin',
-    title: '',
+    title: 'Vice President',
     color: '#3f51b5',
     aliases: [
       'presto',
@@ -522,7 +441,7 @@ const aliases: Alias[] = [
   },
   {
     name: 'Skilling, Jeff',
-    title: '',
+    title: 'CEO',
     color: '#f50057',
     aliases: [
       'jeffrey k skilling@enron',
@@ -553,7 +472,7 @@ const aliases: Alias[] = [
   },
   {
     name: 'Symes, Kate',
-    title: '',
+    title: 'Trader',
     color: '#009688',
     aliases: [
       'symes  kate',
@@ -572,7 +491,7 @@ const aliases: Alias[] = [
   },
   {
     name: 'Whalley, Greg',
-    title: '',
+    title: 'President',
     color: '#78909c',
     aliases: [
       'greg whalley',

@@ -7,9 +7,9 @@ import {
   addToContactsInteraction,
   incSenderTotal,
   incReceiverTotal,
-} from './statsContacts'
-import { addToStatsEmailSent } from './statsEmailSent'
-import { addToStatsWordCloud } from './statsWordCloud'
+} from './processContacts'
+import { addToEmailSent } from './processEmailSent'
+import { addToWordCloud } from './processWordCloud'
 import { hasKeyTerms } from './keyTerms'
 import * as config from 'config'
 
@@ -80,7 +80,7 @@ export function processEmail(email: PSTMessage, emails: EmailDoc[]): void {
   //   console.log(`${sent} From: ${from}, To: ${to}, Subject: ${subject}`)
   // }
 
-  // add to stats
+  // add to db
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const sent = email.clientSubmitTime!
   const id = uuidv4()
@@ -89,8 +89,8 @@ export function processEmail(email: PSTMessage, emails: EmailDoc[]): void {
   }
   if (fromContact) incSenderTotal(fromContact)
   if (toContact) incReceiverTotal(toContact)
-  addToStatsEmailSent(sent, id)
-  addToStatsWordCloud(email)
+  addToEmailSent(sent, id)
+  addToWordCloud(email)
 
   const prettifyAddress = (address: string): string => {
     return address.split('@').join(' @')

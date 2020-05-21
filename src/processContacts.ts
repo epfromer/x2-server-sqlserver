@@ -38,10 +38,10 @@ export function incReceiverTotal(toContact: string): void {
   })
 }
 
-// Process stats list for word cloud and store in db.
-export async function processStatsContacts(): Promise<any> {
-  console.log('processStatsContacts: ' + keyContacts.length + ' contacts')
+// Process list for word cloud and store in db.
+export async function processContacts(): Promise<any> {
+  console.log('processContacts: ' + keyContacts.length + ' contacts')
   await db
-    .collection(config.get('dbStatsContactsCollection'))
+    .collection(config.get('dbContactsCollection'))
     .insertMany(keyContacts)
 }

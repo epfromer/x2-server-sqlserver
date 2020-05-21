@@ -7,15 +7,15 @@ const sw = require('stopword')
 
 // TODO investigate https://www.npmjs.com/package/natural
 
-const statsWordCloudMap = new Map()
+const wordCloudMap = new Map()
 
-interface StatsWordCloudDoc {
+interface WordCloudDoc {
   tag: string
   weight: number
 }
 
 // Tokenize body for word cloud
-export function addToStatsWordCloud(email: PSTMessage): void {
+export function addToWordCloud(email: PSTMessage): void {
   // remove EDRM sig
   const zlSig = '***********'
   let cleanBody = email.body.slice(0, email.body.indexOf(zlSig))
@@ -29,21 +29,21 @@ export function addToStatsWordCloud(email: PSTMessage): void {
 
   // bump counts for any term in our key terms
   cleanArr.forEach((term) => {
-    if (statsWordCloudMap.has(term)) {
-      statsWordCloudMap.set(term, statsWordCloudMap.get(term) + 1)
+    if (wordCloudMap.has(term)) {
+      wordCloudMap.set(term, wordCloudMap.get(term) + 1)
     }
   })
 }
 
-// Process stats list for word cloud and store in db.
-export async function processStatsWordCloudMap(): Promise<any> {
-  const arr: StatsWordCloudDoc[] = []
-  statsWordCloudMap.forEach((v, k) => {
+// Process list for word cloud and store in db.
+export async function processWordCloud(): Promise<any> {
+  const arr: WordCloudDoc[] = []
+  wordCloudMap.forEach((v, k) => {
     arr.push({ tag: k, weight: v })
   })
-  console.log('processStatsWordCloudMap: ' + arr.length + ' terms')
-  await db.collection(config.get('dbStatsWordCloudCollection')).insertMany(arr)
+  console.log('processWordCloud: ' + arr.length + ' terms')
+  await db.collection(config.get('dbWordCloudCollection')).insertMany(arr)
 }
 
 // Initialize key terms map
-keyTerms.forEach((term) => statsWordCloudMap.set(term.toLowerCase(), 0))
+keyTerms.forEach((term) => wordCloudMap.set(term.toLowerCase(), 0))

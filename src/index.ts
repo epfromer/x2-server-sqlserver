@@ -5,9 +5,9 @@ import * as mongodb from 'mongodb'
 import { msString } from './msString'
 import { possibleContacts } from './processEmail'
 import { processEmailList } from './processEmailList'
-import { processStatsContacts } from './statsContacts'
-import { processStatsEmailSentMap } from './statsEmailSent'
-import { processStatsWordCloudMap } from './statsWordCloud'
+import { processContacts } from './processContacts'
+import { processEmailSent } from './processEmailSent'
+import { processWordCloud } from './processWordCloud'
 import { walkPST } from './walkPST'
 
 export let db: any
@@ -81,9 +81,9 @@ export interface EmailDoc {
 
     // process stats
     console.log('processing stats')
-    processStatsContacts()
-    processStatsEmailSentMap()
-    processStatsWordCloudMap()
+    processContacts()
+    processEmailSent()
+    processWordCloud()
 
     // create indexes
     console.log('creating indexes')

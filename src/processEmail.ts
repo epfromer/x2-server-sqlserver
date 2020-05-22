@@ -18,6 +18,14 @@ export const possibleContacts = new Set()
 
 // Processes individual email and stores in list.
 export function processEmail(email: PSTMessage, emails: EmailDoc[]): void {
+  // dedupe
+  const h = hash(email.body)
+  if (hashMap.has(h)) return
+
+  // check if the doc has any key terms / fraudulent project names
+  const hotDoc = hasKeyTerms(email)
+
+  // filter out funky stuff that isn't hot
   const isValidEmail = (email: PSTMessage): boolean | null =>
     email.messageClass === 'IPM.Note' &&
     email.clientSubmitTime !== null &&
@@ -26,12 +34,7 @@ export function processEmail(email: PSTMessage, emails: EmailDoc[]): void {
     (email.senderName.trim() !== '' ||
       email.senderEmailAddress.trim() !== '') &&
     filteredSenders.indexOf(email.senderName.trim()) < 0
-  if (!isValidEmail(email)) return
-
-  // dedupe
-  const h = hash(email.body)
-  if (hashMap.has(h)) return
-  hashMap.set(h, email.body)
+  if (!hotDoc && !isValidEmail(email)) return
 
   // check for key contacts
   const getContacts = (s: string): string[] => {
@@ -70,10 +73,9 @@ export function processEmail(email: PSTMessage, emails: EmailDoc[]): void {
     .concat(displayCCContacts, displayBCCContacts)
     .join('; ')
 
-  // always load email with any key term
-  if (!hasKeyTerms(email)) {
-    // load only email involving contacts?
-    if (config.get('onlyContacts') && !fromContact && !toContact) return
+  // load only email involving contacts?
+  if (!hotDoc && config.get('onlyContacts') && !fromContact && !toContact) {
+    return
   }
 
   // if (config.get('verbose')) {
@@ -109,4 +111,7 @@ export function processEmail(email: PSTMessage, emails: EmailDoc[]): void {
     subject: email.subject,
     body: email.body,
   })
+
+  // add to dedupe map
+  hashMap.set(h, email.body)
 }

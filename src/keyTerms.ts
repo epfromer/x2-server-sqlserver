@@ -61,9 +61,42 @@ export const keyTerms = [
   'whitewing',
 ]
 
+const keyNames = [
+  'baxter',
+  'belden',
+  'causey',
+  'dasovich',
+  'fastow',
+  'fleming',
+  'frevert',
+  'glisan',
+  'kitchen',
+  'kopper',
+  'lavorato',
+  'lay',
+  'mcmahon',
+  'presto',
+  'skilling',
+  'symes',
+  'watkins',
+  'whalley',
+]
+
 export function hasKeyTerms(email: PSTMessage): boolean {
   for (const term of keyTerms) {
     if (email.body.indexOf(term) >= 0 || email.subject.indexOf(term) >= 0)
+      return true
+  }
+  for (const term of keyNames) {
+    if (
+      email.body.indexOf(term) >= 0 ||
+      email.subject.indexOf(term) >= 0 ||
+      email.senderName.indexOf(term) >= 0 ||
+      email.senderEmailAddress.indexOf(term) >= 0 ||
+      email.displayTo.indexOf(term) >= 0 ||
+      email.displayBCC.indexOf(term) >= 0 ||
+      email.displayCC.indexOf(term) >= 0
+    )
       return true
   }
   return false

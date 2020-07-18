@@ -75,7 +75,6 @@ const keyNames = [
   'lavorato',
   'lay',
   'mcmahon',
-  'presto',
   'skilling',
   'symes',
   'watkins',

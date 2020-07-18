@@ -449,7 +449,6 @@ const aliases: Alias[] = [
   //     'john j lavorato/enron@enronxgate@enron',
   //   ],
   // },
-  
   // {
   //   name: 'McMahon, Jeffrey',
   //   title: 'Chief Financial Officer',
@@ -493,7 +492,7 @@ const aliases: Alias[] = [
   //     'kpresto@ect.enron.com',
   //   ],
   // },
-    // {
+  // {
   //   name: 'Symes, Kate',
   //   title: 'Trader',
   //   color: '#8bc34a',

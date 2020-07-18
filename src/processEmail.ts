@@ -22,9 +22,6 @@ export function processEmail(email: PSTMessage, emails: EmailDoc[]): void {
   const h = hash(email.body)
   if (hashMap.has(h)) return
 
-  // check if the doc has any key terms / fraudulent project names
-  const hotDoc = hasKeyTerms(email)
-
   // filter out funky stuff that isn't hot
   const isValidEmail = (email: PSTMessage): boolean | null =>
     email.messageClass === 'IPM.Note' &&
@@ -34,7 +31,7 @@ export function processEmail(email: PSTMessage, emails: EmailDoc[]): void {
     (email.senderName.trim() !== '' ||
       email.senderEmailAddress.trim() !== '') &&
     filteredSenders.indexOf(email.senderName.trim()) < 0
-  if (!hotDoc && !isValidEmail(email)) return
+  if (!isValidEmail(email)) return
 
   // check for key contacts
   const getContacts = (s: string): string[] => {
@@ -72,6 +69,9 @@ export function processEmail(email: PSTMessage, emails: EmailDoc[]): void {
   const toContact = displayToContacts
     .concat(displayCCContacts, displayBCCContacts)
     .join('; ')
+
+  // check if the doc has any key terms / fraudulent project names
+  const hotDoc = hasKeyTerms(email)
 
   // load only email involving contacts?
   if (!hotDoc && config.get('onlyContacts') && !fromContact && !toContact) {

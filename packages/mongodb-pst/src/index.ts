@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import * as config from 'config'
 import * as fs from 'fs'
 import * as mongodb from 'mongodb'
 import { msString } from './msString'

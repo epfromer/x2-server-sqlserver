@@ -15,6 +15,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.11.4",
+    "@klonzo/common": "*",
     "@types/config": "^0.0.36",
     "@types/long": "^4.0.1",
     "@types/mongodb": "^3.5.26",

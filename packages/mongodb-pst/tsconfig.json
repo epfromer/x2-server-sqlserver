@@ -1,9 +1,11 @@
 {
   "extends": "../../tsconfig.json",
-  "include": ["src/**/*", "../common/src/keyContacts.ts"],
-  "composite": true,
+  "include": ["src/**/*"],
   "compilerOptions": {
+    "esModuleInterop": true,
+    "isolatedModules": true,
     "outDir": "dist",
-    "noEmit": true
-  }
+    "rootDir": "src",
+  },
+  "references": [{"path": "../common"}]
 }

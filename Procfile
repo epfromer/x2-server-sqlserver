@@ -1,0 +1,1 @@
+web: serve -s packages/mongodb-server/

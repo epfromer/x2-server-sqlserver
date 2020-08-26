@@ -1,9 +1,0 @@
-{
-  "exclude": ["node_modules", "dist"],
-  "compilerOptions": {
-    "module": "commonjs",
-    "sourceMap": true,
-    "skipLibCheck": true,
-    "target": "es5"
-  }
-}

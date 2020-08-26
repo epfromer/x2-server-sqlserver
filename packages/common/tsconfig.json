@@ -1,8 +1,11 @@
 {
   "extends": "../../tsconfig.json",
   "include": ["src/**/*"],
-  "composite": true,
   "compilerOptions": {
+    "composite": true,
+    "declaration": true,
+    "esModuleInterop": true,
+    "isolatedModules": true,
     "outDir": "dist",
     "rootDir": "src",
   }

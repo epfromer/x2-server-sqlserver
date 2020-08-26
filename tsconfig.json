@@ -1,9 +1,12 @@
 {
-  "extends": "./tsconfig.build.json",
   "compilerOptions": {
     "baseUrl": ".",
     "esModuleInterop": true,
+    "module": "ESNext",
+    "moduleResolution": "node",
     "paths": {"@klonzo/*": ["packages/*/src"]},
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "target": "es5",
   }
 }

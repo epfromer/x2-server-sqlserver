@@ -1,38 +1,9 @@
+import { Alias, Contact } from './types'
 /*
   This is a list of players in the Enron dataset.  
 
   See README for list of these people, their roles, etc.
 */
-
-export interface EmailSent {
-  id: string
-  to: string[]
-  sent: Date
-}
-
-export interface EmailReceived {
-  id: string
-  from: string
-  sent: Date
-}
-
-export interface Contact {
-  name: string
-  aliases: string[]
-  title: string
-  color: string
-  senderTotal: number
-  receiverTotal: number
-  asSender: EmailSent[]
-  asReceiver: EmailReceived[]
-}
-
-export interface Alias {
-  name: string
-  aliases: string[]
-  title: string
-  color: string
-}
 
 //  { name: '', aliases: [] },
 

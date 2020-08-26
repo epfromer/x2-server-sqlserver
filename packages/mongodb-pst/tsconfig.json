@@ -1,9 +1,9 @@
 {
   "extends": "../../tsconfig.json",
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "../common/src/keyContacts.ts"],
   "composite": true,
   "compilerOptions": {
     "outDir": "dist",
-    "rootDir": "src",
+    "noEmit": true
   }
 }

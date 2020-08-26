@@ -1,9 +1,8 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-import * as config from 'config'
+import { WORD_CLOUD_COLLECTION } from '@klonzo/common'
 import { PSTMessage } from 'pst-extractor'
+import * as sw from 'stopword'
 import { db } from './index'
 import { keyTerms } from './keyTerms'
-const sw = require('stopword')
 
 // TODO investigate https://www.npmjs.com/package/natural
 
@@ -42,7 +41,7 @@ export async function processWordCloud(): Promise<any> {
     arr.push({ tag: k, weight: v })
   })
   console.log('processWordCloud: ' + arr.length + ' terms')
-  await db.collection(config.get('dbWordCloudCollection')).insertMany(arr)
+  await db.collection(WORD_CLOUD_COLLECTION).insertMany(arr)
 }
 
 // Initialize key terms map

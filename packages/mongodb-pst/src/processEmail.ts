@@ -1,23 +1,22 @@
+import { Email, ONLY_PROCESS_NAMED_CONTACTS } from '@klonzo/common'
 import { PSTMessage } from 'pst-extractor'
 import { v4 as uuidv4 } from 'uuid'
-import { aliasMap, possibleHits, filteredSenders } from './keyContacts'
 import { hash, hashMap } from './hash'
-import { EmailDoc } from './index'
+import { aliasMap, filteredSenders, possibleHits } from '../../common/src/keyContacts'
+import { hasKeyTerms } from './keyTerms'
 import {
   addToContactsInteraction,
-  incSenderTotal,
   incReceiverTotal,
+  incSenderTotal,
 } from './processContacts'
 import { addToEmailSent } from './processEmailSent'
 import { addToWordCloud } from './processWordCloud'
-import { hasKeyTerms } from './keyTerms'
-import * as config from 'config'
 
 export const ignoredContacts = new Set()
 export const possibleContacts = new Set()
 
 // Processes individual email and stores in list.
-export function processEmail(email: PSTMessage, emails: EmailDoc[]): void {
+export function processEmail(email: PSTMessage, emails: Email[]): void {
   // dedupe
   const h = hash(email.body)
   if (hashMap.has(h)) return
@@ -74,7 +73,7 @@ export function processEmail(email: PSTMessage, emails: EmailDoc[]): void {
   const hotDoc = hasKeyTerms(email)
 
   // load only email involving contacts?
-  if (!hotDoc && config.get('onlyContacts') && !fromContact && !toContact) {
+  if (!hotDoc && ONLY_PROCESS_NAMED_CONTACTS && !fromContact && !toContact) {
     return
   }
 

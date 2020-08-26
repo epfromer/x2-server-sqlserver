@@ -1,10 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import {
+  DB_NAME,
+  MONGODB_SERVER,
+  PST_FOLDER,
+  EMAIL_COLLECTION,
+} from '@klonzo/common'
 import * as fs from 'fs'
 import * as mongodb from 'mongodb'
 import { msString } from './msString'
+import { processContacts } from './processContacts'
 import { possibleContacts } from './processEmail'
 import { processEmailList } from './processEmailList'
-import { processContacts } from './processContacts'
 import { processEmailSent } from './processEmailSent'
 import { processWordCloud } from './processWordCloud'
 import { walkPST } from './walkPST'
@@ -12,47 +18,28 @@ import { walkPST } from './walkPST'
 export let db: any
 export let log: any
 
-export interface EmailDoc {
-  id: string
-  sent: Date
-  from: string
-  fromContact?: string
-  to: string
-  toContact?: string
-  cc: string
-  bcc: string
-  subject: string
-  body: string
-}
-
-// Main async app that walks list of PSTs and processes them.
+  // Main async app that walks list of PSTs and processes them.
 ;(async (): Promise<any> => {
   let numEmails = 0
 
   try {
-    // connect to db
-    console.log(`connecting to ${config.get('dbHost')}`)
-    // const client = await mongodb.MongoClient.connect(config.get('dbHost'), {
+    console.log(`connecting to ${MONGODB_SERVER}`)
+    // const client = await mongodb.MongoClient.connect(MONGODB_SERVER, {
     //   useUnifiedTopology: true,
     // })
-    const client = await mongodb.MongoClient.connect(config.get('dbHost'))
-    db = client.db(config.get('dbName'))
-    console.log(`connected to ${config.get('dbHost')}`)
+    const client = await mongodb.MongoClient.connect(MONGODB_SERVER)
+    db = client.db(DB_NAME)
+    console.log(`connected to ${MONGODB_SERVER}`)
 
-    // drop database if requested
-    if (config.get('dropDatabase')) {
-      console.log(`dropping database ${config.get('dbHost')}`)
-      await db.dropDatabase()
-    }
+    console.log(`dropping database ${MONGODB_SERVER}`)
+    await db.dropDatabase()
 
-    // walk folder
-    const pstFolder: string = config.get('pstFolder')
-    console.log(`walking folder ${pstFolder}`)
-    const folderListing = fs.readdirSync(pstFolder)
+    console.log(`walking folder ${PST_FOLDER}`)
+    const folderListing = fs.readdirSync(PST_FOLDER)
     for (const file of folderListing) {
       console.log(`processing ${file}\n`)
       const processStart = Date.now()
-      const emails = walkPST(pstFolder + file)
+      const emails = walkPST(PST_FOLDER + file)
       console.log(
         file +
           ': processing complete, ' +
@@ -78,17 +65,13 @@ export interface EmailDoc {
     // ignoredContacts.forEach((c) => console.log('ignored: ' + c))
     possibleContacts.forEach((c) => console.log(`'${c}',`))
 
-    // process stats
     console.log('processing stats')
     processContacts()
     processEmailSent()
     processWordCloud()
 
-    // create indexes
     console.log('creating indexes')
-    await db
-      .collection(config.get('dbEmailCollection'))
-      .createIndex({ '$**': 'text' })
+    await db.collection(EMAIL_COLLECTION).createIndex({ '$**': 'text' })
 
     console.log(`${numEmails} emails processed`)
     // client.close();

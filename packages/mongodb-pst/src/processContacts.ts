@@ -1,7 +1,6 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import * as config from 'config'
-import { keyContacts } from './keyContacts'
+import { CONTACT_COLLECTION } from '@klonzo/common'
 import { db } from './index'
+import { keyContacts } from '../../common/src/keyContacts'
 
 export const contactsMap = new Map()
 
@@ -41,7 +40,5 @@ export function incReceiverTotal(toContact: string): void {
 // Process list for word cloud and store in db.
 export async function processContacts(): Promise<any> {
   console.log('processContacts: ' + keyContacts.length + ' contacts')
-  await db
-    .collection(config.get('dbContactsCollection'))
-    .insertMany(keyContacts)
+  await db.collection(CONTACT_COLLECTION).insertMany(keyContacts)
 }

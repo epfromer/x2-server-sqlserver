@@ -1,4 +1,4 @@
-import { WORD_CLOUD_COLLECTION } from '@klonzo/common'
+import { WordCloudTag, WORD_CLOUD_COLLECTION } from '@klonzo/common'
 import { PSTMessage } from 'pst-extractor'
 import * as sw from 'stopword'
 import { db } from './index'
@@ -7,11 +7,6 @@ import { keyTerms } from './keyTerms'
 // TODO investigate https://www.npmjs.com/package/natural
 
 const wordCloudMap = new Map()
-
-interface WordCloudDoc {
-  tag: string
-  weight: number
-}
 
 // Tokenize body for word cloud
 export function addToWordCloud(email: PSTMessage): void {
@@ -36,7 +31,7 @@ export function addToWordCloud(email: PSTMessage): void {
 
 // Process list for word cloud and store in db.
 export async function processWordCloud(): Promise<any> {
-  const arr: WordCloudDoc[] = []
+  const arr: WordCloudTag[] = []
   wordCloudMap.forEach((v, k) => {
     arr.push({ tag: k, weight: v })
   })

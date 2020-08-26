@@ -45,3 +45,8 @@ export interface Alias {
   title: string
   color: string
 }
+
+export interface WordCloudTag {
+  tag: string
+  weight: number
+}

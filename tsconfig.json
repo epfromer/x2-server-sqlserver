@@ -1,12 +1,7 @@
 {
-  "compilerOptions": {
-    "baseUrl": ".",
-    "esModuleInterop": true,
-    "module": "ESNext",
-    "moduleResolution": "node",
-    "paths": {"@klonzo/*": ["packages/*/src"]},
-    "skipLibCheck": true,
-    "sourceMap": true,
-    "target": "es5",
-  }
+  "files": [],
+  "references": [
+    { "path": "packages/common" },
+    { "path": "packages/mongodb-pst" }
+  ]
 }

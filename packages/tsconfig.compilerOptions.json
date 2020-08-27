@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "esModuleInterop": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "paths": {"@klonzo/*": ["packages/*/src"]},
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "target": "es5",
+  }
+}

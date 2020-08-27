@@ -1,12 +1,13 @@
-import { Email, ONLY_PROCESS_NAMED_CONTACTS } from '@klonzo/common'
+import {
+  aliasMap,
+  Email,
+  filteredSenders,
+  ONLY_PROCESS_NAMED_CONTACTS,
+  possibleHits,
+} from '@klonzo/common'
 import { PSTMessage } from 'pst-extractor'
 import { v4 as uuidv4 } from 'uuid'
 import { hash, hashMap } from './hash'
-import {
-  aliasMap,
-  filteredSenders,
-  possibleHits,
-} from '../../common/src/keyContacts'
 import { hasKeyTerms } from './keyTerms'
 import {
   addToContactsInteraction,

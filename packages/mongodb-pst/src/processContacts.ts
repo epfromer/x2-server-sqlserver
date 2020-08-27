@@ -1,6 +1,5 @@
-import { CONTACT_COLLECTION } from '@klonzo/common'
+import { CONTACT_COLLECTION, keyContacts } from '@klonzo/common'
 import { db } from './index'
-import { keyContacts } from '../../common/src/keyContacts'
 
 export const contactsMap = new Map()
 

@@ -4,11 +4,11 @@
   "private": true,
   "license": "MIT",
   "description": "Shared components for x2-server",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
   "scripts": {
     "build": "run-s clean compile",
-    "clean": "rimraf dist",
+    "clean": "rimraf lib",
     "compile": "tsc --build --verbose",
     "coverage": "jest --verbose --coverage",
     "test": "run-s build coverage"

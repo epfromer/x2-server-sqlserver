@@ -1,12 +1,12 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "../tsconfig.compilerOptions.json",
   "include": ["src/**/*"],
   "compilerOptions": {
     "composite": true,
     "declaration": true,
     "esModuleInterop": true,
     "isolatedModules": true,
-    "outDir": "dist",
+    "outDir": "lib",
     "rootDir": "src",
   }
 }

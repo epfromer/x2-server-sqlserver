@@ -13,7 +13,7 @@
   },
   "scripts": {
     "clean": "lerna clean",
-    "build": "lerna run build",
+    "build": "tsc --build --verbose",
     "watch": "lerna run --parallel watch --stream",
     "yarn": "yarn"
   },

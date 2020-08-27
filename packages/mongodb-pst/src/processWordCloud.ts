@@ -1,4 +1,4 @@
-import { WordCloudTag, WORD_CLOUD_COLLECTION } from '@klonzo/common'
+import { WordCloudTag, wordCloudCollection } from '@klonzo/common'
 import { PSTMessage } from 'pst-extractor'
 import * as sw from 'stopword'
 import { db } from './index'
@@ -36,7 +36,7 @@ export async function processWordCloud(): Promise<any> {
     arr.push({ tag: k, weight: v })
   })
   console.log('processWordCloud: ' + arr.length + ' terms')
-  await db.collection(WORD_CLOUD_COLLECTION).insertMany(arr)
+  await db.collection(wordCloudCollection).insertMany(arr)
 }
 
 // Initialize key terms map

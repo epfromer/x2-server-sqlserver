@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
-  DB_NAME,
-  MONGODB_SERVER,
-  PST_FOLDER,
-  EMAIL_COLLECTION,
+  dbName,
+  mongodbServer,
+  pstFolder,
+  emailCollection,
 } from '@klonzo/common'
 import * as fs from 'fs'
 import * as mongodb from 'mongodb'
@@ -23,23 +23,23 @@ export let log: any
   let numEmails = 0
 
   try {
-    console.log(`connecting to ${MONGODB_SERVER}`)
+    console.log(`connecting to ${mongodbServer}`)
     // const client = await mongodb.MongoClient.connect(MONGODB_SERVER, {
     //   useUnifiedTopology: true,
     // })
-    const client = await mongodb.MongoClient.connect(MONGODB_SERVER)
-    db = client.db(DB_NAME)
-    console.log(`connected to ${MONGODB_SERVER}`)
+    const client = await mongodb.MongoClient.connect(mongodbServer)
+    db = client.db(dbName)
+    console.log(`connected to ${mongodbServer}`)
 
-    console.log(`dropping database ${MONGODB_SERVER}`)
+    console.log(`dropping database ${mongodbServer}`)
     await db.dropDatabase()
 
-    console.log(`walking folder ${PST_FOLDER}`)
-    const folderListing = fs.readdirSync(PST_FOLDER)
+    console.log(`walking folder ${pstFolder}`)
+    const folderListing = fs.readdirSync(pstFolder)
     for (const file of folderListing) {
       console.log(`processing ${file}\n`)
       const processStart = Date.now()
-      const emails = walkPST(PST_FOLDER + file)
+      const emails = walkPST(pstFolder + file)
       console.log(
         file +
           ': processing complete, ' +
@@ -71,7 +71,7 @@ export let log: any
     processWordCloud()
 
     console.log('creating indexes')
-    await db.collection(EMAIL_COLLECTION).createIndex({ '$**': 'text' })
+    await db.collection(emailCollection).createIndex({ '$**': 'text' })
 
     console.log(`${numEmails} emails processed`)
     // client.close();

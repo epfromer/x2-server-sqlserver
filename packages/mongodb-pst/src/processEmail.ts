@@ -2,7 +2,7 @@ import {
   aliasMap,
   Email,
   filteredSenders,
-  ONLY_PROCESS_NAMED_CONTACTS,
+  namedContactsOnly,
   possibleHits,
 } from '@klonzo/common'
 import { PSTMessage } from 'pst-extractor'
@@ -78,7 +78,7 @@ export function processEmail(email: PSTMessage, emails: Email[]): void {
   const hotDoc = hasKeyTerms(email)
 
   // load only email involving contacts?
-  if (!hotDoc && ONLY_PROCESS_NAMED_CONTACTS && !fromContact && !toContact) {
+  if (!hotDoc && namedContactsOnly && !fromContact && !toContact) {
     return
   }
 

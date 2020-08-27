@@ -1,4 +1,4 @@
-import { CONTACT_COLLECTION, keyContacts } from '@klonzo/common'
+import { contactCollection, keyContacts } from '@klonzo/common'
 import { db } from './index'
 
 export const contactsMap = new Map()
@@ -39,5 +39,5 @@ export function incReceiverTotal(toContact: string): void {
 // Process list for word cloud and store in db.
 export async function processContacts(): Promise<any> {
   console.log('processContacts: ' + keyContacts.length + ' contacts')
-  await db.collection(CONTACT_COLLECTION).insertMany(keyContacts)
+  await db.collection(contactCollection).insertMany(keyContacts)
 }

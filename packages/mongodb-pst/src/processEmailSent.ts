@@ -1,4 +1,4 @@
-import { EmailSentREMOVE, EMAIL_SENT_COLLECTION } from '@klonzo/common'
+import { EmailSentREMOVE, emailSentCollection } from '@klonzo/common'
 import { db } from './index'
 
 export const emailSent = new Map()
@@ -18,5 +18,5 @@ export async function processEmailSent(): Promise<any> {
   const arr: EmailSentREMOVE[] = []
   emailSent.forEach((value, key) => arr.push({ sent: key, ids: value }))
   console.log('processEmailSent: ' + arr.length + ' records')
-  await db.collection(EMAIL_SENT_COLLECTION).insertMany(arr)
+  await db.collection(emailSentCollection).insertMany(arr)
 }

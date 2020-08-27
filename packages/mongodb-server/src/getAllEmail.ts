@@ -1,16 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import * as config from 'config'
+import { emailCollection, HTTPQuery } from '@klonzo/common'
+import { Request, Response } from 'express'
 import { db } from './index'
 
-interface HTTPQuery {
-  sent?: string
-  timeSpan?: number
-  allText?: string
-  from?: string
-  to?: string
-  subject?: string
-  body?: string
-}
+// TODO - yank 'any'
 
 interface MongoSent {
   $gte: Date
@@ -19,7 +11,7 @@ interface MongoSent {
 
 interface MongoQuery {
   sent?: MongoSent
-  $text?: {}
+  $text?: any
   from?: RegExp
   fromContact?: RegExp
   to?: RegExp
@@ -96,7 +88,7 @@ function createSearchParams(httpQuery: HTTPQuery): MongoQuery {
 }
 
 // HTTP GET /email/
-export async function getAllEmail(req: any, res: any): Promise<void> {
+export async function getAllEmail(req: Request, res: Response): Promise<void> {
   try {
     const skip = req.query.skip ? +req.query.skip : 0
     const limit = req.query.limit ? +req.query.limit : 50
@@ -114,14 +106,14 @@ export async function getAllEmail(req: any, res: any): Promise<void> {
 
     // get total
     const total = await db
-      .collection(config.get('dbEmailCollection'))
+      .collection(emailCollection)
       .countDocuments(query as any)
 
     // do query, with sort if specified
     let emails
     if (sort) {
       emails = await db
-        .collection(config.get('dbEmailCollection'))
+        .collection(emailCollection)
         .find(query as any)
         .sort(sort)
         .skip(skip)
@@ -129,7 +121,7 @@ export async function getAllEmail(req: any, res: any): Promise<void> {
         .toArray()
     } else {
       emails = await db
-        .collection(config.get('dbEmailCollection'))
+        .collection(emailCollection)
         .find(query as any)
         .skip(skip)
         .limit(limit)

@@ -11,6 +11,7 @@ export interface Email {
   body: string
 }
 
+// TODO remove
 export interface EmailSentREMOVE {
   sent: string
   ids: string[]
@@ -49,4 +50,14 @@ export interface Alias {
 export interface WordCloudTag {
   tag: string
   weight: number
+}
+
+export interface HTTPQuery {
+  sent?: string
+  timeSpan?: number
+  allText?: string
+  from?: string
+  to?: string
+  subject?: string
+  body?: string
 }

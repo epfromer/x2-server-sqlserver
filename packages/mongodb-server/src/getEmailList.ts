@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import * as config from 'config'
+import { emailCollection } from '@klonzo/common'
+import { Request, Response } from 'express'
 import { db } from './index'
 
 interface MongoQuery {
@@ -7,13 +7,13 @@ interface MongoQuery {
 }
 
 // HTTP GET /emaillist?ids=id1;id2;id3...
-export async function getEmailList(req: any, res: any): Promise<void> {
+export async function getEmailList(req: Request, res: Response): Promise<void> {
   try {
-    const ids = req.query.ids.split(';')
+    const ids = (req.query.ids as string).split(';')
     const mongoQuery: MongoQuery = { $or: [] }
     ids.forEach((id: string) => mongoQuery.$or.push({ id }))
     const doc = await db
-      .collection(config.get('dbEmailCollection'))
+      .collection(emailCollection)
       .find(mongoQuery as any)
       .toArray()
     res.json(doc)

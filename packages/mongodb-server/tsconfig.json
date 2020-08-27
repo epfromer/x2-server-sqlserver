@@ -1,9 +1,11 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "../tsconfig.compilerOptions.json",
   "include": ["src/**/*"],
-  "composite": true,
   "compilerOptions": {
+    "esModuleInterop": true,
+    "isolatedModules": true,
     "outDir": "dist",
-    "noEmit": true
-  }
+    "rootDir": "src",
+  },
+  "references": [{"path": "../common"}]
 }

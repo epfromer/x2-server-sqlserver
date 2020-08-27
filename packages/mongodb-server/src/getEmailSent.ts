@@ -1,11 +1,11 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import * as config from 'config'
+import { emailSentCollection } from '@klonzo/common'
+import { Request, Response } from 'express'
 import { db } from './index'
 
-export async function getEmailSent(eq: any, res: any): Promise<void> {
+export async function getEmailSent(eq: Request, res: Response): Promise<void> {
   try {
     const emailSent = await db
-      .collection(config.get('dbEmailSentCollection'))
+      .collection(emailSentCollection)
       .find()
       .sort({ sent: 1 })
       .toArray()

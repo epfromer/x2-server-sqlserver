@@ -1,5 +1,5 @@
-const request = require('supertest')
-const app = require('../index')
+import * as request from 'supertest'
+import * as app from '../index'
 
 /*
   These are really integration tests and perform CRUD functions on the same database as the core app.

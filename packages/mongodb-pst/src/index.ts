@@ -20,7 +20,7 @@ export let db: mongodb.Db
   try {
     console.log(`connecting to ${mongodbServer}`)
     const client = await mongodb.MongoClient.connect(mongodbServer, {
-      useUnifiedTopology: true,
+      useUnifiedTopology: false,
     })
     db = client.db(dbName)
     console.log(`connected to ${mongodbServer}`)

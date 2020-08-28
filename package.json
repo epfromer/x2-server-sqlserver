@@ -14,7 +14,8 @@
   "scripts": {
     "clean": "lerna clean",
     "build": "tsc --build --verbose",
-    "watch": "lerna run --parallel watch --stream",
+    "start:mongodb-pst": "lerna run --scope @klonzo/mongodb-pst start --stream",
+    "start:mongodb-server": "lerna run --scope @klonzo/mongodb-server start --stream",
     "yarn": "yarn"
   },
   "devDependencies": {

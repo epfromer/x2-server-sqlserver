@@ -13,7 +13,7 @@
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "tsc --build --verbose",
-    "postinstall-foo": "npm run build",
+    "logs": "heroku logs -a x2-server-mongodb -t",
     "coverage": "jest --coverage --forceExit --detectOpenHandles",
     "prestart": "yarn build",
     "start": "node dist/index.js",

@@ -1,9 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   dbName,
+  emailCollection,
   mongodbServer,
   pstFolder,
-  emailCollection,
 } from '@klonzo/common'
 import * as fs from 'fs'
 import * as mongodb from 'mongodb'
@@ -15,19 +14,14 @@ import { processEmailSent } from './processEmailSent'
 import { processWordCloud } from './processWordCloud'
 import { walkPST } from './walkPST'
 
-export let db: any
-export let log: any
-
-  // Main async app that walks list of PSTs and processes them.
-;(async (): Promise<any> => {
+export let db: mongodb.Db
+;(async (): Promise<void> => {
   let numEmails = 0
-
   try {
     console.log(`connecting to ${mongodbServer}`)
-    // const client = await mongodb.MongoClient.connect(MONGODB_SERVER, {
-    //   useUnifiedTopology: true,
-    // })
-    const client = await mongodb.MongoClient.connect(mongodbServer)
+    const client = await mongodb.MongoClient.connect(mongodbServer, {
+      useUnifiedTopology: true,
+    })
     db = client.db(dbName)
     console.log(`connected to ${mongodbServer}`)
 

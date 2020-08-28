@@ -12,10 +12,7 @@ export async function getEmailList(req: Request, res: Response): Promise<void> {
     const ids = (req.query.ids as string).split(';')
     const mongoQuery: MongoQuery = { $or: [] }
     ids.forEach((id: string) => mongoQuery.$or.push({ id }))
-    const doc = await db
-      .collection(emailCollection)
-      .find(mongoQuery as any)
-      .toArray()
+    const doc = await db.collection(emailCollection).find(mongoQuery).toArray()
     res.json(doc)
   } catch (err) {
     console.error(err.stack)

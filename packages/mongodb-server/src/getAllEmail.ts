@@ -2,8 +2,6 @@ import { emailCollection, HTTPQuery } from '@klonzo/common'
 import { Request, Response } from 'express'
 import { db } from './index'
 
-// TODO - yank 'any'
-
 interface MongoSent {
   $gte: Date
   $lte: Date
@@ -105,16 +103,14 @@ export async function getAllEmail(req: Request, res: Response): Promise<void> {
     const query = createSearchParams(req.query)
 
     // get total
-    const total = await db
-      .collection(emailCollection)
-      .countDocuments(query as any)
+    const total = await db.collection(emailCollection).countDocuments(query)
 
     // do query, with sort if specified
     let emails
     if (sort) {
       emails = await db
         .collection(emailCollection)
-        .find(query as any)
+        .find(query)
         .sort(sort)
         .skip(skip)
         .limit(limit)
@@ -122,7 +118,7 @@ export async function getAllEmail(req: Request, res: Response): Promise<void> {
     } else {
       emails = await db
         .collection(emailCollection)
-        .find(query as any)
+        .find(query)
         .skip(skip)
         .limit(limit)
         .toArray()

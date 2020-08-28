@@ -2,7 +2,7 @@
   "files": [],
   "references": [
     { "path": "packages/common" },
-    { "path": "packages/mongodb-pst" }
+    { "path": "packages/mongodb-pst" },
     { "path": "packages/mongodb-server" }
   ]
 }

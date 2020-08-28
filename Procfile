@@ -1,1 +1,1 @@
-web: serve -s packages/mongodb-server/
+web: node packages/mongodb-server/dist/index.js

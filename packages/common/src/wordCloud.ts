@@ -1,10 +1,12 @@
 import { PSTMessage } from 'pst-extractor'
 import * as sw from 'stopword'
 import { keyTerms } from './keyTerms'
+import { WordCloudTag } from './types'
 
 // TODO investigate https://www.npmjs.com/package/natural
 
 const wordCloudMap = new Map()
+keyTerms.forEach((term) => wordCloudMap.set(term.toLowerCase(), 0))
 
 // Tokenize body for word cloud
 export function addToWordCloud(email: PSTMessage): void {
@@ -28,14 +30,13 @@ export function addToWordCloud(email: PSTMessage): void {
 }
 
 // Process list for word cloud and store in db.
-// export async function processWordCloud(): Promise<any> {
-//   const arr: WordCloudTag[] = []
-//   wordCloudMap.forEach((v, k) => {
-//     arr.push({ tag: k, weight: v })
-//   })
-//   console.log('processWordCloud: ' + arr.length + ' terms')
-//   await db.collection(wordCloudCollection).insertMany(arr)
-// }
-
-// Initialize key terms map
-keyTerms.forEach((term) => wordCloudMap.set(term.toLowerCase(), 0))
+export async function processWordCloud(
+  insertWordCloud: (words: Array<WordCloudTag>) => void
+): Promise<void> {
+  const words: WordCloudTag[] = []
+  wordCloudMap.forEach((v, k) => {
+    words.push({ tag: k, weight: v })
+  })
+  console.log('processWordCloud: ' + words.length + ' terms')
+  await insertWordCloud(words)
+}

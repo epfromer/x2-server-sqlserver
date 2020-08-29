@@ -1,11 +1,8 @@
 import { Alias, Contact } from './types'
 /*
   This is a list of players in the Enron dataset.  
-
   See README for list of these people, their roles, etc.
 */
-
-//  { name: '', aliases: [] },
 
 const aliases: Alias[] = [
   {

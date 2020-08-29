@@ -11,7 +11,7 @@ import { processContacts } from '../../common/src/processContacts'
 import { possibleContacts } from '../../common/src/processEmail'
 import { processEmailList } from './processEmailList'
 import { processEmailSent } from '../../common/src/processEmailSent'
-import { processWordCloud } from '../../common/src/processWordCloud'
+import { processWordCloud } from '../../common/src/wordCloud'
 import { walkPST } from './walkPST'
 
 export let db: mongodb.Db

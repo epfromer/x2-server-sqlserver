@@ -63,7 +63,7 @@ export async function walkFSfolder(
       // insert into db
       const start = Date.now()
       console.log(`inserting ${emails.length} documents`)
-      insertEmails(emails)
+      await insertEmails(emails)
       console.log(file + '  complete, ' + ms(emails.length, start, Date.now()))
       numEmails += emails.length
     } else {

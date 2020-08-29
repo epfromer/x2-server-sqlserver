@@ -3,7 +3,10 @@ import {
   Email,
   emailCollection,
   mongodbServer,
+  processWordCloud,
   walkFSfolder,
+  wordCloudCollection,
+  WordCloudTag,
 } from '@klonzo/common'
 import * as mongodb from 'mongodb'
 
@@ -13,6 +16,11 @@ async function insertEmails(emails: Email[]): Promise<void> {
   await db.collection(emailCollection).insertMany(emails)
 }
 
+async function insertWordCloud(words: WordCloudTag[]): Promise<void> {
+  await db.collection(wordCloudCollection).insertMany(words)
+}
+
+// eslint-disable-next-line @typescript-eslint/no-extra-semi
 ;(async (): Promise<void> => {
   try {
     console.log(`connecting to ${mongodbServer}`)
@@ -26,10 +34,9 @@ async function insertEmails(emails: Email[]): Promise<void> {
 
     const numEmails = await walkFSfolder(insertEmails)
 
-    // console.log('processing stats')
     // processContacts()
     // processEmailSent()
-    // processWordCloud()
+    await processWordCloud(insertWordCloud)
 
     console.log('creating indexes')
     await db.collection(emailCollection).createIndex({ '$**': 'text' })

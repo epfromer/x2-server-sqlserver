@@ -11,7 +11,7 @@ import {
   incSenderTotal,
 } from './processContacts'
 import { addToEmailSent } from './processEmailSent'
-import { addToWordCloud } from './processWordCloud'
+import { addToWordCloud } from './wordCloud'
 
 export const ignoredContacts = new Set()
 export const possibleContacts = new Set()

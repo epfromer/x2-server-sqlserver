@@ -3,8 +3,8 @@ export const hashMap = new Map()
 
 export function hash(s: string): number {
   let h = 0,
-    i,
-    chr
+    i: number,
+    chr: number
   for (i = 0; i < s.length; i++) {
     chr = s.charCodeAt(i)
     h = (h << 5) - h + chr

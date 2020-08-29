@@ -6,7 +6,7 @@
     "declaration": true,
     "esModuleInterop": true,
     "isolatedModules": true,
-    "outDir": "lib",
-    "rootDir": "src",
+    "outDir": "./lib",
+    "rootDir": "./src",
   }
 }

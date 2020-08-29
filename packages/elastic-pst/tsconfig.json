@@ -1,0 +1,11 @@
+{
+  "extends": "../tsconfig.compilerOptions.json",
+  "include": ["src/**/*", "../common/src/keyContacts.ts", "../common/src/processContacts.ts", "../common/src/keyTerms.ts", "../common/src/processEmail.ts", "../common/src/processEmailSent.ts", "../common/src/processWordCloud.ts", "../common/src/walkFSFolder.ts"],
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "outDir": "dist",
+    "rootDir": "src",
+  },
+  "references": [{"path": "../common"}]
+}

@@ -1,10 +1,6 @@
-import {
-  aliasMap,
-  Email,
-  filteredSenders,
-  namedContactsOnly,
-  possibleHits,
-} from '@klonzo/common'
+import { aliasMap, filteredSenders, possibleHits } from './keyContacts'
+import { Email } from './types'
+import { namedContactsOnly } from './constants'
 import { PSTMessage } from 'pst-extractor'
 import { v4 as uuidv4 } from 'uuid'
 import { hash, hashMap } from './hash'

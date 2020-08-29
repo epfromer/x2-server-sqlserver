@@ -1,12 +1,14 @@
 {
-  "name": "@klonzo/mongodb-pst",
+  "name": "@klonzo/elastic-pst",
   "version": "0.0.1",
   "private": true,
   "license": "MIT",
   "author": "Ed Pfromer epfromer@gmail.com",
-  "description": "Extract objects from MS Outlook/Exchange PST files and store in MongoDB",
+  "description": "Extract objects from MS Outlook/Exchange PST files and store in ElasticSearch",
   "main": "./dist/index.js",
   "scripts": {
+    "docker:pull": "docker pull docker.elastic.co/elasticsearch/elasticsearch:7.9.0",
+    "docker:run": "docker run -p 9200:9200 -p 9300:9300 -e 'discovery.type=single-node' docker.elastic.co/elasticsearch/elasticsearch:7.9.0",
     "build": "run-s clean compile",
     "clean": "rimraf dist",
     "compile": "tsc --build --verbose",
@@ -14,7 +16,8 @@
     "start": "run-s build serve"
   },
   "dependencies": {
-    "mongodb": "^3.6.0",
+    "elasticsearch": "^16.7.1",
+    "pst-extractor": "^1.6.0",
     "stopword": "^1.0.1",
     "uuid": "^8.3.0"
   },
@@ -24,7 +27,7 @@
     "@types/config": "^0.0.36",
     "@types/long": "^4.0.1",
     "@types/mongodb": "^3.5.26",
-    "@types/node": "^14.6.1",
+    "@types/node": "^14.6.2",
     "@types/stopword": "^0.3.0",
     "@types/uuid": "^8.3.0",
     "@typescript-eslint/eslint-plugin": "^3.10.1",

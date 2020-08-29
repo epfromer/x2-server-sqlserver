@@ -13,7 +13,11 @@
     "coverage": "jest --verbose --coverage",
     "test": "run-s build coverage"
   },
-  "dependencies": {},
+  "dependencies": {
+    "pst-extractor": "^1.6.0",
+    "stopword": "^1.0.1",
+    "uuid": "^8.3.0"
+  },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^3.10.1",
     "@typescript-eslint/parser": "^3.10.1",

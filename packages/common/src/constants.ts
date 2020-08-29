@@ -1,5 +1,5 @@
 // Common vars
-export const pstFolder = 'c:/github/outlook/'
+export const fsFolder = 'c:/github/outlook/'
 export const dbName = 'x2'
 export const namedContactsOnly = true
 export const emailCollection = 'emails'

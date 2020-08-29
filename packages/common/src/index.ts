@@ -1,4 +1,5 @@
 export * from './constants'
+export * from './processEmailSent'
+export * from './processWordCloud'
 export * from './types'
 export * from './walkFSFolder'
-export * from './wordCloud'

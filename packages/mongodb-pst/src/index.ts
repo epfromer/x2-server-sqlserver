@@ -2,7 +2,10 @@ import {
   dbName,
   Email,
   emailCollection,
+  emailSentCollection,
+  EmailSentREMOVE,
   mongodbServer,
+  processEmailSent,
   processWordCloud,
   walkFSfolder,
   wordCloudCollection,
@@ -20,6 +23,10 @@ async function insertWordCloud(words: WordCloudTag[]): Promise<void> {
   await db.collection(wordCloudCollection).insertMany(words)
 }
 
+async function insertEmailSent(email: EmailSentREMOVE[]): Promise<void> {
+  await db.collection(emailSentCollection).insertMany(email)
+}
+
 // eslint-disable-next-line @typescript-eslint/no-extra-semi
 ;(async (): Promise<void> => {
   try {
@@ -35,7 +42,7 @@ async function insertWordCloud(words: WordCloudTag[]): Promise<void> {
     const numEmails = await walkFSfolder(insertEmails)
 
     // processContacts()
-    // processEmailSent()
+    await processEmailSent(insertEmailSent)
     await processWordCloud(insertWordCloud)
 
     console.log('creating indexes')

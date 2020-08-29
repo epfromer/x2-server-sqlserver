@@ -102,6 +102,7 @@ export function processEmail(email: PSTMessage, emails: Email[]): void {
   emails.push({
     id,
     sent,
+    sentShort: new Date(sent).toISOString().substring(0, 10),
     from: prettifyAddress(email.senderName),
     fromContact,
     to: prettifyAddress(email.displayTo),

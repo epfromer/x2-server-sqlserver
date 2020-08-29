@@ -1,6 +1,7 @@
 export interface Email {
   id: string
   sent: Date
+  sentShort: string
   from: string
   fromContact?: string
   to: string

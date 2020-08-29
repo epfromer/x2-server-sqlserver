@@ -1,10 +1,13 @@
 import {
+  Contact,
+  contactCollection,
   dbName,
   Email,
   emailCollection,
   emailSentCollection,
   EmailSentREMOVE,
   mongodbServer,
+  processContacts,
   processEmailSent,
   processWordCloud,
   walkFSfolder,
@@ -27,6 +30,10 @@ async function insertEmailSent(email: EmailSentREMOVE[]): Promise<void> {
   await db.collection(emailSentCollection).insertMany(email)
 }
 
+async function insertContacts(contacts: Contact[]): Promise<void> {
+  await db.collection(contactCollection).insertMany(contacts)
+}
+
 // eslint-disable-next-line @typescript-eslint/no-extra-semi
 ;(async (): Promise<void> => {
   try {
@@ -41,7 +48,7 @@ async function insertEmailSent(email: EmailSentREMOVE[]): Promise<void> {
 
     const numEmails = await walkFSfolder(insertEmails)
 
-    // processContacts()
+    await processContacts(insertContacts)
     await processEmailSent(insertEmailSent)
     await processWordCloud(insertWordCloud)
 

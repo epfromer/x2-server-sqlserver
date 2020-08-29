@@ -8,7 +8,7 @@
   "types": "./lib/index.d.ts",
   "scripts": {
     "build": "run-s clean compile",
-    "clean": "rimraf lib",
+    "clean": "rimraf lib tsconfig.tsbuildinfo",
     "compile": "tsc --build --verbose",
     "coverage": "jest --verbose --coverage",
     "test": "run-s build coverage"

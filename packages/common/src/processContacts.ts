@@ -1,4 +1,5 @@
 import { keyContacts } from './keyContacts'
+import { Contact } from './types'
 
 export const contactsMap = new Map()
 
@@ -35,8 +36,10 @@ export function incReceiverTotal(toContact: string): void {
   })
 }
 
-// Process list for word cloud and store in db.
-// export async function processContacts(): Promise<any> {
-//   console.log('processContacts: ' + keyContacts.length + ' contacts')
-//   await db.collection(contactCollection).insertMany(keyContacts)
-// }
+// Process list for contacts and store in db.
+export async function processContacts(
+  insertContacts: (words: Array<Contact>) => void
+): Promise<void> {
+  console.log('processContacts: ' + keyContacts.length + ' contacts')
+  await insertContacts(keyContacts)
+}

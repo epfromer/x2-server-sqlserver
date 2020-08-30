@@ -16,9 +16,8 @@
     "start": "run-s build serve"
   },
   "dependencies": {
-    "elasticsearch": "^16.7.1",
+    "@elastic/elasticsearch": "^7.9.0",
     "pst-extractor": "^1.6.0",
-    "stopword": "^1.0.1",
     "uuid": "^8.3.0"
   },
   "devDependencies": {

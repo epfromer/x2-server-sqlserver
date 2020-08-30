@@ -14,58 +14,83 @@ import {
   elasticServer,
   WordCloudTag,
 } from '@klonzo/common'
-import * as elasticsearch from 'elasticsearch'
+import { v4 as uuidv4 } from 'uuid'
+import { Client } from '@elastic/elasticsearch'
 
-export let db: any
+// https://www.elastic.co/blog/new-elasticsearch-javascript-client-released
+// https://www.elastic.co/guide/en/elasticsearch/client/javascript-api/7.x/introduction.html
+// http://localhost:9200/x2
+// http://localhost:9200/x2/_search?q=*
+
+export let client: Client
 
 async function insertEmails(emails: Email[]): Promise<void> {
+  // TODO bulk insert
+  emails.forEach(async (email) => {
+    await client.index({
+      body: {
+        id: uuidv4(),
+        sent: email.sent,
+        sentShort: email.sentShort,
+        from: email.from,
+        fromContact: email.fromContact,
+        to: email.to,
+        toContact: email.toContact,
+        cc: email.cc,
+        bcc: email.bcc,
+        subject: email.subject,
+        body: email.body,
+      },
+      index: dbName,
+    })
+  })
   console.log('insert emails')
   // await db.collection(emailCollection).insertMany(emails)
 }
 
 async function insertWordCloud(words: WordCloudTag[]): Promise<void> {
-  await db.collection(wordCloudCollection).insertMany(words)
+  // await db.collection(wordCloudCollection).insertMany(words)
 }
 
 async function insertEmailSent(email: EmailSentREMOVE[]): Promise<void> {
-  await db.collection(emailSentCollection).insertMany(email)
+  // await db.collection(emailSentCollection).insertMany(email)
 }
 
 async function insertContacts(contacts: Contact[]): Promise<void> {
-  await db.collection(contactCollection).insertMany(contacts)
+  // await db.collection(contactCollection).insertMany(contacts)
 }
 
 // eslint-disable-next-line @typescript-eslint/no-extra-semi
-;(async (): Promise<void> => {
+async function run() {
+  console.log(`${elasticServer}: connecting`)
+  client = new Client({ node: elasticServer })
+
+  console.log(`${elasticServer}: dropping database`)
   try {
-    console.log(`${elasticServer}: connecting`)
-    db = new elasticsearch.Client({ host: elasticServer, log: 'error' })
-
-    console.log(`${elasticServer}: dropping database`)
-    try {
-      await db.indices.delete({ index: dbName })
-    } catch (error) {
-      console.error(error)
-    }
-
-    console.log(`${elasticServer}: creating indexes`)
-    await db.indices.create({ index: dbName })
-
-    console.log(`${elasticServer}: inserting emails`)
-    const numEmails = await walkFSfolder(insertEmails)
-
-    console.log(`${elasticServer}: inserting contacts`)
-    // await processContacts(insertContacts)
-
-    console.log(`${elasticServer}: inserting email sent`)
-    // await processEmailSent(insertEmailSent)
-
-    console.log(`${elasticServer}: inserting word cloud`)
-    // await processWordCloud(insertWordCloud)
-
-    console.log(`${elasticServer}: complete, ${numEmails} emails processed`)
-    // client.close();
+    await client.indices.delete({ index: dbName })
   } catch (error) {
     console.error(error)
   }
-})()
+
+  console.log(`${elasticServer}: creating indexes`)
+  await client.indices.create({ index: dbName })
+
+  console.log(`${elasticServer}: inserting emails`)
+  const numEmails = await walkFSfolder(insertEmails)
+
+  console.log(`${elasticServer}: inserting contacts`)
+  // await processContacts(insertContacts)
+
+  console.log(`${elasticServer}: inserting email sent`)
+  // await processEmailSent(insertEmailSent)
+
+  console.log(`${elasticServer}: inserting word cloud`)
+  // await processWordCloud(insertWordCloud)
+
+  console.log(`${elasticServer}: refreshing index`)
+  await client.indices.refresh({ index: dbName })
+
+  console.log(`${elasticServer}: complete, ${numEmails} emails processed`)
+}
+
+run().catch(console.error)

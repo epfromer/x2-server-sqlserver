@@ -12,48 +12,47 @@ import { getWordCloud } from './getWordCloud'
 import { setContact } from './setContactColor'
 
 export let db: mongodb.Db
-;(async (): Promise<void> => {
-  try {
-    console.log(`connecting to ${mongodbServer}`)
-    const client = await mongodb.MongoClient.connect(mongodbServer, {
-      useUnifiedTopology: true,
-    })
-    db = client.db(dbName)
-    console.log(`connected to ${mongodbServer}`)
 
-    const app: express.Application = express.default()
-    app.use(morgan.default('dev'))
+async function run() {
+  console.log(`connecting to ${mongodbServer}`)
+  const client = await mongodb.MongoClient.connect(mongodbServer, {
+    useUnifiedTopology: true,
+  })
+  db = client.db(dbName)
+  console.log(`connected to ${mongodbServer}`)
 
-    app.use(bodyParser.json())
-    app.use(bodyParser.urlencoded({ extended: true }))
-    app.use(bodyParser.text())
-    app.use(bodyParser.json({ type: 'application/json' }))
+  const app: express.Application = express.default()
+  app.use(morgan.default('dev'))
 
-    app.all('/*', (req, res, next) => {
-      res.header('Access-Control-Allow-Origin', '*')
-      res.header('Access-Control-Allow-Methods', 'POST, DELETE, PUT, GET')
-      res.header('Access-Control-Allow-Headers', 'X-Requested-With')
-      res.header('Access-Control-Allow-Headers', 'Content-Type')
-      next()
-    })
+  app.use(bodyParser.json())
+  app.use(bodyParser.urlencoded({ extended: true }))
+  app.use(bodyParser.text())
+  app.use(bodyParser.json({ type: 'application/json' }))
 
-    // set up routes
-    app.route('/').get(getAllEmail)
-    app.route('/email').get(getAllEmail)
-    app.route('/email/:id').get(getSpecificEmail)
-    app.route('/emaillist').get(getEmailList)
-    app.route('/emailsent').get(getEmailSent)
-    app.route('/wordcloud').get(getWordCloud)
-    app.route('/contacts').get(getContacts)
-    app.route('/contacts/:id').put(setContact)
+  app.all('/*', (req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*')
+    res.header('Access-Control-Allow-Methods', 'POST, DELETE, PUT, GET')
+    res.header('Access-Control-Allow-Headers', 'X-Requested-With')
+    res.header('Access-Control-Allow-Headers', 'Content-Type')
+    next()
+  })
 
-    const port = process.env.PORT || 3000
-    app.listen(port)
-    console.log(`running on PORT: ${port}`)
+  // set up routes
+  app.route('/').get(getAllEmail)
+  app.route('/email').get(getAllEmail)
+  app.route('/email/:id').get(getSpecificEmail)
+  app.route('/emaillist').get(getEmailList)
+  app.route('/emailsent').get(getEmailSent)
+  app.route('/wordcloud').get(getWordCloud)
+  app.route('/contacts').get(getContacts)
+  app.route('/contacts/:id').put(setContact)
 
-    // emit event for integraton tests to start
-    // app.emit('appStarted')
-  } catch (error) {
-    console.error(error)
-  }
-})()
+  const port = process.env.PORT || 3000
+  app.listen(port)
+  console.log(`running on PORT: ${port}`)
+
+  // emit event for integraton tests to start
+  // app.emit('appStarted')
+}
+
+run().catch(console.error)

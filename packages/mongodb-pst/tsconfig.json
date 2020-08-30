@@ -1,6 +1,6 @@
 {
   "extends": "../tsconfig.compilerOptions.json",
-  "include": ["src/**/*", "../common/src/msString.ts", "../common/src/walkPST.ts", "../common/src/processEmailList.ts", "../common/src/walkFolder.ts"],
+  "include": ["src/**/*"],
   "compilerOptions": {
     "esModuleInterop": true,
     "isolatedModules": true,

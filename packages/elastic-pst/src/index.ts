@@ -1,73 +1,69 @@
 import {
+  Contact,
+  contactCollection,
   dbName,
+  Email,
   emailCollection,
-  mongodbServer,
-  pstFolder,
+  emailSentCollection,
+  EmailSentREMOVE,
+  processContacts,
+  processEmailSent,
+  processWordCloud,
+  walkFSfolder,
+  wordCloudCollection,
+  elasticServer,
+  WordCloudTag,
 } from '@klonzo/common'
-import * as fs from 'fs'
-import * as mongodb from 'mongodb'
-import { msString } from './msString'
-import { processContacts } from '../../common/src/processContacts'
-import { possibleContacts } from '../../common/src/processEmail'
-import { processEmailList } from './processEmailList'
-import { processEmailSent } from '../../common/src/processEmailSent'
-import { processWordCloud } from '../../common/src/processWordCloud'
-import { walkPST } from './walkPST'
+import * as elasticsearch from 'elasticsearch'
 
-export let db: mongodb.Db
+export let db: any
+
+async function insertEmails(emails: Email[]): Promise<void> {
+  console.log('insert emails')
+  // await db.collection(emailCollection).insertMany(emails)
+}
+
+async function insertWordCloud(words: WordCloudTag[]): Promise<void> {
+  await db.collection(wordCloudCollection).insertMany(words)
+}
+
+async function insertEmailSent(email: EmailSentREMOVE[]): Promise<void> {
+  await db.collection(emailSentCollection).insertMany(email)
+}
+
+async function insertContacts(contacts: Contact[]): Promise<void> {
+  await db.collection(contactCollection).insertMany(contacts)
+}
+
+// eslint-disable-next-line @typescript-eslint/no-extra-semi
 ;(async (): Promise<void> => {
-  let numEmails = 0
   try {
-    console.log(`connecting to ${mongodbServer}`)
-    const client = await mongodb.MongoClient.connect(mongodbServer, {
-      useUnifiedTopology: false,
-    })
-    db = client.db(dbName)
-    console.log(`connected to ${mongodbServer}`)
+    console.log(`${elasticServer}: connecting`)
+    db = new elasticsearch.Client({ host: elasticServer, log: 'error' })
 
-    console.log(`dropping database ${mongodbServer}`)
-    await db.dropDatabase()
-
-    console.log(`walking folder ${pstFolder}`)
-    const folderListing = fs.readdirSync(pstFolder)
-    for (const file of folderListing) {
-      console.log(`processing ${file}\n`)
-      const processStart = Date.now()
-      const emails = walkPST(pstFolder + file)
-      console.log(
-        file +
-          ': processing complete, ' +
-          msString(emails.length, processStart, Date.now())
-      )
-      if (emails.length > 0) {
-        // insert into db
-        const dbInsertStart = Date.now()
-        console.log(`inserting ${emails.length} documents`)
-        processEmailList(emails)
-        console.log(
-          file +
-            ': insertion complete, ' +
-            msString(emails.length, dbInsertStart, Date.now())
-        )
-        numEmails += emails.length
-      } else {
-        console.log(file + ': processing complete, no emails')
-      }
+    console.log(`${elasticServer}: dropping database`)
+    try {
+      await db.indices.delete({ index: dbName })
+    } catch (error) {
+      console.error(error)
     }
 
-    // ignored contacts
-    // ignoredContacts.forEach((c) => console.log('ignored: ' + c))
-    possibleContacts.forEach((c) => console.log(`'${c}',`))
+    console.log(`${elasticServer}: creating indexes`)
+    await db.indices.create({ index: dbName })
 
-    console.log('processing stats')
-    processContacts()
-    processEmailSent()
-    processWordCloud()
+    console.log(`${elasticServer}: inserting emails`)
+    const numEmails = await walkFSfolder(insertEmails)
 
-    console.log('creating indexes')
-    await db.collection(emailCollection).createIndex({ '$**': 'text' })
+    console.log(`${elasticServer}: inserting contacts`)
+    // await processContacts(insertContacts)
 
-    console.log(`${numEmails} emails processed`)
+    console.log(`${elasticServer}: inserting email sent`)
+    // await processEmailSent(insertEmailSent)
+
+    console.log(`${elasticServer}: inserting word cloud`)
+    // await processWordCloud(insertWordCloud)
+
+    console.log(`${elasticServer}: complete, ${numEmails} emails processed`)
     // client.close();
   } catch (error) {
     console.error(error)

@@ -11,3 +11,6 @@ export const wordCloudCollection = 'wordcloud'
 export const mongodbServer =
   'mongodb+srv://test:f00bar@cluster0-vaftj.mongodb.net/x2?retryWrites=true&w=majority'
 export const mongodbServer2 = 'mongodb://localhost:27017/x2'
+
+// ElasticSearch
+export const elasticServer = 'http://localhost:9200'

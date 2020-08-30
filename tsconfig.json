@@ -3,6 +3,8 @@
   "references": [
     { "path": "packages/common" },
     { "path": "packages/mongodb-pst" },
-    { "path": "packages/mongodb-server" }
+    { "path": "packages/mongodb-server" },
+    { "path": "packages/elastic-pst" },
+    { "path": "packages/elastic-server" }
   ]
 }

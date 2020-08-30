@@ -61,7 +61,6 @@ async function run() {
   await db.collection(emailCollection).createIndex({ '$**': 'text' })
 
   console.log(`${mongodbServer}: complete, ${numEmails} emails processed`)
-  // client.close();
 }
 
 run().catch(console.error)

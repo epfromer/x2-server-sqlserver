@@ -1,21 +1,14 @@
+import { Client } from '@elastic/elasticsearch'
 import {
   Contact,
-  contactCollection,
   dbName,
-  Email,
-  emailCollection,
-  emailSentCollection,
-  EmailSentREMOVE,
-  processContacts,
-  processEmailSent,
-  processWordCloud,
-  walkFSfolder,
-  wordCloudCollection,
   elasticServer,
+  Email,
+  EmailSentREMOVE,
+  walkFSfolder,
   WordCloudTag,
 } from '@klonzo/common'
 import { v4 as uuidv4 } from 'uuid'
-import { Client } from '@elastic/elasticsearch'
 
 // https://www.elastic.co/blog/new-elasticsearch-javascript-client-released
 // https://www.elastic.co/guide/en/elasticsearch/client/javascript-api/7.x/introduction.html
@@ -28,6 +21,7 @@ async function insertEmails(emails: Email[]): Promise<void> {
   // TODO bulk insert
   emails.forEach(async (email) => {
     await client.index({
+      index: dbName,
       body: {
         id: uuidv4(),
         sent: email.sent,
@@ -41,7 +35,6 @@ async function insertEmails(emails: Email[]): Promise<void> {
         subject: email.subject,
         body: email.body,
       },
-      index: dbName,
     })
   })
   console.log('insert emails')

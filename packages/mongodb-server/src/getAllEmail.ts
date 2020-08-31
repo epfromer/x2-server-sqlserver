@@ -1,4 +1,4 @@
-import { emailCollection, HTTPQuery } from '@klonzo/common'
+import { defaultLimit, emailCollection, HTTPQuery } from '@klonzo/common'
 import { Request, Response } from 'express'
 import { db } from './index'
 
@@ -85,42 +85,39 @@ function createSearchParams(httpQuery: HTTPQuery): MongoQuery {
   return mongoQuery
 }
 
+const createSortOrder = (httpQuery) => {
+  interface Sort {
+    [index: string]: number
+  }
+  const sort: Sort = {}
+  if (httpQuery.sort) {
+    sort[httpQuery.sort as string] = httpQuery.order === '1' ? 1 : -1
+  }
+  return sort
+}
+
 // HTTP GET /email/
 export async function getAllEmail(req: Request, res: Response): Promise<void> {
   try {
-    const skip = req.query.skip ? +req.query.skip : 0
-    const limit = req.query.limit ? +req.query.limit : 50
-
-    // determine sort order, if any
-    interface Sort {
-      [index: string]: number
-    }
-    const sort: Sort = {}
-    if (req.query.sort) {
-      sort[req.query.sort as string] = req.query.order === '1' ? 1 : -1
-    }
-
     const query = createSearchParams(req.query)
 
-    // get total
     const total = await db.collection(emailCollection).countDocuments(query)
 
-    // do query, with sort if specified
     let emails
-    if (sort) {
+    if (createSortOrder(req.query)) {
       emails = await db
         .collection(emailCollection)
         .find(query)
-        .sort(sort)
-        .skip(skip)
-        .limit(limit)
+        .sort(createSortOrder(req.query))
+        .skip(req.query.skip ? +req.query.skip : 0)
+        .limit(req.query.limit ? +req.query.limit : defaultLimit)
         .toArray()
     } else {
       emails = await db
         .collection(emailCollection)
         .find(query)
-        .skip(skip)
-        .limit(limit)
+        .skip(req.query.skip ? +req.query.skip : 0)
+        .limit(req.query.limit ? +req.query.limit : defaultLimit)
         .toArray()
     }
 

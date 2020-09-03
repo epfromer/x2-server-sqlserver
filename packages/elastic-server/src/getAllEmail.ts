@@ -10,6 +10,7 @@ const createSortOrder = (httpQuery) => {
       sort += ':' + (httpQuery.order === '1' ? 'asc' : 'desc')
     }
   }
+  console.log(sort)
   return sort
 }
 

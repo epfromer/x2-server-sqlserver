@@ -1,77 +1,67 @@
 import { Client } from '@elastic/elasticsearch'
 import { dbName, defaultLimit, elasticServer } from '@klonzo/common'
 import { Request, Response } from 'express'
-import moment from 'moment'
 
-function createSearchParams(httpQuery) {
-  console.log(httpQuery)
-  let queryParams = ''
-  if (httpQuery.clientSubmitTimeSearchString) {
-    const day = new Date(httpQuery.clientSubmitTimeSearchString)
+const createSearchParams = (httpQuery) => {
+  // console.log(httpQuery)
 
-    // default to just the specified day
-    let dayStart = moment(day).startOf('day')
-    let dayEnd = moment(day).endOf('day')
+  const { allText, sent, timeSpan, from, to, subject, body } = httpQuery
 
-    // is there a time span?
-    if (httpQuery.clientSubmitTimeSpan) {
-      dayStart = moment(dayStart).subtract(
-        +httpQuery.clientSubmitTimeSpan,
-        'day'
-      )
-      dayEnd = moment(dayEnd).add(+httpQuery.clientSubmitTimeSpan, 'day')
+  let query = ''
+
+  if (sent) {
+    const start = new Date(sent)
+    const end = new Date(start.getTime())
+    end.setDate(end.getDate() + 1)
+
+    if (timeSpan && timeSpan > 0) {
+      start.setDate(start.getDate() - +timeSpan)
+      end.setDate(end.getDate() + +timeSpan)
     }
 
-    queryParams += `clientSubmitTime:[${dayStart
-      .toDate()
-      .getTime()} TO ${dayEnd.toDate().getTime()}] `
+    query += `sent:[${start.getTime()} TO ${end.getTime()}] `
   }
 
-  if (httpQuery.allTextSearchString) {
-    queryParams += `(body:"${httpQuery.allTextSearchString}") OR `
-    queryParams += `(displayTo:"${httpQuery.allTextSearchString}") OR `
-    queryParams += `(senderName:"${httpQuery.allTextSearchString}") OR (senderEmailAddress:"${httpQuery.allTextSearchString}") | `
-    queryParams += `(subject:"${httpQuery.allTextSearchString}")`
+  if (allText) {
+    query += `body:"${allText}" OR `
+    query += `to:"${allText}" OR toContact:"${allText}" OR bcc:"${allText}" OR cc:"${allText}" OR `
+    query += `from:"${allText}" OR fromContact:"${allText}" OR `
+    query += `subject:"${allText}"`
   } else {
-    // body
-    if (httpQuery.bodySearchString) {
-      if (queryParams) {
-        queryParams += ' AND '
+    if (from) {
+      query += query ? ' AND ' : ''
+      // check if searching only named contacts, delimited with ()
+      if (from.indexOf('(') >= 0) {
+        query += `fromContact:"${from}" `
+      } else {
+        query += `from:"${from}" `
       }
-      queryParams += `body:"${httpQuery.bodySearchString}"`
     }
-
-    // displayTo
-    if (httpQuery.toSearchString) {
-      if (queryParams) {
-        queryParams += ' AND '
+    if (to) {
+      query += query ? ' AND ' : ''
+      // check if searching only named contacts, delimited with ()
+      if (to.indexOf('(') >= 0) {
+        query += `toContact:"${to}" `
+      } else {
+        query += `to:"${to}" `
       }
-      queryParams += `(displayTo:"${httpQuery.toSearchString}" OR displayBCC:"${httpQuery.toSearchString}" OR displayCC:"${httpQuery.toSearchString}") `
     }
-
-    // senderName
-    if (httpQuery.senderSearchString) {
-      if (queryParams) {
-        queryParams += ' AND '
-      }
-      queryParams += `(senderName:"${httpQuery.senderSearchString}" OR senderEmailAddress:"${httpQuery.senderSearchString}") `
+    if (subject) {
+      query += query ? ' AND ' : ''
+      query += `subject:"${subject}" `
     }
-
-    // subject
-    if (httpQuery.subjectSearchString) {
-      if (queryParams) {
-        queryParams += ' AND '
-      }
-      queryParams += `subject:"${httpQuery.subjectSearchString}" `
+    if (body) {
+      query += query ? ' AND ' : ''
+      query += `body:"${body}"`
     }
   }
 
-  if (!queryParams) {
-    queryParams = '*'
+  if (!query) {
+    query = '*'
   }
 
-  console.log(queryParams)
-  return queryParams
+  // console.log(query)
+  return query
 }
 
 const createSortOrder = (httpQuery) => {

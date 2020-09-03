@@ -58,32 +58,32 @@ async function run() {
   console.log(`${elasticServer}: connecting`)
   client = new Client({ node: elasticServer })
 
-  console.log(`${elasticServer}: dropping database`)
+  console.log(`drop database`)
   try {
     await client.indices.delete({ index: dbName })
   } catch (error) {
     console.error(error)
   }
 
-  console.log(`${elasticServer}: creating indexes`)
+  console.log(`create indexes`)
   await client.indices.create({ index: dbName })
 
-  console.log(`${elasticServer}: inserting emails`)
+  console.log(`insert emails`)
   const numEmails = await walkFSfolder(insertEmails)
 
-  console.log(`${elasticServer}: inserting contacts`)
+  console.log(`insert contacts`)
   // await processContacts(insertContacts)
 
-  console.log(`${elasticServer}: inserting email sent`)
+  console.log(`insert email sent`)
   // await processEmailSent(insertEmailSent)
 
-  console.log(`${elasticServer}: inserting word cloud`)
+  console.log(`insert word cloud`)
   // await processWordCloud(insertWordCloud)
 
-  console.log(`${elasticServer}: refreshing index`)
+  console.log(`refresh index`)
   await client.indices.refresh({ index: dbName })
 
-  console.log(`${elasticServer}: complete, ${numEmails} emails processed`)
+  console.log(`complete, ${numEmails} emails processed`)
 }
 
 run().catch(console.error)

@@ -5,7 +5,9 @@ import {
   elasticServer,
   Email,
   EmailSentREMOVE,
+  processWordCloud,
   walkFSfolder,
+  wordCloudCollection,
   WordCloudTag,
 } from '@klonzo/common'
 import { v4 as uuidv4 } from 'uuid'
@@ -17,7 +19,7 @@ import { v4 as uuidv4 } from 'uuid'
 
 export let client: Client
 
-async function insertEmails(emails: Email[]): Promise<void> {
+const insertEmails = async (emails: Email[]): Promise<void> => {
   // TODO bulk insert
   emails.forEach(async (email) => {
     await client.index({
@@ -37,19 +39,22 @@ async function insertEmails(emails: Email[]): Promise<void> {
       },
     })
   })
-  console.log('insert emails')
-  // await db.collection(emailCollection).insertMany(emails)
 }
 
-async function insertWordCloud(words: WordCloudTag[]): Promise<void> {
-  // await db.collection(wordCloudCollection).insertMany(words)
+const insertWordCloud = async (wordCloud: WordCloudTag[]): Promise<void> => {
+  await client.index({
+    index: dbName + wordCloudCollection,
+    body: {
+      wordCloudCollection: wordCloud,
+    },
+  })
 }
 
-async function insertEmailSent(email: EmailSentREMOVE[]): Promise<void> {
+const insertEmailSent = async (email: EmailSentREMOVE[]): Promise<void> => {
   // await db.collection(emailSentCollection).insertMany(email)
 }
 
-async function insertContacts(contacts: Contact[]): Promise<void> {
+const insertContacts = async (contacts: Contact[]): Promise<void> => {
   // await db.collection(contactCollection).insertMany(contacts)
 }
 
@@ -61,24 +66,26 @@ async function run() {
   console.log(`drop database`)
   try {
     await client.indices.delete({ index: dbName })
+    await client.indices.delete({ index: dbName + wordCloudCollection })
   } catch (error) {
     console.error(error)
   }
 
   console.log(`create indexes`)
   await client.indices.create({ index: dbName })
+  await client.indices.create({ index: dbName + wordCloudCollection })
 
   console.log(`insert emails`)
   const numEmails = await walkFSfolder(insertEmails)
 
-  console.log(`insert contacts`)
-  // await processContacts(insertContacts)
+  console.log(`insert word cloud`)
+  await processWordCloud(insertWordCloud)
 
   console.log(`insert email sent`)
   // await processEmailSent(insertEmailSent)
 
-  console.log(`insert word cloud`)
-  // await processWordCloud(insertWordCloud)
+  console.log(`insert contacts`)
+  // await processContacts(insertContacts)
 
   console.log(`refresh index`)
   await client.indices.refresh({ index: dbName })

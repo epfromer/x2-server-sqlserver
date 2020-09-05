@@ -6,6 +6,7 @@
   "author": "Ed Pfromer epfromer@gmail.com",
   "description": "REST/CRUD interface on email in ElasticSearch for X2 client",
   "main": "index.js",
+  "elastic-version": "https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html",
   "engines": {
     "node": ">= 12",
     "yarn": ">= 1"

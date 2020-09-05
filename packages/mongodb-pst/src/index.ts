@@ -18,19 +18,19 @@ import * as mongodb from 'mongodb'
 
 export let db: mongodb.Db
 
-async function insertEmails(emails: Email[]): Promise<void> {
-  await db.collection(emailCollection).insertMany(emails)
+const insertEmails = async (email: Email[]): Promise<void> => {
+  await db.collection(emailCollection).insertMany(email)
 }
 
-async function insertWordCloud(words: WordCloudTag[]): Promise<void> {
-  await db.collection(wordCloudCollection).insertMany(words)
+const insertWordCloud = async (wordCloud: WordCloudTag[]): Promise<void> => {
+  await db.collection(wordCloudCollection).insertMany(wordCloud)
 }
 
-async function insertEmailSent(email: EmailSentREMOVE[]): Promise<void> {
-  await db.collection(emailSentCollection).insertMany(email)
+const insertEmailSent = async (emailSent: EmailSentREMOVE[]): Promise<void> => {
+  await db.collection(emailSentCollection).insertMany(emailSent)
 }
 
-async function insertContacts(contacts: Contact[]): Promise<void> {
+const insertContacts = async (contacts: Contact[]): Promise<void> => {
   await db.collection(contactCollection).insertMany(contacts)
 }
 
@@ -42,25 +42,25 @@ async function run() {
   })
   db = client.db(dbName)
 
-  console.log(`${mongodbServer}: dropping database`)
+  console.log(`drop database`)
   await db.dropDatabase()
 
-  console.log(`${mongodbServer}: inserting emails`)
+  console.log(`insert emails`)
   const numEmails = await walkFSfolder(insertEmails)
 
-  console.log(`${mongodbServer}: inserting contacts`)
-  await processContacts(insertContacts)
-
-  console.log(`${mongodbServer}: inserting email sent`)
-  await processEmailSent(insertEmailSent)
-
-  console.log(`${mongodbServer}: inserting word cloud`)
+  console.log(`insert word cloud`)
   await processWordCloud(insertWordCloud)
 
-  console.log(`${mongodbServer}: creating indexes`)
+  console.log(`insert email sent`)
+  await processEmailSent(insertEmailSent)
+
+  console.log(`insert contacts`)
+  await processContacts(insertContacts)
+
+  console.log(`create index`)
   await db.collection(emailCollection).createIndex({ '$**': 'text' })
 
-  console.log(`${mongodbServer}: complete, ${numEmails} emails processed`)
+  console.log(`complete, ${numEmails} emails processed`)
 }
 
 run().catch(console.error)

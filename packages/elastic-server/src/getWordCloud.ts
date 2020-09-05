@@ -6,12 +6,10 @@ import { Request, Response } from 'express'
 export async function getWordCloud(req: Request, res: Response): Promise<void> {
   try {
     const client = new Client({ node: elasticServer })
-
     const { body } = await client.search({
       index: dbName + wordCloudCollection,
       q: '*',
     })
-
     res.json(body.hits.hits[0]._source.wordCloudCollection)
   } catch (err) {
     console.error(err.stack)

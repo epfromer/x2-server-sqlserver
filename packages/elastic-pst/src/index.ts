@@ -1,10 +1,14 @@
 import { Client } from '@elastic/elasticsearch'
 import {
   Contact,
+  contactCollection,
   dbName,
   elasticServer,
   Email,
+  emailSentCollection,
   EmailSentREMOVE,
+  processContacts,
+  processEmailSent,
   processWordCloud,
   walkFSfolder,
   wordCloudCollection,
@@ -51,11 +55,21 @@ const insertWordCloud = async (wordCloud: WordCloudTag[]): Promise<void> => {
 }
 
 const insertEmailSent = async (email: EmailSentREMOVE[]): Promise<void> => {
-  // await db.collection(emailSentCollection).insertMany(email)
+  await client.index({
+    index: dbName + emailSentCollection,
+    body: {
+      emailSentCollection: email,
+    },
+  })
 }
 
 const insertContacts = async (contacts: Contact[]): Promise<void> => {
-  // await db.collection(contactCollection).insertMany(contacts)
+  await client.index({
+    index: dbName + contactCollection,
+    body: {
+      contactCollection: contacts,
+    },
+  })
 }
 
 // eslint-disable-next-line @typescript-eslint/no-extra-semi
@@ -67,6 +81,8 @@ async function run() {
   try {
     await client.indices.delete({ index: dbName })
     await client.indices.delete({ index: dbName + wordCloudCollection })
+    await client.indices.delete({ index: dbName + emailSentCollection })
+    await client.indices.delete({ index: dbName + contactCollection })
   } catch (error) {
     console.error(error)
   }
@@ -74,6 +90,8 @@ async function run() {
   console.log(`create indexes`)
   await client.indices.create({ index: dbName })
   await client.indices.create({ index: dbName + wordCloudCollection })
+  await client.indices.create({ index: dbName + emailSentCollection })
+  await client.indices.create({ index: dbName + contactCollection })
 
   console.log(`insert emails`)
   const numEmails = await walkFSfolder(insertEmails)
@@ -82,10 +100,10 @@ async function run() {
   await processWordCloud(insertWordCloud)
 
   console.log(`insert email sent`)
-  // await processEmailSent(insertEmailSent)
+  await processEmailSent(insertEmailSent)
 
   console.log(`insert contacts`)
-  // await processContacts(insertContacts)
+  await processContacts(insertContacts)
 
   console.log(`refresh index`)
   await client.indices.refresh({ index: dbName })

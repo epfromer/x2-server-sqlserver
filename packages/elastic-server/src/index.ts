@@ -3,7 +3,6 @@ import * as express from 'express'
 import * as morgan from 'morgan'
 import { getAllEmail } from './getAllEmail'
 import { getContacts } from './getContacts'
-import { getEmailList } from './getEmailList'
 import { getEmailSent } from './getEmailSent'
 import { getSpecificEmail } from './getSpecificEmail'
 import { getWordCloud } from './getWordCloud'
@@ -35,7 +34,6 @@ async function run() {
   app.route('/').get(getAllEmail)
   app.route('/email').get(getAllEmail)
   app.route('/email/:id').get(getSpecificEmail)
-  app.route('/emaillist').get(getEmailList)
   app.route('/emailsent').get(getEmailSent)
   app.route('/wordcloud').get(getWordCloud)
   app.route('/contacts').get(getContacts)

@@ -11,13 +11,13 @@
     "yarn": ">= 1"
   },
   "scripts": {
-    "prebuild": "rimraf dist",
-    "build": "tsc --build --verbose",
+    "clean": "rimraf dist",
+    "compile": "tsc --build --verbose",
     "logs": "heroku logs -a x2-server-mongodb -t",
-    "coverage": "jest --coverage --forceExit --detectOpenHandles",
-    "prestart": "yarn build",
-    "start": "node dist/index.js",
-    "test": "jest --forceExit --detectOpenHandles"
+    "serve": "node dist/index.js",
+    "start": "run-s clean compile serve",
+    "test": "jest --forceExit --detectOpenHandles",
+    "watch": "ts-node-dev --respawn -- src/index.ts"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
@@ -50,6 +50,7 @@
     "prettier": "^2.1.1",
     "rimraf": "^3.0.2",
     "supertest": "^4.0.2",
+    "ts-node-dev": "^1.0.0-pre.62",
     "typescript": "^4.0.2"
   },
   "eslintConfig": {

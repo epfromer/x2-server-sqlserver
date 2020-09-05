@@ -1,15 +1,15 @@
-import { emailSentCollection } from '@klonzo/common'
+import { Client } from '@elastic/elasticsearch'
+import { dbName, elasticServer, emailSentCollection } from '@klonzo/common'
 import { Request, Response } from 'express'
 
 export async function getEmailSent(eq: Request, res: Response): Promise<void> {
   try {
-    // const emailSent = await db
-    //   .collection(emailSentCollection)
-    //   .find()
-    //   .sort({ sent: 1 })
-    //   .toArray()
-    const emailSent = {}
-    res.json(emailSent)
+    const client = new Client({ node: elasticServer })
+    const { body } = await client.search({
+      index: dbName + emailSentCollection,
+      q: '*',
+    })
+    res.json(body.hits.hits[0]._source.emailSentCollection)
   } catch (err) {
     console.error(err.stack)
     res.status(500).send(err.msg)

@@ -8,10 +8,10 @@ export const contactCollection = 'contacts'
 export const emailSentCollection = 'emailsent'
 export const wordCloudCollection = 'wordcloud'
 
-// MongoDB
+// MongoDB (via MongoDB.net or Docker)
 export const mongodbServer =
   'mongodb+srv://test:f00bar@cluster0-vaftj.mongodb.net/x2?retryWrites=true&w=majority'
 export const mongodbServer2 = 'mongodb://localhost:27017/x2'
 
-// ElasticSearch
+// ElasticSearch (via Docker)
 export const elasticServer = 'http://localhost:9200'

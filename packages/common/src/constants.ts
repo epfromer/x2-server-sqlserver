@@ -2,9 +2,9 @@
 export const fsFolder = 'c:/github/outlook/'
 export const dbName = 'x2'
 export const defaultLimit = 50
-export const namedContactsOnly = true
+export const namedCustodiansOnly = true
 export const emailCollection = 'emails'
-export const contactCollection = 'contacts'
+export const custodianCollection = 'custodians'
 export const emailSentCollection = 'emailsent'
 export const wordCloudCollection = 'wordcloud'
 

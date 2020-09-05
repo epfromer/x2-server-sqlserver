@@ -4,11 +4,11 @@ import * as express from 'express'
 import * as mongodb from 'mongodb'
 import * as morgan from 'morgan'
 import { getAllEmail } from './getAllEmail'
-import { getContacts } from './getContacts'
+import { getCustodians } from './getCustodians'
 import { getEmailSent } from './getEmailSent'
 import { getSpecificEmail } from './getSpecificEmail'
 import { getWordCloud } from './getWordCloud'
-import { setContact } from './setContactColor'
+import { setCustodian } from './setCustodian'
 
 export let db: mongodb.Db
 
@@ -42,15 +42,12 @@ async function run() {
   app.route('/email/:id').get(getSpecificEmail)
   app.route('/emailsent').get(getEmailSent)
   app.route('/wordcloud').get(getWordCloud)
-  app.route('/contacts').get(getContacts)
-  app.route('/contacts/:id').put(setContact)
+  app.route('/custodians').get(getCustodians)
+  app.route('/custodians/:id').put(setCustodian)
 
   const port = process.env.PORT || 3000
   app.listen(port)
   console.log(`running on PORT: ${port}`)
-
-  // emit event for integraton tests to start
-  // app.emit('appStarted')
 }
 
 run().catch(console.error)

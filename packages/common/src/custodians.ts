@@ -1,4 +1,4 @@
-import { Alias, Contact } from './types'
+import { Alias, Custodian } from './types'
 /*
   This is a list of players in the Enron dataset.  
   See README for list of these people, their roles, etc.
@@ -7,6 +7,7 @@ import { Alias, Contact } from './types'
 const aliases: Alias[] = [
   {
     name: 'Causey, Richard',
+    id: 'causey',
     title: 'Executive Vice President and Chief Accounting Officer',
     color: '#cddc39',
     aliases: [
@@ -26,6 +27,7 @@ const aliases: Alias[] = [
   },
   {
     name: 'Fastow, Andrew',
+    id: 'fastow',
     title: 'Chief Financial Officer',
     color: '#e91e63',
     aliases: [
@@ -46,6 +48,7 @@ const aliases: Alias[] = [
   },
   {
     name: 'Glisan, Ben',
+    id: 'glisan',
     title: 'Treasurer',
     color: '#a11e63',
     aliases: [
@@ -62,6 +65,7 @@ const aliases: Alias[] = [
   },
   {
     name: 'Lay, Kenneth',
+    id: 'lay',
     title: 'Founder, CEO and Chairman',
     color: '#ff9800',
     aliases: [
@@ -130,6 +134,7 @@ const aliases: Alias[] = [
   },
   {
     name: 'Skilling, Jeff',
+    id: 'skilling',
     title: 'CEO',
     color: '#4caf50',
     aliases: [
@@ -161,6 +166,7 @@ const aliases: Alias[] = [
   },
   {
     name: 'Whalley, Greg',
+    id: 'whalley',
     title: 'President',
     color: '#3f51b5',
     aliases: [
@@ -481,9 +487,9 @@ const aliases: Alias[] = [
   // },
 ]
 
-// TODO find other contacts associated with key terms
+// TODO find other Custodians associated with key terms
 
-// set up contacts list from aliases, and map for quick access to contact
+// set up Custodians list from aliases, and map for quick access to Custodian
 export const possibleHits = [
   // 'baxter',
   // 'boyle',
@@ -516,20 +522,20 @@ export const possibleHits = [
   // 'galvan',
   // 'cash',
 ]
-export const keyContacts: Contact[] = []
+export const custodians: Custodian[] = []
 export const aliasMap = new Map()
-aliases.map((contact) => {
-  keyContacts.push({
+aliases.map((custodian) => {
+  custodians.push({
     senderTotal: 0,
     receiverTotal: 0,
-    asSender: [],
-    asReceiver: [],
-    ...contact,
+    toCustodians: [],
+    fromCustodians: [],
+    ...custodian,
   })
-  contact.aliases.map((alias) => {
-    aliasMap.set(alias.toLowerCase(), contact.name)
+  custodian.aliases.map((alias) => {
+    aliasMap.set(alias.toLowerCase(), custodian.name)
   })
-  aliasMap.set(contact.name.toLowerCase(), contact.name)
+  aliasMap.set(custodian.name.toLowerCase(), custodian.name)
 })
 
 export const filteredSenders = ['HotWebCash Newsletter']

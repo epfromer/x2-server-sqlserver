@@ -3,9 +3,9 @@ export interface Email {
   sent: Date
   sentShort: string
   from: string
-  fromContact?: string
+  fromCustodian?: string
   to: string
-  toContact?: string
+  toCustodian?: string
   cc: string
   bcc: string
   subject: string
@@ -30,18 +30,20 @@ export interface EmailReceived {
   sent: Date
 }
 
-export interface Contact {
+export interface Custodian {
+  id: string
   name: string
   aliases: string[]
   title: string
   color: string
   senderTotal: number
   receiverTotal: number
-  asSender: EmailSent[]
-  asReceiver: EmailReceived[]
+  toCustodians: EmailSent[]
+  fromCustodians: EmailReceived[]
 }
 
 export interface Alias {
+  id: string
   name: string
   aliases: string[]
   title: string

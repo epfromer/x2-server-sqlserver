@@ -2,11 +2,11 @@ import * as bodyParser from 'body-parser'
 import * as express from 'express'
 import * as morgan from 'morgan'
 import { getAllEmail } from './getAllEmail'
-import { getContacts } from './getContacts'
+import { getCustodians } from './getCustodians'
 import { getEmailSent } from './getEmailSent'
 import { getSpecificEmail } from './getSpecificEmail'
 import { getWordCloud } from './getWordCloud'
-import { setContact } from './setContactColor'
+import { setCustodian } from './setCustodianColor'
 
 // https://www.elastic.co/blog/new-elasticsearch-javascript-client-released
 // https://www.elastic.co/guide/en/elasticsearch/client/javascript-api/7.x/introduction.html
@@ -36,8 +36,8 @@ async function run() {
   app.route('/email/:id').get(getSpecificEmail)
   app.route('/emailsent').get(getEmailSent)
   app.route('/wordcloud').get(getWordCloud)
-  app.route('/contacts').get(getContacts)
-  app.route('/contacts/:id').put(setContact)
+  app.route('/Custodians').get(getCustodians)
+  app.route('/Custodians/:id').put(setCustodian)
 
   const port = process.env.PORT || 3000
   app.listen(port)

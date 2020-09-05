@@ -1,13 +1,13 @@
 import { Client } from '@elastic/elasticsearch'
 import {
-  Contact,
-  contactCollection,
+  Custodian,
+  custodianCollection,
   dbName,
   elasticServer,
   Email,
   emailSentCollection,
   EmailSentREMOVE,
-  processContacts,
+  processCustodians,
   processEmailSent,
   processWordCloud,
   walkFSfolder,
@@ -33,9 +33,9 @@ const insertEmails = async (emails: Email[]): Promise<void> => {
         sent: email.sent,
         sentShort: email.sentShort,
         from: email.from,
-        fromContact: email.fromContact,
+        fromCustodian: email.fromCustodian,
         to: email.to,
-        toContact: email.toContact,
+        toCustodian: email.toCustodian,
         cc: email.cc,
         bcc: email.bcc,
         subject: email.subject,
@@ -63,11 +63,11 @@ const insertEmailSent = async (email: EmailSentREMOVE[]): Promise<void> => {
   })
 }
 
-const insertContacts = async (contacts: Contact[]): Promise<void> => {
+const insertCustodians = async (Custodians: Custodian[]): Promise<void> => {
   await client.index({
-    index: dbName + contactCollection,
+    index: dbName + custodianCollection,
     body: {
-      contactCollection: contacts,
+      CustodianCollection: Custodians,
     },
   })
 }
@@ -82,7 +82,7 @@ async function run() {
     await client.indices.delete({ index: dbName })
     await client.indices.delete({ index: dbName + wordCloudCollection })
     await client.indices.delete({ index: dbName + emailSentCollection })
-    await client.indices.delete({ index: dbName + contactCollection })
+    await client.indices.delete({ index: dbName + custodianCollection })
   } catch (error) {
     console.error(error)
   }
@@ -91,7 +91,7 @@ async function run() {
   await client.indices.create({ index: dbName })
   await client.indices.create({ index: dbName + wordCloudCollection })
   await client.indices.create({ index: dbName + emailSentCollection })
-  await client.indices.create({ index: dbName + contactCollection })
+  await client.indices.create({ index: dbName + custodianCollection })
 
   console.log(`insert emails`)
   const numEmails = await walkFSfolder(insertEmails)
@@ -102,8 +102,8 @@ async function run() {
   console.log(`insert email sent`)
   await processEmailSent(insertEmailSent)
 
-  console.log(`insert contacts`)
-  await processContacts(insertContacts)
+  console.log(`insert Custodians`)
+  await processCustodians(insertCustodians)
 
   console.log(`refresh index`)
   await client.indices.refresh({ index: dbName })

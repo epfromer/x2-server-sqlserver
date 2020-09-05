@@ -1,6 +1,5 @@
 import { emailCollection } from '@klonzo/common'
 import { Request, Response } from 'express'
-import * as mongodb from 'mongodb'
 import { db } from './index'
 
 // HTTP GET /email/<id>
@@ -9,12 +8,24 @@ export async function getSpecificEmail(
   res: Response
 ): Promise<void> {
   try {
-    const doc = await db
+    const email = await db
       .collection(emailCollection)
-      .findOne({ _id: new mongodb.ObjectId(req.params.id) })
-    res.json(doc)
+      .findOne({ id: req.params.id })
+    res.json({
+      id: email.id,
+      sent: email.sent,
+      sentShort: email.sentShort,
+      from: email.from,
+      fromCustodian: email.fromCustodian,
+      to: email.to,
+      toCustodian: email.toCustodian,
+      cc: email.cc,
+      bcc: email.bcc,
+      subject: email.subject,
+      body: email.body,
+    })
   } catch (err) {
     console.error(err.stack)
-    res.status(500).send(err.msg)
+    res.status(404).send(err.msg)
   }
 }

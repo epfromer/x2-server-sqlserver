@@ -1,6 +1,6 @@
 import { PSTMessage } from 'pst-extractor'
 import * as sw from 'stopword'
-import { keyTerms } from './keyTerms'
+import { keyTerms } from './terms'
 import { WordCloudTag } from './types'
 
 // TODO investigate https://www.npmjs.com/package/natural

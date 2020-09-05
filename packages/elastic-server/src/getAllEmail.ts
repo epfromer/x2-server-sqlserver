@@ -24,24 +24,24 @@ const createSearchParams = (httpQuery) => {
 
   if (allText) {
     query += `body:"${allText}" OR `
-    query += `to:"${allText}" OR toContact:"${allText}" OR bcc:"${allText}" OR cc:"${allText}" OR `
-    query += `from:"${allText}" OR fromContact:"${allText}" OR `
+    query += `to:"${allText}" OR toCustodian:"${allText}" OR bcc:"${allText}" OR cc:"${allText}" OR `
+    query += `from:"${allText}" OR fromCustodian:"${allText}" OR `
     query += `subject:"${allText}"`
   } else {
     if (from) {
       query += query ? ' AND ' : ''
-      // check if searching only named contacts, delimited with ()
+      // check if searching only named Custodians, delimited with ()
       if (from.indexOf('(') >= 0) {
-        query += `fromContact:"${from}" `
+        query += `fromCustodian:"${from}" `
       } else {
         query += `from:"${from}" `
       }
     }
     if (to) {
       query += query ? ' AND ' : ''
-      // check if searching only named contacts, delimited with ()
+      // check if searching only named Custodians, delimited with ()
       if (to.indexOf('(') >= 0) {
-        query += `toContact:"${to}" `
+        query += `toCustodian:"${to}" `
       } else {
         query += `to:"${to}" `
       }
@@ -92,13 +92,13 @@ export async function getAllEmail(req: Request, res: Response): Promise<void> {
     })
 
     const emails = body.hits.hits.map((email) => ({
-      _id: email._source.id,
+      id: email._source.id,
       sent: email._source.sent,
       sentShort: email._source.sentShort,
       from: email._source.from,
-      fromContact: email._source.fromContact,
+      fromCustodian: email._source.fromCustodian,
       to: email._source.to,
-      toContact: email._source.toContact,
+      toCustodian: email._source.toCustodian,
       cc: email._source.cc,
       bcc: email._source.bcc,
       subject: email._source.subject,

@@ -1,20 +1,20 @@
-import { aliasMap, filteredSenders, possibleHits } from './keyContacts'
+import { aliasMap, filteredSenders, possibleHits } from './custodians'
 import { Email } from './types'
-import { namedContactsOnly } from './constants'
+import { namedCustodiansOnly } from './constants'
 import { PSTMessage } from 'pst-extractor'
 import { v4 as uuidv4 } from 'uuid'
 import { hash, hashMap } from './hash'
-import { hasKeyTerms } from './keyTerms'
+import { hasTerms } from './terms'
 import {
-  addToContactsInteraction,
+  addToCustodiansInteraction,
   incReceiverTotal,
   incSenderTotal,
-} from './processContacts'
+} from './processCustodians'
 import { addToEmailSent } from './processEmailSent'
 import { addToWordCloud } from './processWordCloud'
 
-export const ignoredContacts = new Set()
-export const possibleContacts = new Set()
+export const ignoredCustodians = new Set()
+export const possibleCustodians = new Set()
 
 // Processes individual email and stores in list.
 export function processEmail(email: PSTMessage, emails: Email[]): void {
@@ -33,48 +33,52 @@ export function processEmail(email: PSTMessage, emails: Email[]): void {
     filteredSenders.indexOf(email.senderName.trim()) < 0
   if (!isValidEmail(email)) return
 
-  // check for key contacts
-  const getContacts = (s: string): string[] => {
-    let potentialContacts = s.toLowerCase().trim().split(';')
-    potentialContacts = potentialContacts.map((contact) => contact.trim())
-    potentialContacts = potentialContacts.filter((contact) => contact !== '')
-    const foundContacts: string[] = []
-    potentialContacts.forEach((contact) => {
-      if (aliasMap.has(contact)) {
-        foundContacts.push(aliasMap.get(contact))
+  // check for key Custodians
+  const getCustodians = (s: string): string[] => {
+    let potentialCustodians = s.toLowerCase().trim().split(';')
+    potentialCustodians = potentialCustodians.map((Custodian) =>
+      Custodian.trim()
+    )
+    potentialCustodians = potentialCustodians.filter(
+      (Custodian) => Custodian !== ''
+    )
+    const foundCustodians: string[] = []
+    potentialCustodians.forEach((Custodian) => {
+      if (aliasMap.has(Custodian)) {
+        foundCustodians.push(aliasMap.get(Custodian))
       } else {
-        ignoredContacts.add(contact)
+        ignoredCustodians.add(Custodian)
         possibleHits.forEach((h) => {
-          if (contact.indexOf(h) >= 0) possibleContacts.add(contact)
+          if (Custodian.indexOf(h) >= 0) possibleCustodians.add(Custodian)
         })
       }
     })
-    return foundContacts
+    return foundCustodians
   }
 
-  // get contacts for to/from fields
-  const senderNameContacts = getContacts(email.senderName)
-  const senderEmailAddressContacts = getContacts(email.senderEmailAddress)
-  const displayToContacts = getContacts(email.displayTo)
-  const displayCCContacts = getContacts(email.displayCC)
-  const displayBCCContacts = getContacts(email.displayBCC)
+  // get Custodians for to/from fields
+  const senderNameCustodians = getCustodians(email.senderName)
+  const senderEmailAddressCustodians = getCustodians(email.senderEmailAddress)
+  const displayToCustodians = getCustodians(email.displayTo)
+  const displayCCCustodians = getCustodians(email.displayCC)
+  const displayBCCCustodians = getCustodians(email.displayBCC)
 
   // combine into strings
-  let fromContact = ''
-  if (senderNameContacts.length) {
-    fromContact = senderNameContacts[0]
-  } else if (senderEmailAddressContacts.length) {
-    fromContact = senderEmailAddressContacts[0]
+  let fromCustodian = ''
+  if (senderNameCustodians.length) {
+    fromCustodian = senderNameCustodians[0]
+  } else if (senderEmailAddressCustodians.length) {
+    fromCustodian = senderEmailAddressCustodians[0]
   }
-  const toContact = displayToContacts
-    .concat(displayCCContacts, displayBCCContacts)
+  const toCustodian = displayToCustodians
+    .concat(displayCCCustodians, displayBCCCustodians)
     .join('; ')
 
   // check if the doc has any key terms / fraudulent project names
-  const hotDoc = hasKeyTerms(email)
+  const hotDoc = hasTerms(email)
 
-  // load only email involving contacts?
-  if (!hotDoc && namedContactsOnly && !fromContact && !toContact) {
+  // load only email involving Custodians?
+  if (!hotDoc && namedCustodiansOnly && !fromCustodian && !toCustodian) {
     return
   }
 
@@ -86,11 +90,11 @@ export function processEmail(email: PSTMessage, emails: Email[]): void {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const sent = email.clientSubmitTime!
   const id = uuidv4()
-  if (fromContact && toContact) {
-    addToContactsInteraction(fromContact, toContact, id, sent)
+  if (fromCustodian && toCustodian) {
+    addToCustodiansInteraction(fromCustodian, toCustodian, id, sent)
   }
-  if (fromContact) incSenderTotal(fromContact)
-  if (toContact) incReceiverTotal(toContact)
+  if (fromCustodian) incSenderTotal(fromCustodian)
+  if (toCustodian) incReceiverTotal(toCustodian)
   addToEmailSent(sent, id)
   addToWordCloud(email)
 
@@ -104,9 +108,9 @@ export function processEmail(email: PSTMessage, emails: Email[]): void {
     sent,
     sentShort: new Date(sent).toISOString().substring(0, 10),
     from: prettifyAddress(email.senderName),
-    fromContact,
+    fromCustodian,
     to: prettifyAddress(email.displayTo),
-    toContact,
+    toCustodian,
     cc: email.displayCC,
     bcc: email.displayBCC,
     subject: email.subject,

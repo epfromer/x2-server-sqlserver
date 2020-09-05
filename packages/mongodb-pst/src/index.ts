@@ -1,13 +1,13 @@
 import {
-  Contact,
-  contactCollection,
+  Custodian,
+  custodianCollection,
   dbName,
   Email,
   emailCollection,
   emailSentCollection,
   EmailSentREMOVE,
   mongodbServer,
-  processContacts,
+  processCustodians,
   processEmailSent,
   processWordCloud,
   walkFSfolder,
@@ -30,11 +30,10 @@ const insertEmailSent = async (emailSent: EmailSentREMOVE[]): Promise<void> => {
   await db.collection(emailSentCollection).insertMany(emailSent)
 }
 
-const insertContacts = async (contacts: Contact[]): Promise<void> => {
-  await db.collection(contactCollection).insertMany(contacts)
+const insertCustodians = async (Custodians: Custodian[]): Promise<void> => {
+  await db.collection(custodianCollection).insertMany(Custodians)
 }
 
-// eslint-disable-next-line @typescript-eslint/no-extra-semi
 async function run() {
   console.log(`${mongodbServer}: connecting`)
   const client = await mongodb.MongoClient.connect(mongodbServer, {
@@ -54,8 +53,8 @@ async function run() {
   console.log(`insert email sent`)
   await processEmailSent(insertEmailSent)
 
-  console.log(`insert contacts`)
-  await processContacts(insertContacts)
+  console.log(`insert Custodians`)
+  await processCustodians(insertCustodians)
 
   console.log(`create index`)
   await db.collection(emailCollection).createIndex({ '$**': 'text' })

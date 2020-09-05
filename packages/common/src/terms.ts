@@ -81,7 +81,7 @@ const keyNames = [
   'whalley',
 ]
 
-export function hasKeyTerms(email: PSTMessage): boolean {
+export function hasTerms(email: PSTMessage): boolean {
   for (const term of keyTerms) {
     if (email.body.indexOf(term) >= 0 || email.subject.indexOf(term) >= 0)
       return true

@@ -11,9 +11,9 @@ interface query {
   sent?: MongoSent
   $text?: any
   from?: RegExp
-  fromContact?: RegExp
+  fromCustodian?: RegExp
   to?: RegExp
-  toContact?: RegExp
+  toCustodian?: RegExp
   subject?: RegExp
   body?: RegExp
 }
@@ -55,17 +55,17 @@ const createSearchParams = (httpQuery: HTTPQuery): query => {
     // expressions ignoring case targeting specific fields, which requires
     // full collection scans and will be slower on big collections.
     if (from) {
-      // check if searching only named contacts, delimited with ()
+      // check if searching only named Custodians, delimited with ()
       if (from.indexOf('(') >= 0) {
-        query.fromContact = new RegExp(from, 'i')
+        query.fromCustodian = new RegExp(from, 'i')
       } else {
         query.from = new RegExp(from, 'i')
       }
     }
     if (to) {
-      // check if searching only named contacts, delimited with ()
+      // check if searching only named Custodians, delimited with ()
       if (httpQuery.to.indexOf('(') >= 0) {
-        query.toContact = new RegExp(to, 'i')
+        query.toCustodian = new RegExp(to, 'i')
       } else {
         query.to = new RegExp(to, 'i')
       }
@@ -117,6 +117,20 @@ export async function getAllEmail(req: Request, res: Response): Promise<void> {
         .limit(req.query.limit ? +req.query.limit : defaultLimit)
         .toArray()
     }
+
+    emails = emails.map((email) => ({
+      id: email.id,
+      sent: email.sent,
+      sentShort: email.sentShort,
+      from: email.from,
+      fromCustodian: email.fromCustodian,
+      to: email.to,
+      toCustodian: email.toCustodian,
+      cc: email.cc,
+      bcc: email.bcc,
+      subject: email.subject,
+      body: email.body,
+    }))
 
     res.json({
       total,

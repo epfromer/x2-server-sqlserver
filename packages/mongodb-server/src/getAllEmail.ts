@@ -9,11 +9,10 @@ interface MongoSent {
 
 interface query {
   sent?: MongoSent
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  $and?: any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   $text?: any
-  from?: RegExp
-  fromCustodian?: RegExp
-  to?: RegExp
-  toCustodian?: RegExp
   subject?: RegExp
   body?: RegExp
 }
@@ -51,34 +50,34 @@ const createSearchParams = (httpQuery: HTTPQuery): query => {
       $search: allText,
     }
   } else {
-    // Else, we have specific field searching.  Here, have to use regular
-    // expressions ignoring case targeting specific fields, which requires
-    // full collection scans and will be slower on big collections.
+    // Else, we have specific field searching.
+    const queryArr = []
     if (from) {
-      // check if searching only named Custodians, delimited with ()
-      if (from.indexOf('(') >= 0) {
-        query.fromCustodian = new RegExp(from, 'i')
-      } else {
-        query.from = new RegExp(from, 'i')
-      }
+      const re = new RegExp(from, 'i')
+      queryArr.push({
+        $or: [{ fromCustodian: re }, { from: re }],
+      })
     }
     if (to) {
-      // check if searching only named Custodians, delimited with ()
-      if (httpQuery.to.indexOf('(') >= 0) {
-        query.toCustodian = new RegExp(to, 'i')
-      } else {
-        query.to = new RegExp(to, 'i')
-      }
+      const re = new RegExp(to, 'i')
+      queryArr.push({
+        $or: [{ toCustodian: re }, { to: re }, { cc: re }, { bcc: re }],
+      })
     }
     if (subject) {
-      query.subject = new RegExp(subject, 'i')
+      queryArr.push({
+        subject: new RegExp(subject, 'i'),
+      })
     }
     if (body) {
-      query.body = new RegExp(body, 'i')
+      queryArr.push({
+        body: new RegExp(body, 'i'),
+      })
     }
+    if (queryArr.length) query.$and = queryArr
   }
 
-  // console.log(query)
+  console.log(query)
   return query
 }
 

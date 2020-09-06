@@ -6,7 +6,7 @@ import {
   elasticServer,
   Email,
   emailSentByDayCollection,
-  EmailSentREMOVE,
+  EmailSentByDay,
   processCustodians,
   processEmailSentByDay,
   processWordCloud,
@@ -35,7 +35,7 @@ const insertEmails = async (emails: Email[]): Promise<void> => {
         from: email.from,
         fromCustodian: email.fromCustodian,
         to: email.to,
-        toCustodian: email.toCustodian,
+        toCustodians: email.toCustodians,
         cc: email.cc,
         bcc: email.bcc,
         subject: email.subject,
@@ -54,7 +54,7 @@ const insertWordCloud = async (wordCloud: WordCloudTag[]): Promise<void> => {
   })
 }
 
-const insertEmailSent = async (email: EmailSentREMOVE[]): Promise<void> => {
+const insertEmailSentByDay = async (email: EmailSentByDay[]): Promise<void> => {
   await client.index({
     index: dbName + emailSentByDayCollection,
     body: {
@@ -74,7 +74,7 @@ const insertCustodians = async (Custodians: Custodian[]): Promise<void> => {
 
 // eslint-disable-next-line @typescript-eslint/no-extra-semi
 async function run() {
-  console.log(`${elasticServer}: connecting`)
+  console.log(`connect to ${elasticServer}`)
   client = new Client({ node: elasticServer })
 
   console.log(`drop database`)
@@ -100,15 +100,15 @@ async function run() {
   await processWordCloud(insertWordCloud)
 
   console.log(`insert email sent`)
-  await processEmailSentByDay(insertEmailSent)
+  await processEmailSentByDay(insertEmailSentByDay)
 
-  console.log(`insert Custodians`)
+  console.log(`insert custodians`)
   await processCustodians(insertCustodians)
 
   console.log(`refresh index`)
   await client.indices.refresh({ index: dbName })
 
-  console.log(`complete, ${numEmails} emails processed`)
+  console.log(`completed ${numEmails} emails`)
 }
 
 run().catch(console.error)

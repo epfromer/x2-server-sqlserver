@@ -1,8 +1,6 @@
 import { custodians } from './custodians'
 import { Custodian } from './types'
 
-export const custodiansMap = new Map()
-
 export function addCustodiansInteraction(
   fromCustodian: string,
   toCustodians: string[],

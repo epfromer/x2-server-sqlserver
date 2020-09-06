@@ -6,7 +6,7 @@ import { getCustodians } from './getCustodians'
 import { getEmailSent } from './getEmailSent'
 import { getSpecificEmail } from './getSpecificEmail'
 import { getWordCloud } from './getWordCloud'
-import { setCustodian } from './setCustodianColor'
+import { setCustodian } from './setCustodian'
 
 // https://www.elastic.co/blog/new-elasticsearch-javascript-client-released
 // https://www.elastic.co/guide/en/elasticsearch/client/javascript-api/7.x/introduction.html

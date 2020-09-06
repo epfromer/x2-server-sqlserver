@@ -3,7 +3,10 @@ import { custodianCollection, dbName, elasticServer } from '@klonzo/common'
 import { Request, Response } from 'express'
 
 // HTTP GET /Custodians
-export async function getCustodians(req: Request, res: Response): Promise<void> {
+export async function getCustodians(
+  req: Request,
+  res: Response
+): Promise<void> {
   try {
     const client = new Client({ node: elasticServer })
     const { body } = await client.search({

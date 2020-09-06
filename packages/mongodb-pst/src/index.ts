@@ -55,13 +55,13 @@ async function run() {
   console.log(`insert email sent`)
   await processEmailSentByDay(insertEmailSentByDay)
 
-  console.log(`insert Custodians`)
+  console.log(`insert custodians`)
   await processCustodians(insertCustodians)
 
   console.log(`create index`)
   await db.collection(emailCollection).createIndex({ '$**': 'text' })
 
-  console.log(`processed ${numEmails} emails`)
+  console.log(`completed ${numEmails} emails`)
 }
 
 run().catch(console.error)

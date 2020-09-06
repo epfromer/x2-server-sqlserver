@@ -7,7 +7,7 @@ export const custodians: Custodian[] = [
     name: 'Causey, Richard',
     id: 'causey',
     title: 'Executive Vice President and Chief Accounting Officer',
-    color: '#cddc39',
+    color: '#03a9f4',
     aliases: [
       'Causey, Richard',
       'richard causey@enron',
@@ -58,7 +58,7 @@ export const custodians: Custodian[] = [
     name: 'Fleming, Rosalee',
     id: 'fleming',
     title: 'Assistant to Ken Lay',
-    color: '#cf9810',
+    color: '#009688',
     aliases: [
       'Fleming, Rosalee',
       'Rosalee Fleming',
@@ -100,7 +100,7 @@ export const custodians: Custodian[] = [
     name: 'Lay, Kenneth',
     id: 'lay',
     title: 'Founder, CEO and Chairman',
-    color: '#ff9800',
+    color: '#ffff00',
     aliases: [
       'Lay, Kenneth',
       'kenneth l lay@enron,',

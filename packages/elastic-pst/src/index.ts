@@ -5,10 +5,10 @@ import {
   dbName,
   elasticServer,
   Email,
-  emailSentCollection,
+  emailSentByDayCollection,
   EmailSentREMOVE,
   processCustodians,
-  processEmailSent,
+  processEmailSentByDay,
   processWordCloud,
   walkFSfolder,
   wordCloudCollection,
@@ -56,7 +56,7 @@ const insertWordCloud = async (wordCloud: WordCloudTag[]): Promise<void> => {
 
 const insertEmailSent = async (email: EmailSentREMOVE[]): Promise<void> => {
   await client.index({
-    index: dbName + emailSentCollection,
+    index: dbName + emailSentByDayCollection,
     body: {
       emailSentCollection: email,
     },
@@ -81,7 +81,7 @@ async function run() {
   try {
     await client.indices.delete({ index: dbName })
     await client.indices.delete({ index: dbName + wordCloudCollection })
-    await client.indices.delete({ index: dbName + emailSentCollection })
+    await client.indices.delete({ index: dbName + emailSentByDayCollection })
     await client.indices.delete({ index: dbName + custodianCollection })
   } catch (error) {
     console.error(error)
@@ -90,7 +90,7 @@ async function run() {
   console.log(`create indexes`)
   await client.indices.create({ index: dbName })
   await client.indices.create({ index: dbName + wordCloudCollection })
-  await client.indices.create({ index: dbName + emailSentCollection })
+  await client.indices.create({ index: dbName + emailSentByDayCollection })
   await client.indices.create({ index: dbName + custodianCollection })
 
   console.log(`insert emails`)
@@ -100,7 +100,7 @@ async function run() {
   await processWordCloud(insertWordCloud)
 
   console.log(`insert email sent`)
-  await processEmailSent(insertEmailSent)
+  await processEmailSentByDay(insertEmailSent)
 
   console.log(`insert Custodians`)
   await processCustodians(insertCustodians)

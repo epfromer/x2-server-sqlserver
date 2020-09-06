@@ -2,9 +2,10 @@ import { custodianCollection } from '@klonzo/common'
 import { Request, Response } from 'express'
 import { db } from './index'
 
+// HTTP PUT /custodians/:id
 export async function setCustodian(req: Request, res: Response): Promise<void> {
   try {
-    // should have some validation, but assume ok for now
+    // TODO validation
     const doc = await db
       .collection(custodianCollection)
       .findOneAndUpdate({ id: req.params.id }, { $set: req.body })

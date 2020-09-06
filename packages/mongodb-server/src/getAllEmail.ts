@@ -125,7 +125,7 @@ export async function getAllEmail(req: Request, res: Response): Promise<void> {
       from: email.from,
       fromCustodian: email.fromCustodian,
       to: email.to,
-      toCustodian: email.toCustodian,
+      toCustodians: email.toCustodians,
       cc: email.cc,
       bcc: email.bcc,
       subject: email.subject,

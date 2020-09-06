@@ -5,29 +5,26 @@ export interface Email {
   from: string
   fromCustodian?: string
   to: string
-  toCustodian?: string
+  toCustodians?: string[]
   cc: string
   bcc: string
   subject: string
   body: string
 }
 
-// TODO remove
-export interface EmailSentREMOVE {
-  sent: string
-  ids: string[]
+export interface EmailSentByDay {
+  sent: Date
+  emailIds: string[]
 }
 
-export interface EmailSent {
-  sent: Date
-  id: string
-  to: string[]
+export interface EmailSentToCustodians {
+  emailId: string
+  custodianIds: string[]
 }
 
-export interface EmailReceived {
-  id: string
-  from: string
-  sent: Date
+export interface EmailReceivedFromCustodians {
+  emailId: string
+  custodianId: string
 }
 
 export interface Custodian {
@@ -38,16 +35,8 @@ export interface Custodian {
   color: string
   senderTotal: number
   receiverTotal: number
-  toCustodians: EmailSent[]
-  fromCustodians: EmailReceived[]
-}
-
-export interface Alias {
-  id: string
-  name: string
-  aliases: string[]
-  title: string
-  color: string
+  toCustodians: EmailSentToCustodians[]
+  fromCustodians: EmailReceivedFromCustodians[]
 }
 
 export interface WordCloudTag {

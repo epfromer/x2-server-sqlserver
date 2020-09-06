@@ -1,23 +1,25 @@
-import { EmailSentREMOVE } from './types'
+import { EmailSentByDay } from './types'
 
-export const emailSent = new Map()
+export const emailSentByDay = new Map()
 
 // Add to emails sent map
-export function addToEmailSent(sent: Date, id: string): void {
+export function addToEmailSentByDay(sent: Date, id: string): void {
   const day = sent.toISOString().slice(0, 10)
-  if (emailSent.has(day)) {
-    emailSent.get(day).push(id)
+  if (emailSentByDay.has(day)) {
+    emailSentByDay.get(day).push(id)
   } else {
-    emailSent.set(day, [id])
+    emailSentByDay.set(day, [id])
   }
 }
 
 // Process list for email sent and store in db.
-export async function processEmailSent(
-  insertEmailSent: (words: Array<EmailSentREMOVE>) => void
+export async function processEmailSentByDay(
+  insertEmailSentByDay: (words: Array<EmailSentByDay>) => void
 ): Promise<void> {
-  const email: EmailSentREMOVE[] = []
-  emailSent.forEach((value, key) => email.push({ sent: key, ids: value }))
-  console.log('processEmailSent: ' + email.length + ' records')
-  await insertEmailSent(email)
+  const email: EmailSentByDay[] = []
+  emailSentByDay.forEach((value, key) =>
+    email.push({ sent: key, emailIds: value })
+  )
+  console.log('processEmailSentByDay: ' + email.length + ' records')
+  await insertEmailSentByDay(email)
 }

@@ -1,11 +1,18 @@
-import { dbName, mongodbServer } from '@klonzo/common'
+import {
+  custodianCollection,
+  dbName,
+  emailCollection,
+  emailSentByDayCollection,
+  mongodbServer,
+  wordCloudCollection,
+} from '@klonzo/common'
 import * as bodyParser from 'body-parser'
 import * as express from 'express'
 import * as mongodb from 'mongodb'
 import * as morgan from 'morgan'
 import { getAllEmail } from './getAllEmail'
 import { getCustodians } from './getCustodians'
-import { getEmailSent } from './getEmailSent'
+import { getEmailSentByDay } from './getEmailSent'
 import { getSpecificEmail } from './getSpecificEmail'
 import { getWordCloud } from './getWordCloud'
 import { setCustodian } from './setCustodian'
@@ -40,7 +47,7 @@ async function run() {
   app.route('/').get(getAllEmail)
   app.route('/email').get(getAllEmail)
   app.route('/email/:id').get(getSpecificEmail)
-  app.route('/emailsent').get(getEmailSent)
+  app.route('/emailsentbyday').get(getEmailSentByDay)
   app.route('/wordcloud').get(getWordCloud)
   app.route('/custodians').get(getCustodians)
   app.route('/custodians/:id').put(setCustodian)

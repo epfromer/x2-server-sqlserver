@@ -1,15 +1,24 @@
-import { emailSentCollection } from '@klonzo/common'
+import { emailSentByDayCollection } from '@klonzo/common'
 import { Request, Response } from 'express'
 import { db } from './index'
 
-export async function getEmailSent(eq: Request, res: Response): Promise<void> {
+// HTTP GET /emailsent
+export async function getEmailSentByDay(
+  req: Request,
+  res: Response
+): Promise<void> {
   try {
-    const emailSent = await db
-      .collection(emailSentCollection)
+    const emailSentByDay = await db
+      .collection(emailSentByDayCollection)
       .find()
       .sort({ sent: 1 })
       .toArray()
-    res.json(emailSent)
+    res.json(
+      emailSentByDay.map((day) => ({
+        sent: day.sent,
+        emailIds: day.emailIds,
+      }))
+    )
   } catch (err) {
     console.error(err.stack)
     res.status(500).send(err.msg)

@@ -1,20 +1,43 @@
-import { aliasMap, filteredSenders, possibleHits } from './custodians'
-import { Email } from './types'
-import { namedCustodiansOnly } from './constants'
 import { PSTMessage } from 'pst-extractor'
 import { v4 as uuidv4 } from 'uuid'
+import { onlyHot } from './constants'
+import { aliasMap } from './custodians'
 import { hash, hashMap } from './hash'
-import { hasTerms } from './terms'
 import {
-  addToCustodiansInteraction,
+  addCustodiansInteraction,
   incReceiverTotal,
   incSenderTotal,
 } from './processCustodians'
-import { addToEmailSent } from './processEmailSent'
+import { addToEmailSentByDay } from './processEmailSent'
 import { addToWordCloud } from './processWordCloud'
+import { hasTerms } from './terms'
+import { Email } from './types'
 
-export const ignoredCustodians = new Set()
-export const possibleCustodians = new Set()
+// filter out funky stuff that isn't hot
+const isValidEmail = (email): boolean | null =>
+  email.messageClass === 'IPM.Note' &&
+  email.clientSubmitTime !== null &&
+  email.clientSubmitTime > new Date(1999, 0, 1) &&
+  email.clientSubmitTime < new Date(2002, 3, 1) &&
+  (email.senderName.trim() !== '' || email.senderEmailAddress.trim() !== '')
+
+// check for custodians
+const getCustodians = (s, foundCustodians) => {
+  let potentialCustodians = s.toLowerCase().trim().split(';')
+  potentialCustodians = potentialCustodians.map((c) => c.trim())
+  potentialCustodians = potentialCustodians.filter((c) => c !== '')
+
+  potentialCustodians.forEach((custodian) => {
+    if (aliasMap.has(custodian)) {
+      foundCustodians.add(aliasMap.get(custodian))
+    }
+  })
+
+  return foundCustodians
+}
+
+// helps with display of super long email addresses
+const breakUpAddress = (addr) => addr.split('@').join(' @')
 
 // Processes individual email and stores in list.
 export function processEmail(email: PSTMessage, emails: Email[]): void {
@@ -22,95 +45,48 @@ export function processEmail(email: PSTMessage, emails: Email[]): void {
   const h = hash(email.body)
   if (hashMap.has(h)) return
 
-  // filter out funky stuff that isn't hot
-  const isValidEmail = (email: PSTMessage): boolean | null =>
-    email.messageClass === 'IPM.Note' &&
-    email.clientSubmitTime !== null &&
-    email.clientSubmitTime > new Date(1999, 0, 1) &&
-    email.clientSubmitTime < new Date(2002, 3, 1) &&
-    (email.senderName.trim() !== '' ||
-      email.senderEmailAddress.trim() !== '') &&
-    filteredSenders.indexOf(email.senderName.trim()) < 0
   if (!isValidEmail(email)) return
 
-  // check for key Custodians
-  const getCustodians = (s: string): string[] => {
-    let potentialCustodians = s.toLowerCase().trim().split(';')
-    potentialCustodians = potentialCustodians.map((Custodian) =>
-      Custodian.trim()
-    )
-    potentialCustodians = potentialCustodians.filter(
-      (Custodian) => Custodian !== ''
-    )
-    const foundCustodians: string[] = []
-    potentialCustodians.forEach((Custodian) => {
-      if (aliasMap.has(Custodian)) {
-        foundCustodians.push(aliasMap.get(Custodian))
-      } else {
-        ignoredCustodians.add(Custodian)
-        possibleHits.forEach((h) => {
-          if (Custodian.indexOf(h) >= 0) possibleCustodians.add(Custodian)
-        })
-      }
-    })
-    return foundCustodians
-  }
+  // get custodians, if any
+  const fromCustodiansSet = new Set()
+  getCustodians(email.senderName, fromCustodiansSet)
+  getCustodians(email.senderEmailAddress, fromCustodiansSet)
+  const fromCustodians = [...Array.from(fromCustodiansSet)]
+  const fromCustodian = fromCustodians.length
+    ? (fromCustodians[0] as string)
+    : ''
 
-  // get Custodians for to/from fields
-  const senderNameCustodians = getCustodians(email.senderName)
-  const senderEmailAddressCustodians = getCustodians(email.senderEmailAddress)
-  const displayToCustodians = getCustodians(email.displayTo)
-  const displayCCCustodians = getCustodians(email.displayCC)
-  const displayBCCCustodians = getCustodians(email.displayBCC)
+  const toCustodiansSet = new Set()
+  getCustodians(email.displayTo, toCustodiansSet)
+  getCustodians(email.displayCC, toCustodiansSet)
+  getCustodians(email.displayBCC, toCustodiansSet)
+  const toCustodians = [...Array.from(toCustodiansSet)] as string[]
 
-  // combine into strings
-  let fromCustodian = ''
-  if (senderNameCustodians.length) {
-    fromCustodian = senderNameCustodians[0]
-  } else if (senderEmailAddressCustodians.length) {
-    fromCustodian = senderEmailAddressCustodians[0]
-  }
-  const toCustodian = displayToCustodians
-    .concat(displayCCCustodians, displayBCCCustodians)
-    .join('; ')
+  // load only hot emails?
+  const hot = hasTerms(email) || fromCustodian || toCustodians.length
+  if (!hot && onlyHot) return
 
-  // check if the doc has any key terms / fraudulent project names
-  const hotDoc = hasTerms(email)
+  const emailId = uuidv4()
 
-  // load only email involving Custodians?
-  if (!hotDoc && namedCustodiansOnly && !fromCustodian && !toCustodian) {
-    return
-  }
-
-  // if (config.get('verbose')) {
-  //   console.log(`${sent} From: ${from}, To: ${to}, Subject: ${subject}`)
-  // }
-
-  // add to db
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const sent = email.clientSubmitTime!
-  const id = uuidv4()
-  if (fromCustodian && toCustodian) {
-    addToCustodiansInteraction(fromCustodian, toCustodian, id, sent)
+  if (fromCustodian && toCustodians.length) {
+    addCustodiansInteraction(fromCustodian, toCustodians, emailId)
   }
   if (fromCustodian) incSenderTotal(fromCustodian)
-  if (toCustodian) incReceiverTotal(toCustodian)
-  addToEmailSent(sent, id)
-  addToWordCloud(email)
+  if (toCustodians.length) toCustodians.forEach((c) => incReceiverTotal(c))
 
-  const prettifyAddress = (address: string): string => {
-    return address.split('@').join(' @')
-  }
+  addToEmailSentByDay(email.clientSubmitTime, emailId)
+
+  addToWordCloud(email)
 
   // add to list to be inserted later
   emails.push({
-    id,
-    sent,
-    sentShort: new Date(sent).toISOString().substring(0, 10),
-    from: prettifyAddress(email.senderName),
-    fromCustodian,
-    to: prettifyAddress(email.displayTo),
-    toCustodian,
+    id: emailId,
+    sent: email.clientSubmitTime,
+    sentShort: new Date(email.clientSubmitTime).toISOString().slice(0, 10),
+    from: breakUpAddress(email.senderName),
+    fromCustodian: fromCustodian as string,
+    to: breakUpAddress(email.displayTo),
+    toCustodians: toCustodians as string[],
     cc: email.displayCC,
     bcc: email.displayBCC,
     subject: email.subject,

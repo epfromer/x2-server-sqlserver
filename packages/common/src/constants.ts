@@ -2,10 +2,10 @@
 export const fsFolder = 'c:/github/outlook/'
 export const dbName = 'x2'
 export const defaultLimit = 50
-export const namedCustodiansOnly = true
-export const emailCollection = 'emails'
+export const onlyHot = true
+export const emailCollection = 'email'
 export const custodianCollection = 'custodians'
-export const emailSentCollection = 'emailsent'
+export const emailSentByDayCollection = 'emailsentbyday'
 export const wordCloudCollection = 'wordcloud'
 
 // MongoDB (via MongoDB.net or Docker)

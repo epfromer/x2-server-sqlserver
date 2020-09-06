@@ -1,16 +1,15 @@
-import { Alias, Custodian } from './types'
-/*
-  This is a list of players in the Enron dataset.  
-  See README for list of these people, their roles, etc.
-*/
+import { Custodian } from './types'
 
-const aliases: Alias[] = [
+// This is a list of custodians in the Enron dataset.
+// See README for list of these people, their roles, etc.
+export const custodians: Custodian[] = [
   {
     name: 'Causey, Richard',
     id: 'causey',
     title: 'Executive Vice President and Chief Accounting Officer',
     color: '#cddc39',
     aliases: [
+      'Causey, Richard',
       'richard causey@enron',
       'richard causey',
       'causey',
@@ -24,6 +23,10 @@ const aliases: Alias[] = [
       'richard causey/corp/enron@enron',
       'rcausey@enron.com',
     ],
+    senderTotal: 0,
+    receiverTotal: 0,
+    toCustodians: [],
+    fromCustodians: [],
   },
   {
     name: 'Fastow, Andrew',
@@ -31,6 +34,7 @@ const aliases: Alias[] = [
     title: 'Chief Financial Officer',
     color: '#e91e63',
     aliases: [
+      'Fastow, Andrew',
       'andy fastow',
       'andrew s fastow',
       'Fastow, Andy',
@@ -45,6 +49,30 @@ const aliases: Alias[] = [
       'andrew.s.fastow@enron.com',
       'fastow',
     ],
+    senderTotal: 0,
+    receiverTotal: 0,
+    toCustodians: [],
+    fromCustodians: [],
+  },
+  {
+    name: 'Fleming, Rosalee',
+    id: 'fleming',
+    title: 'Assistant to Ken Lay',
+    color: '#cf9810',
+    aliases: [
+      'Fleming, Rosalee',
+      'Rosalee Fleming',
+      'rosalee.fleming@enron.com',
+      'rosalee fleming@enron',
+      'rfleming@enron.com',
+      'fleming  rosalee',
+      'fleming',
+      'roslee.fleming@enron.com',
+    ],
+    senderTotal: 0,
+    receiverTotal: 0,
+    toCustodians: [],
+    fromCustodians: [],
   },
   {
     name: 'Glisan, Ben',
@@ -52,6 +80,7 @@ const aliases: Alias[] = [
     title: 'Treasurer',
     color: '#a11e63',
     aliases: [
+      'Glisan, Ben',
       'ben.glisan@enron.com',
       'glisan  ben',
       'Glisan, Ben F',
@@ -62,6 +91,10 @@ const aliases: Alias[] = [
       'glisan',
       'ben glisan @smtp@enronxgate',
     ],
+    senderTotal: 0,
+    receiverTotal: 0,
+    toCustodians: [],
+    fromCustodians: [],
   },
   {
     name: 'Lay, Kenneth',
@@ -69,6 +102,7 @@ const aliases: Alias[] = [
     title: 'Founder, CEO and Chairman',
     color: '#ff9800',
     aliases: [
+      'Lay, Kenneth',
       'kenneth l lay@enron,',
       'kenneth l. lay - enron',
       'kenneth l. lay/enron',
@@ -131,6 +165,10 @@ const aliases: Alias[] = [
       'imceanotes-ken+2elay-+2echairman+2eof+2ethe+2eboard+40enron+2ecom+40enron+20communications@enron.com',
       'ken lay-',
     ],
+    senderTotal: 0,
+    receiverTotal: 0,
+    toCustodians: [],
+    fromCustodians: [],
   },
   {
     name: 'Skilling, Jeff',
@@ -138,6 +176,7 @@ const aliases: Alias[] = [
     title: 'CEO',
     color: '#4caf50',
     aliases: [
+      'Skilling, Jeff',
       'jeffrey k skilling@enron',
       'jeff skilling@enron',
       'jskilli@enron.com',
@@ -163,6 +202,10 @@ const aliases: Alias[] = [
       'jeff skilling- president and ceo@enron',
       'jeff.skilling',
     ],
+    senderTotal: 0,
+    receiverTotal: 0,
+    toCustodians: [],
+    fromCustodians: [],
   },
   {
     name: 'Whalley, Greg',
@@ -170,6 +213,7 @@ const aliases: Alias[] = [
     title: 'President',
     color: '#3f51b5',
     aliases: [
+      'Whalley, Greg',
       'greg whalley',
       'gwhalle@enron.com',
       'gwhalley@enron.com',
@@ -187,6 +231,10 @@ const aliases: Alias[] = [
       'office of the chairman - enron wholesale services- mark frevert and greg whalley',
       'greg whalley@ect',
     ],
+    senderTotal: 0,
+    receiverTotal: 0,
+    toCustodians: [],
+    fromCustodians: [],
   },
   // {
   //   name: 'Watkins, Sherron',
@@ -199,20 +247,6 @@ const aliases: Alias[] = [
   //     'watkins  sherron',
   //     'sherron_watkins@enron.net',
   //     'watkins',
-  //   ],
-  // },
-  // {
-  //   name: 'Fleming, Rosalee',
-  //   title: 'Assistant to Ken Lay',
-  //   color: '#cf9810',
-  //   aliases: [
-  //     'Rosalee Fleming',
-  //     'rosalee.fleming@enron.com',
-  //     'rosalee fleming@enron',
-  //     'rfleming@enron.com',
-  //     'fleming  rosalee',
-  //     'fleming',
-  //     'roslee.fleming@enron.com',
   //   ],
   // },
   // {
@@ -487,55 +521,11 @@ const aliases: Alias[] = [
   // },
 ]
 
-// TODO find other Custodians associated with key terms
-
-// set up Custodians list from aliases, and map for quick access to Custodian
-export const possibleHits = [
-  // 'baxter',
-  // 'boyle',
-  // 'belden',
-  // 'causey',
-  // 'daso',
-  // 'ellen',
-  // 'fastow',
-  // 'fleming',
-  // 'watkins',
-  // 'sherron',
-  // 'frevert',
-  // 'glisan',
-  // 'kitchen',
-  // 'kopper',
-  // 'lavorato',
-  // 'lay',
-  // 'mcmahon',
-  // 'presto',
-  // 'skilling',
-  // 'symes',
-  // 'whalley',
-  // 'watkins',
-  // 'sherron',
-  // 'buy',
-  // 'mellencamp',
-  // 'shackleton',
-  // 'schwertner',
-  // 'vargas',
-  // 'galvan',
-  // 'cash',
-]
-export const custodians: Custodian[] = []
+// create map to quickly find custodian id from all
+// the custodian name / alias / email permutations
 export const aliasMap = new Map()
-aliases.map((custodian) => {
-  custodians.push({
-    senderTotal: 0,
-    receiverTotal: 0,
-    toCustodians: [],
-    fromCustodians: [],
-    ...custodian,
+custodians.forEach((custodian) => {
+  custodian.aliases.forEach((alias) => {
+    aliasMap.set(alias.toLowerCase(), custodian.id)
   })
-  custodian.aliases.map((alias) => {
-    aliasMap.set(alias.toLowerCase(), custodian.name)
-  })
-  aliasMap.set(custodian.name.toLowerCase(), custodian.name)
 })
-
-export const filteredSenders = ['HotWebCash Newsletter']

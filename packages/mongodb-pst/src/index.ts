@@ -4,11 +4,11 @@ import {
   dbName,
   Email,
   emailCollection,
-  emailSentCollection,
-  EmailSentREMOVE,
+  EmailSentByDay,
+  emailSentByDayCollection,
   mongodbServer,
   processCustodians,
-  processEmailSent,
+  processEmailSentByDay,
   processWordCloud,
   walkFSfolder,
   wordCloudCollection,
@@ -26,8 +26,10 @@ const insertWordCloud = async (wordCloud: WordCloudTag[]): Promise<void> => {
   await db.collection(wordCloudCollection).insertMany(wordCloud)
 }
 
-const insertEmailSent = async (emailSent: EmailSentREMOVE[]): Promise<void> => {
-  await db.collection(emailSentCollection).insertMany(emailSent)
+const insertEmailSentByDay = async (
+  emailSentByDay: EmailSentByDay[]
+): Promise<void> => {
+  await db.collection(emailSentByDayCollection).insertMany(emailSentByDay)
 }
 
 const insertCustodians = async (Custodians: Custodian[]): Promise<void> => {
@@ -35,7 +37,7 @@ const insertCustodians = async (Custodians: Custodian[]): Promise<void> => {
 }
 
 async function run() {
-  console.log(`${mongodbServer}: connecting`)
+  console.log(`connect to ${mongodbServer}`)
   const client = await mongodb.MongoClient.connect(mongodbServer, {
     useUnifiedTopology: false,
   })
@@ -51,7 +53,7 @@ async function run() {
   await processWordCloud(insertWordCloud)
 
   console.log(`insert email sent`)
-  await processEmailSent(insertEmailSent)
+  await processEmailSentByDay(insertEmailSentByDay)
 
   console.log(`insert Custodians`)
   await processCustodians(insertCustodians)
@@ -59,7 +61,7 @@ async function run() {
   console.log(`create index`)
   await db.collection(emailCollection).createIndex({ '$**': 'text' })
 
-  console.log(`complete, ${numEmails} emails processed`)
+  console.log(`processed ${numEmails} emails`)
 }
 
 run().catch(console.error)

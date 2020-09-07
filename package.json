@@ -18,6 +18,8 @@
     "watch:elastic-server": "lerna run --scope @klonzo/elastic-server watch --stream",
     "start:mongodb-pst": "lerna run --scope @klonzo/mongodb-pst start --stream",
     "watch:mongodb-server": "lerna run --scope @klonzo/mongodb-server watch --stream",
+    "start:postgres-pst": "lerna run --scope @klonzo/postgres-pst start --stream",
+    "watch:postgres-server": "lerna run --scope @klonzo/postgres-server watch --stream",
     "yarn": "yarn"
   },
   "devDependencies": {

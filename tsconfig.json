@@ -2,9 +2,11 @@
   "files": [],
   "references": [
     { "path": "packages/common" },
+    { "path": "packages/elastic-pst" },
+    { "path": "packages/elastic-server" },
     { "path": "packages/mongodb-pst" },
     { "path": "packages/mongodb-server" },
-    { "path": "packages/elastic-pst" },
-    { "path": "packages/elastic-server" }
+    { "path": "packages/postgres-pst" },
+    { "path": "packages/postgres-server" }
   ]
 }

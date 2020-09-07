@@ -1,29 +1,27 @@
 {
-  "name": "@klonzo/elastic-pst",
+  "name": "@klonzo/postgres-pst",
   "version": "0.0.1",
   "private": true,
   "license": "MIT",
   "author": "Ed Pfromer epfromer@gmail.com",
-  "description": "Extract objects from MS Outlook/Exchange PST files and store in ElasticSearch",
+  "description": "Extract objects from MS Outlook/Exchange PST files and store in PostgreSQL",
   "main": "./dist/index.js",
-  "elastic-version": "https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html",
   "scripts": {
     "build": "run-s clean compile",
-    "clean": "rimraf dist",
+    "clean": "rimraf dist tsconfig.tsbuildinfo",
     "compile": "tsc --build --verbose",
-    "docker:run": "docker run --name elastic -p 9200:9200 -p 9300:9300 -e 'discovery.type=single-node' docker.elastic.co/elasticsearch/elasticsearch:7.9.1",
+    "docker:run": "docker run --name postgres -e POSTGRES_PASSWORD=f00bar -d -p 5432:5432",
     "serve": "node dist/index.js",
     "start": "run-s build serve"
   },
   "dependencies": {
-    "@elastic/elasticsearch": "^7.9.0",
+    "pg": "^8.3.3",
     "pst-extractor": "^1.6.0",
     "uuid": "^8.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.11.6",
     "@klonzo/common": "*",
-    "@types/elasticsearch": "^5.0.36",
     "@types/node": "^14.6.4",
     "@typescript-eslint/eslint-plugin": "^4.1.0",
     "@typescript-eslint/parser": "^4.1.0",

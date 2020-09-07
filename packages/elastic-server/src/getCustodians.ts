@@ -2,7 +2,7 @@ import { Client } from '@elastic/elasticsearch'
 import { custodianCollection, dbName, elasticServer } from '@klonzo/common'
 import { Request, Response } from 'express'
 
-// HTTP GET /Custodians
+// HTTP GET /custodians
 export async function getCustodians(
   req: Request,
   res: Response
@@ -12,9 +12,22 @@ export async function getCustodians(
     const { body } = await client.search({
       index: dbName + custodianCollection,
       q: '*',
+      sort: 'id.keyword:asc',
     })
-    console.log(body.hits.hits[0]._source)
-    res.json(body.hits.hits[0]._source.custodianCollection)
+
+    const custodians = body.hits.hits.map((custodian) => ({
+      id: custodian._source.id,
+      name: custodian._source.name,
+      aliases: custodian._source.aliases,
+      title: custodian._source.title,
+      color: custodian._source.color,
+      senderTotal: custodian._source.senderTotal,
+      receiverTotal: custodian._source.receiverTotal,
+      toCustodians: custodian._source.toCustodians,
+      fromCustodians: custodian._source.fromCustodians,
+    }))
+
+    res.json(custodians)
   } catch (err) {
     console.error(err.stack)
     res.status(500).send(err.msg)

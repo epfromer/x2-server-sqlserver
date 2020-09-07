@@ -15,19 +15,10 @@ export async function getSpecificEmail(
       q: `id:${req.params.id}`,
     })
 
-    const email = {}
+    let email = {}
     if (body.hits.hits && body.hits.hits.length) {
       const hit = body.hits.hits[0]._source
-      console.log(hit)
-      console.log(hit.id, req.params.id)
-      if (hit.id === req.params.id) {
-        console.log('exact match')
-      }
-      //   let email: Email
-      //   email.id = body.hits.hits[0]._source.id
-      //   res.json(email)
-      // } else {
-      //   res.status(404).send('email not found')
+      if (hit.id === req.params.id) email = hit
     }
 
     res.json(email)

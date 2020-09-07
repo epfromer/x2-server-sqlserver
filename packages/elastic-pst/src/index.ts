@@ -64,11 +64,22 @@ const insertEmailSentByDay = async (email: EmailSentByDay[]): Promise<void> => {
 }
 
 const insertCustodians = async (custodians: Custodian[]): Promise<void> => {
-  await client.index({
-    index: dbName + custodianCollection,
-    body: {
-      custodianCollection: custodians,
-    },
+  custodians.forEach(async (custodian) => {
+    await client.index({
+      index: dbName + custodianCollection,
+      id: custodian.id,
+      body: {
+        id: custodian.id,
+        name: custodian.name,
+        aliases: custodian.aliases,
+        title: custodian.title,
+        color: custodian.color,
+        senderTotal: custodian.senderTotal,
+        receiverTotal: custodian.receiverTotal,
+        toCustodians: custodian.toCustodians,
+        fromCustodians: custodian.fromCustodians,
+      },
+    })
   })
 }
 

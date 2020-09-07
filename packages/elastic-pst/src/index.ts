@@ -63,11 +63,11 @@ const insertEmailSentByDay = async (email: EmailSentByDay[]): Promise<void> => {
   })
 }
 
-const insertCustodians = async (Custodians: Custodian[]): Promise<void> => {
+const insertCustodians = async (custodians: Custodian[]): Promise<void> => {
   await client.index({
     index: dbName + custodianCollection,
     body: {
-      CustodianCollection: Custodians,
+      custodianCollection: custodians,
     },
   })
 }

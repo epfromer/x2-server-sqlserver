@@ -34,7 +34,7 @@ async function run() {
   app.route('/').get(getAllEmail)
   app.route('/email').get(getAllEmail)
   app.route('/email/:id').get(getSpecificEmail)
-  app.route('/emailsent').get(getEmailSent)
+  app.route('/emailsentbyday').get(getEmailSent)
   app.route('/wordcloud').get(getWordCloud)
   app.route('/custodians').get(getCustodians)
   app.route('/custodians/:id').put(setCustodian)

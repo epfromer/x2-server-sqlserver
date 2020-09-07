@@ -1,11 +1,4 @@
-import {
-  custodianCollection,
-  dbName,
-  emailCollection,
-  emailSentByDayCollection,
-  mongodbServer,
-  wordCloudCollection,
-} from '@klonzo/common'
+import { dbName, mongodbServer } from '@klonzo/common'
 import * as bodyParser from 'body-parser'
 import * as express from 'express'
 import * as mongodb from 'mongodb'
@@ -19,6 +12,7 @@ import { setCustodian } from './setCustodian'
 
 export let db: mongodb.Db
 
+// TODO - test moving connection to each HTTP req
 async function run() {
   console.log(`connecting to ${mongodbServer}`)
   const client = await mongodb.MongoClient.connect(mongodbServer, {

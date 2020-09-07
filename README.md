@@ -1,3 +1,3 @@
-# x2-server
+# x2-servers
 
-Monorepo of x2 servers that interface to different database technologies including MongoDB, PostGRES, etc.
+Monorepo of servers to extract email from PSTs, store in MongoDB, ElasticSearch, PostgreSQL, and serve via REST/CRUD for full text searching.

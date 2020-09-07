@@ -13,7 +13,8 @@ export async function getCustodians(
       index: dbName + custodianCollection,
       q: '*',
     })
-    res.json(body.hits.hits[0]._source.CustodianCollection)
+    console.log(body.hits.hits[0]._source)
+    res.json(body.hits.hits[0]._source.custodianCollection)
   } catch (err) {
     console.error(err.stack)
     res.status(500).send(err.msg)

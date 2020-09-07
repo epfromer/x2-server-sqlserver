@@ -36,8 +36,8 @@ async function run() {
   app.route('/email/:id').get(getSpecificEmail)
   app.route('/emailsent').get(getEmailSent)
   app.route('/wordcloud').get(getWordCloud)
-  app.route('/Custodians').get(getCustodians)
-  app.route('/Custodians/:id').put(setCustodian)
+  app.route('/custodians').get(getCustodians)
+  app.route('/custodians/:id').put(setCustodian)
 
   const port = process.env.PORT || 3000
   app.listen(port)

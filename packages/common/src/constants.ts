@@ -9,9 +9,9 @@ export const emailSentByDayCollection = 'emailsentbyday'
 export const wordCloudCollection = 'wordcloud'
 
 // MongoDB (via MongoDB.net or Docker)
-export const mongodbServer =
+export const mongodbServer1 =
   'mongodb+srv://test:f00bar@cluster0-vaftj.mongodb.net/x2?retryWrites=true&w=majority'
-export const mongodbServer2 = 'mongodb://localhost:27017/x2'
+export const mongodbServer = 'mongodb://localhost:27017/x2'
 
 // ElasticSearch (via Docker)
 export const elasticServer = 'http://localhost:9200'

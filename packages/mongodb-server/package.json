@@ -13,6 +13,7 @@
   "scripts": {
     "clean": "rimraf dist",
     "compile": "tsc --build --verbose",
+    "docker:run": "docker run --name mongodb -p 27017:27017 mongo",
     "logs": "heroku logs -a x2-server-mongodb -t",
     "serve": "node dist/index.js",
     "start": "run-s clean compile serve",

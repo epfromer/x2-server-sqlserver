@@ -100,7 +100,10 @@ export async function getAllEmail(req: Request, res: Response): Promise<void> {
 
     const total = await knex(emailCollection).count()
     let emails = await knex(emailCollection)
-      .orderBy('sent', 'asc')
+      .orderBy(
+        req.query.sort ? req.query.sort : 'sent',
+        req.query.order === '1' ? 'asc' : 'desc'
+      )
       .offset(req.query.skip ? +req.query.skip : 0)
       .limit(req.query.limit ? +req.query.limit : defaultLimit)
     emails = emails.map((email) => ({

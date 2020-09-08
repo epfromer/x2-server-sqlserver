@@ -14,12 +14,35 @@ import {
   wordCloudCollection,
   WordCloudTag,
 } from '@klonzo/common'
+import { v4 as uuidv4 } from 'uuid'
 import * as dotenv from 'dotenv'
+dotenv.config()
+
 import { Client } from 'pg'
 
-// const insertEmails = async (email: Email[]): Promise<void> => {
-//   await db.collection(emailCollection).insertMany(email)
-// }
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const knex = require('knex')
+
+const client = new Client()
+let db
+
+const insertEmails = async (emails: Email[]): Promise<void> => {
+  emails.forEach(async (email) => {
+    await db(emailCollection).insert({
+      id: uuidv4(),
+      sent: email.sent,
+      sentShort: email.sentShort,
+      from: email.from,
+      fromCustodian: email.fromCustodian,
+      to: email.to,
+      toCustodians: email.toCustodians.toString(),
+      cc: email.cc,
+      bcc: email.bcc,
+      subject: email.subject,
+      body: email.body,
+    })
+  })
+}
 
 // const insertWordCloud = async (wordCloud: WordCloudTag[]): Promise<void> => {
 //   await db.collection(wordCloudCollection).insertMany(wordCloud)
@@ -36,29 +59,42 @@ import { Client } from 'pg'
 // }
 
 async function run() {
-  dotenv.config()
-
   console.log(`connect to postgres`)
-  const client = new Client()
+  await client.connect()
 
   console.log(`drop database`)
-  try {
-    await client.connect()
-    await client.query('drop database ' + dbName)
-  } catch (err) {
-    console.log(err)
-  }
+  await client.query('drop database if exists ' + dbName)
 
   console.log(`create database`)
   await client.query('create database ' + dbName)
 
-  // https://www.npmjs.com/package/knex
+  db = knex({
+    client: 'pg',
+    connection: {
+      host: process.env.PGHOST,
+      password: process.env.PGPASSWORD,
+      database: dbName,
+    },
+  })
+  await db.schema.createTable(emailCollection, (table) => {
+    table.string('id').primary()
+    table.datetime('sent')
+    table.date('sentShort')
+    table.text('from')
+    table.text('fromCustodian')
+    table.text('to')
+    table.text('toCustodians')
+    table.text('cc')
+    table.text('bcc')
+    table.text('subject')
+    table.text('body')
+  })
 
-  // console.log(`insert emails`)
-  // const numEmails = await walkFSfolder(insertEmails)
+  // const res = await db(emailCollection).select('*')
+  // console.log(res)
 
-  const result = await client.query('SELECT now()')
-  console.log(result)
+  console.log(`insert emails`)
+  const numEmails = await walkFSfolder(insertEmails)
 
   // console.log(`insert word cloud`)
   // await processWordCloud(insertWordCloud)
@@ -72,7 +108,7 @@ async function run() {
   // console.log(`create index`)
   // await db.collection(emailCollection).createIndex({ '$**': 'text' })
 
-  // console.log(`completed ${numEmails} emails`)
+  console.log(`completed ${numEmails} emails`)
   client.end()
 }
 

@@ -14,6 +14,8 @@ import {
   wordCloudCollection,
   WordCloudTag,
 } from '@klonzo/common'
+import * as dotenv from 'dotenv'
+import { Client } from 'pg'
 
 // const insertEmails = async (email: Email[]): Promise<void> => {
 //   await db.collection(emailCollection).insertMany(email)
@@ -34,19 +36,29 @@ import {
 // }
 
 async function run() {
-  console.log(process.env.PGUSER)
+  dotenv.config()
 
-  // console.log(`connect to ${mongodbServer}`)
-  // const client = await mongodb.MongoClient.connect(mongodbServer, {
-  //   useUnifiedTopology: false,
-  // })
-  // db = client.db(dbName)
+  console.log(`connect to postgres`)
+  const client = new Client()
 
-  // console.log(`drop database`)
-  // await db.dropDatabase()
+  console.log(`drop database`)
+  try {
+    await client.connect()
+    await client.query('drop database ' + dbName)
+  } catch (err) {
+    console.log(err)
+  }
+
+  console.log(`create database`)
+  await client.query('create database ' + dbName)
+
+  // https://www.npmjs.com/package/knex
 
   // console.log(`insert emails`)
   // const numEmails = await walkFSfolder(insertEmails)
+
+  const result = await client.query('SELECT now()')
+  console.log(result)
 
   // console.log(`insert word cloud`)
   // await processWordCloud(insertWordCloud)
@@ -61,6 +73,7 @@ async function run() {
   // await db.collection(emailCollection).createIndex({ '$**': 'text' })
 
   // console.log(`completed ${numEmails} emails`)
+  client.end()
 }
 
 run().catch(console.error)

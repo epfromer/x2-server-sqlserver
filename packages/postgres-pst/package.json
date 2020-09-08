@@ -10,7 +10,7 @@
     "build": "run-s clean compile",
     "clean": "rimraf dist tsconfig.tsbuildinfo",
     "compile": "tsc --build --verbose",
-    "docker:run": "docker run --name postgres -e POSTGRES_PASSWORD=f00bar -d -p 5432:5432",
+    "docker:run": "docker run --name postgres -e POSTGRES_PASSWORD=f00bar -d -p 5432:5432 postgres",
     "serve": "node dist/index.js",
     "start": "run-s build serve"
   },

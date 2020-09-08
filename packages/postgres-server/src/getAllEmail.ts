@@ -1,4 +1,4 @@
-import { dbName, emailCollection } from '@klonzo/common'
+import { dbName, emailCollection, defaultLimit } from '@klonzo/common'
 import * as dotenv from 'dotenv'
 import { Request, Response } from 'express'
 dotenv.config()
@@ -125,9 +125,14 @@ export async function getAllEmail(req: Request, res: Response): Promise<void> {
     // const total = await db.collection(emailCollection).countDocuments(query)
     const total = 100
 
+    const perPage = req.query.limit ? +req.query.limit : defaultLimit
+    const currentPage = (req.query.skip ? +req.query.skip : 0) / perPage + 1
+
+    console.log(perPage, currentPage)
+
     let emails = await knex(emailCollection).orderBy('sent', 'asc').paginate({
-      perPage: 2,
-      currentPage: 2,
+      perPage,
+      currentPage,
     })
     emails = emails.data.map((email) => ({
       id: email.id,

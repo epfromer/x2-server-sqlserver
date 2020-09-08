@@ -4,10 +4,10 @@ import { Client } from 'pg'
 import { v4 as uuidv4 } from 'uuid'
 dotenv.config()
 
+const client = new Client()
+
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const knex = require('knex')
-
-const client = new Client()
 let db
 
 const insertEmails = async (emails: Email[]): Promise<void> => {
@@ -51,6 +51,7 @@ async function run() {
 
   console.log(`create database`)
   await client.query('create database ' + dbName)
+  client.end()
 
   db = knex({
     client: 'pg',
@@ -74,8 +75,6 @@ async function run() {
     table.text('body')
   })
 
-
-
   console.log(`insert emails`)
   const numEmails = await walkFSfolder(insertEmails)
 
@@ -92,7 +91,6 @@ async function run() {
   // await db.collection(emailCollection).createIndex({ '$**': 'text' })
 
   console.log(`completed ${numEmails} emails`)
-  client.end()
 }
 
 run().catch(console.error)

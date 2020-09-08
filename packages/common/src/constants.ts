@@ -12,10 +12,10 @@ export const wordCloudCollection = 'wordcloud'
 // TODO put that into heroku interface, not .env
 
 // MongoDB (via MongoDB.net or Docker)
-export const mongodbServer1 =
+export const mongodbServer =
   'mongodb+srv://test:f00bar@cluster0-vaftj.mongodb.net/x2?retryWrites=true&w=majority'
 // https://hub.docker.com/_/mongo
-export const mongodbServer = 'mongodb://localhost:27017/x2'
+export const mongodbServer1 = 'mongodb://localhost:27017/x2'
 
 // ElasticSearch (via Docker)
 // https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html

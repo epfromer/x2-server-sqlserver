@@ -13,10 +13,6 @@ const knex = require('knex')({
   },
 })
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const { attachPaginate } = require('knex-paginate')
-attachPaginate()
-
 // interface MongoSent {
 //   $gte: Date
 //   $lte: Date
@@ -102,46 +98,19 @@ export async function getAllEmail(req: Request, res: Response): Promise<void> {
   try {
     // const query = createSearchParams(req.query)
 
-    // const total = await db.collection(emailCollection).countDocuments(query)
-
-    // let emails
-    // if (createSortOrder(req.query)) {
-    //   emails = await db
-    //     .collection(emailCollection)
-    //     .find(query)
-    //     .sort(createSortOrder(req.query))
-    //     .skip(req.query.skip ? +req.query.skip : 0)
-    //     .limit(req.query.limit ? +req.query.limit : defaultLimit)
-    //     .toArray()
-    // } else {
-    //   emails = await db
-    //     .collection(emailCollection)
-    //     .find(query)
-    //     .skip(req.query.skip ? +req.query.skip : 0)
-    //     .limit(req.query.limit ? +req.query.limit : defaultLimit)
-    //     .toArray()
-    // }
-
-    // const total = await db.collection(emailCollection).countDocuments(query)
-    const total = 100
-
-    const perPage = req.query.limit ? +req.query.limit : defaultLimit
-    const currentPage = (req.query.skip ? +req.query.skip : 0) / perPage + 1
-
-    console.log(perPage, currentPage)
-
-    let emails = await knex(emailCollection).orderBy('sent', 'asc').paginate({
-      perPage,
-      currentPage,
-    })
-    emails = emails.data.map((email) => ({
+    const total = await knex(emailCollection).count()
+    let emails = await knex(emailCollection)
+      .orderBy('sent', 'asc')
+      .offset(req.query.skip ? +req.query.skip : 0)
+      .limit(req.query.limit ? +req.query.limit : defaultLimit)
+    emails = emails.map((email) => ({
       id: email.id,
       sent: email.sent,
       sentShort: email.sentShort,
       from: email.from,
       fromCustodian: email.fromCustodian,
       to: email.to,
-      toCustodians: email.toCustodians, // TODO convert to array
+      toCustodians: email.toCustodians ? email.toCustodians.split(',') : [],
       cc: email.cc,
       bcc: email.bcc,
       subject: email.subject,
@@ -149,7 +118,7 @@ export async function getAllEmail(req: Request, res: Response): Promise<void> {
     }))
 
     res.json({
-      total,
+      total: +total[0].count,
       emails,
     })
   } catch (err) {

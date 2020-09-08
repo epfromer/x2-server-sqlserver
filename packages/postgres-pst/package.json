@@ -17,7 +17,6 @@
   "dependencies": {
     "dotenv": "^8.2.0",
     "knex": "^0.21.5",
-    "knex-paginate": "^1.2.3",
     "pg": "^8.3.3",
     "pst-extractor": "^1.6.0",
     "uuid": "^8.3.0"

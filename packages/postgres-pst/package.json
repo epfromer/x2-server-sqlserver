@@ -15,6 +15,7 @@
     "start": "run-s build serve"
   },
   "dependencies": {
+    "dotenv": "^8.2.0",
     "pg": "^8.3.3",
     "pst-extractor": "^1.6.0",
     "uuid": "^8.3.0"

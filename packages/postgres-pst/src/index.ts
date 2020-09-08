@@ -1,24 +1,8 @@
-import {
-  Custodian,
-  custodianCollection,
-  dbName,
-  Email,
-  emailCollection,
-  EmailSentByDay,
-  emailSentByDayCollection,
-  mongodbServer,
-  processCustodians,
-  processEmailSentByDay,
-  processWordCloud,
-  walkFSfolder,
-  wordCloudCollection,
-  WordCloudTag,
-} from '@klonzo/common'
-import { v4 as uuidv4 } from 'uuid'
+import { dbName, Email, emailCollection, walkFSfolder } from '@klonzo/common'
 import * as dotenv from 'dotenv'
-dotenv.config()
-
 import { Client } from 'pg'
+import { v4 as uuidv4 } from 'uuid'
+dotenv.config()
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const knex = require('knex')
@@ -90,8 +74,7 @@ async function run() {
     table.text('body')
   })
 
-  // const res = await db(emailCollection).select('*')
-  // console.log(res)
+
 
   console.log(`insert emails`)
   const numEmails = await walkFSfolder(insertEmails)

@@ -1,4 +1,12 @@
-import { dbName, Email, emailCollection, walkFSfolder } from '@klonzo/common'
+import {
+  dbName,
+  Email,
+  emailCollection,
+  processWordCloud,
+  walkFSfolder,
+  wordCloudCollection,
+  WordCloudTag,
+} from '@klonzo/common'
 import * as dotenv from 'dotenv'
 import { Client } from 'pg'
 import { v4 as uuidv4 } from 'uuid'
@@ -35,9 +43,14 @@ const insertEmails = async (emails: Email[]): Promise<void> => {
   })
 }
 
-// const insertWordCloud = async (wordCloud: WordCloudTag[]): Promise<void> => {
-//   await db.collection(wordCloudCollection).insertMany(wordCloud)
-// }
+const insertWordCloud = async (wordCloud: WordCloudTag[]): Promise<void> => {
+  wordCloud.forEach(async (word) => {
+    await db(wordCloudCollection).insert({
+      tag: word.tag,
+      weight: word.weight,
+    })
+  })
+}
 
 // const insertEmailSentByDay = async (
 //   emailSentByDay: EmailSentByDay[]
@@ -88,21 +101,22 @@ async function run() {
     table.text('email_body')
     table.text('email_body_lc')
   })
+  await db.schema.createTable(wordCloudCollection, (table) => {
+    table.string('tag').primary()
+    table.decimal('weight')
+  })
 
   console.log(`insert emails`)
   const numEmails = await walkFSfolder(insertEmails)
 
-  // console.log(`insert word cloud`)
-  // await processWordCloud(insertWordCloud)
+  console.log(`insert word cloud`)
+  await processWordCloud(insertWordCloud)
 
   // console.log(`insert email sent`)
   // await processEmailSentByDay(insertEmailSentByDay)
 
   // console.log(`insert custodians`)
   // await processCustodians(insertCustodians)
-
-  // console.log(`create index`)
-  // await db.collection(emailCollection).createIndex({ '$**': 'text' })
 
   console.log(`completed ${numEmails} emails`)
 }

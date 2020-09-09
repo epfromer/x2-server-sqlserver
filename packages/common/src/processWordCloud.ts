@@ -14,6 +14,9 @@ export function addToWordCloud(email: PSTMessage): void {
   const zlSig = '***********'
   let cleanBody = email.body.slice(0, email.body.indexOf(zlSig))
 
+  // add in other fields to body
+  // TODO
+
   // remove CR/LF and lowercase
   cleanBody = cleanBody.replace(/[\r\n\t]/g, ' ').toLowerCase()
 

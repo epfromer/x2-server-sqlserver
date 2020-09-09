@@ -19,7 +19,7 @@ const knex = require('knex')({
 })
 
 const createSearchParams = (httpQuery: HTTPQuery) => {
-  // console.log(httpQuery)
+  console.log(httpQuery)
 
   const { allText, sent, timeSpan, from, to, subject, body } = httpQuery
 
@@ -44,12 +44,14 @@ const createSearchParams = (httpQuery: HTTPQuery) => {
     query +=
       (query ? ' and ' : '') +
       `(` +
-      `email_from_lc like '%${from}%' or ` +
-      `email_from_custodian_lc like '%${from}%' or ` +
-      `email_to_lc like '%${to}%' or ` +
-      `email_to_custodians_lc like '%${to}%' or ` +
-      `email_cc_lc like '%${to}%' or ` +
-      `email_bcc_lc like '%${to}%'` +
+      `email_from_lc like '%${allText}%' or ` +
+      `email_from_custodian_lc like '%${allText}%' or ` +
+      `email_to_lc like '%${allText}%' or ` +
+      `email_to_custodians_lc like '%${allText}%' or ` +
+      `email_cc_lc like '%${allText}%' or ` +
+      `email_bcc_lc like '%${allText}%' or ` +
+      `email_subject_lc like '%${allText}%' or ` +
+      `email_body_lc like '%${allText}%'` +
       `)`
   } else {
     // Else, we have specific field searching.

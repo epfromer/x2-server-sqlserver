@@ -1,5 +1,6 @@
-import { dbName, emailCollection, defaultLimit } from '@klonzo/common'
+import { dbName, defaultLimit, emailCollection } from '@klonzo/common'
 import * as dotenv from 'dotenv'
+import { Client } from 'pg'
 import { Request, Response } from 'express'
 dotenv.config()
 
@@ -82,30 +83,34 @@ const knex = require('knex')({
 //   return query
 // }
 
-// const createSortOrder = (httpQuery) => {
-//   interface Sort {
-//     [index: string]: number
-//   }
-//   const sort: Sort = {}
-//   if (httpQuery.sort) {
-//     sort[httpQuery.sort as string] = httpQuery.order === '1' ? 1 : -1
-//   }
-//   return sort
-// }
-
 // HTTP GET /email/
 export async function getAllEmail(req: Request, res: Response): Promise<void> {
   try {
     // const query = createSearchParams(req.query)
 
-    const total = await knex(emailCollection).count()
-    let emails = await knex(emailCollection)
-      .orderBy(
-        req.query.sort ? req.query.sort : 'sent',
-        req.query.order === '1' ? 'asc' : 'desc'
-      )
-      .offset(req.query.skip ? +req.query.skip : 0)
-      .limit(req.query.limit ? +req.query.limit : defaultLimit)
+    const client = new Client({
+      host: process.env.PGHOST,
+      password: process.env.PGPASSWORD,
+      database: dbName,
+    })
+    await client.connect()
+    const email = await client.query(
+      'select "subject" from "email" where to_tsvector(subject) @@ to_tsquery("Lay")'
+    )
+    console.log(email)
+
+    // const total = await knex(emailCollection).count()
+    // const total = await knex(emailCollection).count()
+    // let emails = await knex(emailCollection).whereRaw(
+    //   "to_tsvector(from) @@ to_tsquery('Lay')"
+    // )
+    // .orderBy(
+    //   req.query.sort ? req.query.sort : 'sent',
+    //   req.query.order === '1' ? 'asc' : 'desc'
+    // )
+    // .offset(req.query.skip ? +req.query.skip : 0)
+    // .limit(req.query.limit ? +req.query.limit : defaultLimit)
+    let emails = await knex(emailCollection).raw('select *')
     emails = emails.map((email) => ({
       id: email.id,
       sent: email.sent,
@@ -121,7 +126,8 @@ export async function getAllEmail(req: Request, res: Response): Promise<void> {
     }))
 
     res.json({
-      total: +total[0].count,
+      total: 100,
+      // total: +total[0].count,
       emails,
     })
   } catch (err) {

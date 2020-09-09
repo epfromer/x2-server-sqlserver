@@ -40,7 +40,7 @@ const createSearchParams = (httpQuery: HTTPQuery) => {
   }
 
   if (allText) {
-    // any text field
+    // any text field?
     query +=
       (query ? ' and ' : '') +
       `(` +
@@ -92,7 +92,6 @@ const createSearchParams = (httpQuery: HTTPQuery) => {
 export async function getAllEmail(req: Request, res: Response): Promise<void> {
   try {
     const query = createSearchParams(req.query)
-
     const total = await knex(emailCollection).whereRaw(query).count()
     const emails = await knex(emailCollection)
       .orderBy(

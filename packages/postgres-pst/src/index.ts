@@ -13,17 +13,24 @@ let db
 const insertEmails = async (emails: Email[]): Promise<void> => {
   emails.forEach(async (email) => {
     await db(emailCollection).insert({
-      id: uuidv4(),
-      sent: email.sent,
-      sentShort: email.sentShort,
-      from: email.from,
-      fromCustodian: email.fromCustodian,
-      to: email.to,
-      toCustodians: email.toCustodians.toString(),
-      cc: email.cc,
-      bcc: email.bcc,
-      subject: email.subject,
-      body: email.body,
+      email_id: uuidv4(),
+      email_sent: email.sent,
+      email_from: email.from,
+      email_from_lc: email.from.toLowerCase(), // lower case of text fields for faster search
+      email_from_custodian: email.fromCustodian,
+      email_from_custodian_lc: email.fromCustodian.toLowerCase(),
+      email_to: email.to,
+      email_to_lc: email.to.toLowerCase(),
+      email_to_custodians: email.toCustodians.toString(),
+      email_to_custodians_lc: email.toCustodians.toString().toLowerCase(),
+      email_cc: email.cc,
+      email_cc_lc: email.cc.toLowerCase(),
+      email_bcc: email.bcc,
+      email_bcc_lc: email.bcc.toLowerCase(),
+      email_subject: email.subject,
+      email_subject_lc: email.subject.toLowerCase(),
+      email_body: email.body,
+      email_body_lc: email.body.toLowerCase(),
     })
   })
 }
@@ -62,17 +69,24 @@ async function run() {
     },
   })
   await db.schema.createTable(emailCollection, (table) => {
-    table.string('id').primary()
-    table.datetime('sent')
-    table.date('sentShort')
-    table.text('from')
-    table.text('fromCustodian')
-    table.text('to')
-    table.text('toCustodians')
-    table.text('cc')
-    table.text('bcc')
-    table.text('subject')
-    table.text('body')
+    table.string('email_id').primary()
+    table.datetime('email_sent')
+    table.text('email_from')
+    table.text('email_from_lc') // lower case of text fields for faster search
+    table.text('email_from_custodian')
+    table.text('email_from_custodian_lc')
+    table.text('email_to')
+    table.text('email_to_lc')
+    table.text('email_to_custodians')
+    table.text('email_to_custodians_lc')
+    table.text('email_cc')
+    table.text('email_cc_lc')
+    table.text('email_bcc')
+    table.text('email_bcc_lc')
+    table.text('email_subject')
+    table.text('email_subject_lc')
+    table.text('email_body')
+    table.text('email_body_lc')
   })
 
   console.log(`insert emails`)

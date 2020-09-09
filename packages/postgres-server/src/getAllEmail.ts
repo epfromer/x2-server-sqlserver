@@ -1,6 +1,10 @@
-import { dbName, defaultLimit, emailCollection } from '@klonzo/common'
+import {
+  dbName,
+  defaultLimit,
+  emailCollection,
+  HTTPQuery,
+} from '@klonzo/common'
 import * as dotenv from 'dotenv'
-import { Client } from 'pg'
 import { Request, Response } from 'express'
 dotenv.config()
 
@@ -14,121 +18,107 @@ const knex = require('knex')({
   },
 })
 
-// interface MongoSent {
-//   $gte: Date
-//   $lte: Date
-// }
+const createSearchParams = (httpQuery: HTTPQuery) => {
+  // console.log(httpQuery)
 
-// const createSearchParams = (httpQuery: HTTPQuery): query => {
-//   // console.log(httpQuery)
+  const { allText, sent, timeSpan, from, to, subject, body } = httpQuery
 
-//   const { allText, sent, timeSpan, from, to, subject, body } = httpQuery
+  let query = ''
 
-//   const query: query = {}
+  if (sent) {
+    const start = new Date(sent)
+    const end = new Date(start.getTime())
+    end.setDate(end.getDate() + 1)
+    // is there a time span?
+    if (timeSpan && timeSpan > 0) {
+      start.setDate(start.getDate() - +timeSpan)
+      end.setDate(end.getDate() + +timeSpan)
+    }
+    query +=
+      `(email_sent >= '${new Date(start).toISOString().slice(0, 10)}' and ` +
+      `email_sent <= '${new Date(end).toISOString().slice(0, 10)}')`
+  }
 
-//   if (sent) {
-//     const start = new Date(sent)
-//     const end = new Date(start.getTime())
-//     end.setDate(end.getDate() + 1)
+  if (allText) {
+    // any text field
+    query +=
+      (query ? ' and ' : '') +
+      `(` +
+      `email_from_lc like '%${from}%' or ` +
+      `email_from_custodian_lc like '%${from}%' or ` +
+      `email_to_lc like '%${to}%' or ` +
+      `email_to_custodians_lc like '%${to}%' or ` +
+      `email_cc_lc like '%${to}%' or ` +
+      `email_bcc_lc like '%${to}%'` +
+      `)`
+  } else {
+    // Else, we have specific field searching.
+    if (from) {
+      query +=
+        (query ? ' and ' : '') +
+        `(` +
+        `email_from_lc like '%${from}%' or ` +
+        `email_from_custodian_lc like '%${from}%'` +
+        `)`
+    }
+    if (to) {
+      query +=
+        (query ? ' and ' : '') +
+        `(` +
+        `email_to_lc like '%${to}%' or ` +
+        `email_to_custodians_lc like '%${to}%' or ` +
+        `email_cc_lc like '%${to}%' or ` +
+        `email_bcc_lc like '%${to}%'` +
+        `)`
+    }
+    if (subject) {
+      query +=
+        (query ? ' and ' : '') +
+        `(` +
+        `email_subject_lc like '%${subject}%'` +
+        `)`
+    }
+    if (body) {
+      query +=
+        (query ? ' and ' : '') + `(` + `email_body_lc like '%${body}%'` + `)`
+    }
+  }
 
-//     // is there a time span?
-//     if (timeSpan && timeSpan > 0) {
-//       start.setDate(start.getDate() - +timeSpan)
-//       end.setDate(end.getDate() + +timeSpan)
-//     }
-
-//     query.sent = {
-//       $gte: start,
-//       $lte: end,
-//     }
-//   }
-
-//   // Text searching is complex.  If using allText, then use the $text
-//   // fulltext searching provided by Mongo, but cannot limit that to a specific
-//   // text field - it searches all text indexes.  At least with MongoDB 3.6.
-//   if (allText) {
-//     // any text field
-//     query.$text = {
-//       $search: allText,
-//     }
-//   } else {
-//     // Else, we have specific field searching.
-//     const queryArr = []
-//     if (from) {
-//       const re = new RegExp(from, 'i')
-//       queryArr.push({
-//         $or: [{ fromCustodian: re }, { from: re }],
-//       })
-//     }
-//     if (to) {
-//       const re = new RegExp(to, 'i')
-//       queryArr.push({
-//         $or: [{ toCustodian: re }, { to: re }, { cc: re }, { bcc: re }],
-//       })
-//     }
-//     if (subject) {
-//       queryArr.push({
-//         subject: new RegExp(subject, 'i'),
-//       })
-//     }
-//     if (body) {
-//       queryArr.push({
-//         body: new RegExp(body, 'i'),
-//       })
-//     }
-//     if (queryArr.length) query.$and = queryArr
-//   }
-
-//   console.log(query)
-//   return query
-// }
+  console.log(query)
+  return query
+}
 
 // HTTP GET /email/
 export async function getAllEmail(req: Request, res: Response): Promise<void> {
   try {
-    // const query = createSearchParams(req.query)
+    const query = createSearchParams(req.query)
 
-    const client = new Client({
-      host: process.env.PGHOST,
-      password: process.env.PGPASSWORD,
-      database: dbName,
-    })
-    await client.connect()
-    const email = await client.query(
-      'select "subject" from "email" where to_tsvector(subject) @@ to_tsquery("Lay")'
-    )
-    console.log(email)
-
-    // const total = await knex(emailCollection).count()
-    // const total = await knex(emailCollection).count()
-    // let emails = await knex(emailCollection).whereRaw(
-    //   "to_tsvector(from) @@ to_tsquery('Lay')"
-    // )
-    // .orderBy(
-    //   req.query.sort ? req.query.sort : 'sent',
-    //   req.query.order === '1' ? 'asc' : 'desc'
-    // )
-    // .offset(req.query.skip ? +req.query.skip : 0)
-    // .limit(req.query.limit ? +req.query.limit : defaultLimit)
-    let emails = await knex(emailCollection).raw('select *')
-    emails = emails.map((email) => ({
-      id: email.id,
-      sent: email.sent,
-      sentShort: email.sentShort,
-      from: email.from,
-      fromCustodian: email.fromCustodian,
-      to: email.to,
-      toCustodians: email.toCustodians ? email.toCustodians.split(',') : [],
-      cc: email.cc,
-      bcc: email.bcc,
-      subject: email.subject,
-      body: email.body,
-    }))
-
+    const total = await knex(emailCollection).whereRaw(query).count()
+    const emails = await knex(emailCollection)
+      .orderBy(
+        req.query.sort ? 'email_' + req.query.sort : 'email_sent',
+        req.query.order === '1' ? 'asc' : 'desc'
+      )
+      .offset(req.query.skip ? +req.query.skip : 0)
+      .limit(req.query.limit ? +req.query.limit : defaultLimit)
+      .whereRaw(query)
     res.json({
-      total: 100,
-      // total: +total[0].count,
-      emails,
+      total: +total[0].count,
+      emails: emails.map((email) => ({
+        id: email.email_id,
+        sent: email.email_sent,
+        sentShort: new Date(email.email_sent).toISOString().slice(0, 10),
+        from: email.email_from,
+        fromCustodian: email.email_from_custodian,
+        to: email.email_to,
+        toCustodians: email.email_to_custodians
+          ? email.email_to_custodians.split(',')
+          : [],
+        cc: email.email_cc,
+        bcc: email.email_bcc,
+        subject: email.email_subject,
+        body: email.email_body,
+      })),
     })
   } catch (err) {
     console.error(err.stack)

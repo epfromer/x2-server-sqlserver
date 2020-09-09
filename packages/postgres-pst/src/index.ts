@@ -2,6 +2,9 @@ import {
   dbName,
   Email,
   emailCollection,
+  EmailSentByDay,
+  emailSentByDayCollection,
+  processEmailSentByDay,
   processWordCloud,
   walkFSfolder,
   wordCloudCollection,
@@ -52,11 +55,16 @@ const insertWordCloud = async (wordCloud: WordCloudTag[]): Promise<void> => {
   })
 }
 
-// const insertEmailSentByDay = async (
-//   emailSentByDay: EmailSentByDay[]
-// ): Promise<void> => {
-//   await db.collection(emailSentByDayCollection).insertMany(emailSentByDay)
-// }
+const insertEmailSentByDay = async (
+  emailSentByDay: EmailSentByDay[]
+): Promise<void> => {
+  emailSentByDay.forEach(async (day) => {
+    await db(emailSentByDayCollection).insert({
+      day_sent: day.sent,
+      emailIds: day.emailIds.join(','),
+    })
+  })
+}
 
 // const insertCustodians = async (Custodians: Custodian[]): Promise<void> => {
 //   await db.collection(custodianCollection).insertMany(Custodians)
@@ -105,6 +113,10 @@ async function run() {
     table.string('tag').primary()
     table.decimal('weight')
   })
+  await db.schema.createTable(emailSentByDayCollection, (table) => {
+    table.datetime('day_sent').primary()
+    table.text('emailIds')
+  })
 
   console.log(`insert emails`)
   const numEmails = await walkFSfolder(insertEmails)
@@ -112,8 +124,8 @@ async function run() {
   console.log(`insert word cloud`)
   await processWordCloud(insertWordCloud)
 
-  // console.log(`insert email sent`)
-  // await processEmailSentByDay(insertEmailSentByDay)
+  console.log(`insert email sent`)
+  await processEmailSentByDay(insertEmailSentByDay)
 
   // console.log(`insert custodians`)
   // await processCustodians(insertCustodians)

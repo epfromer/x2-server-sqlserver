@@ -76,15 +76,16 @@ export function processEmail(email: PSTMessage, emails: Email[]): void {
 
   addToEmailSentByDay(email.clientSubmitTime, emailId)
 
-  addToWordCloud(email)
+  addToWordCloud(email, fromCustodian, toCustodians.join(' '))
 
   // add to list to be inserted later
   emails.push({
     id: emailId,
     sent: email.clientSubmitTime,
+    // TODO remove
     sentShort: new Date(email.clientSubmitTime).toISOString().slice(0, 10),
     from: breakUpAddress(email.senderName),
-    fromCustodian: fromCustodian as string,
+    fromCustodian: fromCustodian,
     to: breakUpAddress(email.displayTo),
     toCustodians: toCustodians as string[],
     cc: email.displayCC,

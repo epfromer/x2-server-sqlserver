@@ -9,13 +9,23 @@ const wordCloudMap = new Map()
 keyTerms.forEach((term) => wordCloudMap.set(term.toLowerCase(), 0))
 
 // Tokenize body for word cloud
-export function addToWordCloud(email: PSTMessage): void {
+export function addToWordCloud(
+  email: PSTMessage,
+  fromCustodian: string,
+  toCustodians: string
+): void {
   // remove EDRM sig
   const zlSig = '***********'
   let cleanBody = email.body.slice(0, email.body.indexOf(zlSig))
 
   // add in other fields to body
-  // TODO
+  cleanBody += ' ' + email.senderName
+  cleanBody += ' ' + fromCustodian
+  cleanBody += ' ' + email.displayTo
+  cleanBody += ' ' + toCustodians
+  cleanBody += ' ' + email.displayCC
+  cleanBody += ' ' + email.displayBCC
+  cleanBody += ' ' + email.subject
 
   // remove CR/LF and lowercase
   cleanBody = cleanBody.replace(/[\r\n\t]/g, ' ').toLowerCase()

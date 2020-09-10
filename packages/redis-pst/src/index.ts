@@ -1,6 +1,8 @@
 import * as dotenv from 'dotenv'
 import redis from 'redis'
 import redisearch from 'redis-redisearch'
+import { promisify } from 'util'
+
 redisearch(redis)
 dotenv.config()
 
@@ -21,28 +23,22 @@ client.on('error', function (error) {
 
 // const insertCustodians = async (custodians: Custodian[]): Promise<void> => {}
 
-async function run() {
-  // client.set('key', 'value', redis.print)
-  // client.get('key', redis.print)
+const ftDropAsync = promisify(client.ft_drop).bind(client)
+const ftCreateAsync = promisify(client.ft_create).bind(client)
+const ftAddAsync = promisify(client.ft_add).bind(client)
+const ftSearchAsync = promisify(client.ft_search).bind(client)
 
-  client.ft_drop(['foo'], (err) => {
-    if (err) console.error(err)
-    client.ft_create(['foo', 'SCHEMA', 'name', 'TEXT'], (err) => {
-      if (err) console.error(err)
-      console.log('created')
-      client.ft_add(
-        ['foo', 101010, 1.0, 'FIELDS', 'name', 'ed is super cool'],
-        (err) => {
-          if (err) console.error(err)
-          console.log('added')
-          client.ft_search(['foo', 'super'], (err, docs) => {
-            if (err) console.error(err)
-            console.log('search complete', docs)
-          })
-        }
-      )
-    })
-  })
+async function run() {
+  await ftDropAsync(['foo'])
+
+  await ftCreateAsync(['foo', 'SCHEMA', 'name', 'TEXT'])
+  console.log('created')
+
+  await ftAddAsync(['foo', 101010, 1.0, 'FIELDS', 'name', 'ed is Super cool'])
+  console.log('added')
+
+  const res = await ftSearchAsync(['foo', 'super'])
+  console.log('search complete', res)
 
   // console.log(`connect to redis`)
   // await client.connect()

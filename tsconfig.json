@@ -7,6 +7,8 @@
     { "path": "packages/mongodb-pst" },
     { "path": "packages/mongodb-server" },
     { "path": "packages/postgres-pst" },
-    { "path": "packages/postgres-server" }
+    { "path": "packages/postgres-server" },
+    { "path": "packages/redis-pst" },
+    { "path": "packages/redis-server" }
   ]
 }

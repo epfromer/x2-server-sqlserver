@@ -15,10 +15,23 @@ export async function getSpecificEmail(
       q: `id:${req.params.id}`,
     })
 
-    let email = {}
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const email: any = {}
     if (body.hits.hits && body.hits.hits.length) {
       const hit = body.hits.hits[0]._source
-      if (hit.id === req.params.id) email = hit
+      if (hit.id === req.params.id) {
+        email.id = hit.id
+        email.sent = hit.sent
+        email.sentShort = new Date(hit.sent).toISOString().slice(0, 10)
+        email.from = hit.from
+        email.fromCustodian = hit.fromCustodian
+        email.to = hit.to
+        email.toCustodians = hit.toCustodians
+        email.cc = hit.cc
+        email.bcc = hit.bcc
+        email.subject = hit.subject
+        email.body = hit.body
+      }
     }
 
     res.json(email)

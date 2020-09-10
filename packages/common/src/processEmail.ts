@@ -82,8 +82,6 @@ export function processEmail(email: PSTMessage, emails: Email[]): void {
   emails.push({
     id: emailId,
     sent: email.clientSubmitTime,
-    // TODO remove
-    sentShort: new Date(email.clientSubmitTime).toISOString().slice(0, 10),
     from: breakUpAddress(email.senderName),
     fromCustodian: fromCustodian,
     to: breakUpAddress(email.displayTo),

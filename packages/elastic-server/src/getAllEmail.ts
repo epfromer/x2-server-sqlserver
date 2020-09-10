@@ -94,7 +94,7 @@ export async function getAllEmail(req: Request, res: Response): Promise<void> {
     const emails = body.hits.hits.map((email) => ({
       id: email._source.id,
       sent: email._source.sent,
-      sentShort: email._source.sentShort,
+      sentShort: new Date(email._source.sent).toISOString().slice(0, 10),
       from: email._source.from,
       fromCustodian: email._source.fromCustodian,
       to: email._source.to,

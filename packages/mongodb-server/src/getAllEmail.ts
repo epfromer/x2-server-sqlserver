@@ -120,7 +120,7 @@ export async function getAllEmail(req: Request, res: Response): Promise<void> {
     emails = emails.map((email) => ({
       id: email.id,
       sent: email.sent,
-      sentShort: email.sentShort,
+      sentShort: new Date(email.sent).toISOString().slice(0, 10),
       from: email.from,
       fromCustodian: email.fromCustodian,
       to: email.to,

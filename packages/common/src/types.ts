@@ -1,7 +1,7 @@
 export interface Email {
   id: string
   sent: Date
-  sentShort: string
+  sentShort?: string
   from: string
   fromCustodian?: string
   to: string

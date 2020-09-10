@@ -31,8 +31,6 @@ const insertEmails = async (emails: Email[]): Promise<void> => {
       body: {
         id: uuidv4(),
         sent: email.sent,
-        // TODO don't store sentShort in db, just convert at server
-        sentShort: email.sentShort,
         from: email.from,
         fromCustodian: email.fromCustodian,
         to: email.to,

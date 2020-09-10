@@ -1,12 +1,11 @@
 # pst-mongo
 
-Extract objects from MS Outlook/Exchange PST files and stores in ElasticSearch
+Extract objects from MS Outlook/Exchange PST files and stores in ElasticSearch.
 
 To run ElasticSearch in a Docker container, see: <https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html>
 
 ```bash
-docker pull docker.elastic.co/elasticsearch/elasticsearch:7.9.0
-docker run -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:7.9.0
+docker run --name elastic -p 9200:9200 -p 9300:9300 -e 'discovery.type=single-node' docker.elastic.co/elasticsearch/elasticsearch:7.9.0
 ```
 
 ## Enron Dataset

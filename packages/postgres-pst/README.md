@@ -1,11 +1,11 @@
-# pst-mongo
+# pst-postgres
 
-Extract objects from MS Outlook/Exchange PST files and stores in MongoDB
+Extract objects from MS Outlook/Exchange PST files and stores in PostgreSQL.
 
-To run Mongo in a Docker container, use:
+To run PostgreSQL in a Docker container, use:
 
 ```bash
-docker run --name mongodb -p 27017:27017 mongo
+docker run --name postgres -e POSTGRES_PASSWORD=f00bar -d -p 5432:5432 postgres
 ```
 
 ## Enron Dataset

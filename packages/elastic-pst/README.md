@@ -1,4 +1,4 @@
-# pst-mongo
+# pst-elastic
 
 Extract objects from MS Outlook/Exchange PST files and stores in ElasticSearch.
 

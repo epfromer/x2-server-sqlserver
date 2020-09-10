@@ -1,6 +1,8 @@
 import { emailCollection } from '@klonzo/common'
 import { Request, Response } from 'express'
 
+// http://knexjs.org/#Builder
+
 // HTTP GET /email/<id>
 export async function getSpecificEmail(
   req: Request,

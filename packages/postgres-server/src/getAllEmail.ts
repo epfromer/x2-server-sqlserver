@@ -8,6 +8,8 @@ import * as dotenv from 'dotenv'
 import { Request, Response } from 'express'
 dotenv.config()
 
+// http://knexjs.org/#Builder
+
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const knex = require('knex')({
   client: 'pg',
@@ -19,7 +21,7 @@ const knex = require('knex')({
 })
 
 const createSearchParams = (httpQuery: HTTPQuery) => {
-  console.log(httpQuery)
+  // console.log(httpQuery)
 
   let { allText, from, to, subject, body } = httpQuery
   if (allText) allText = allText.toLowerCase()
@@ -92,7 +94,7 @@ const createSearchParams = (httpQuery: HTTPQuery) => {
     }
   }
 
-  console.log(query)
+  // console.log(query)
   return query
 }
 

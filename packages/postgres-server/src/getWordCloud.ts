@@ -3,6 +3,8 @@ import * as dotenv from 'dotenv'
 import { Request, Response } from 'express'
 dotenv.config()
 
+// http://knexjs.org/#Builder
+
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const knex = require('knex')({
   client: 'pg',

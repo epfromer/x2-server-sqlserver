@@ -30,7 +30,7 @@ export interface EmailReceivedFromCustodians {
 export interface Custodian {
   id: string
   name: string
-  aliases: string[]
+  aliases?: string[]
   title: string
   color: string
   senderTotal: number

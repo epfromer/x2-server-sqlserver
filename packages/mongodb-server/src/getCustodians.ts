@@ -13,7 +13,6 @@ export async function getCustodians(
       custodians.map((custodian) => ({
         id: custodian.id,
         name: custodian.name,
-        aliases: custodian.aliases,
         title: custodian.title,
         color: custodian.color,
         senderTotal: custodian.senderTotal,

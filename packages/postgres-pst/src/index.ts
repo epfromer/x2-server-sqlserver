@@ -1,9 +1,12 @@
 import {
+  Custodian,
+  custodianCollection,
   dbName,
   Email,
   emailCollection,
   EmailSentByDay,
   emailSentByDayCollection,
+  processCustodians,
   processEmailSentByDay,
   processWordCloud,
   walkFSfolder,
@@ -66,9 +69,20 @@ const insertEmailSentByDay = async (
   })
 }
 
-// const insertCustodians = async (Custodians: Custodian[]): Promise<void> => {
-//   await db.collection(custodianCollection).insertMany(Custodians)
-// }
+const insertCustodians = async (custodians: Custodian[]): Promise<void> => {
+  custodians.forEach(async (custodian) => {
+    await db(custodianCollection).insert({
+      custodian_id: custodian.id,
+      custodian_name: custodian.name,
+      title: custodian.title,
+      color: custodian.color,
+      sender_total: custodian.senderTotal,
+      receiver_total: custodian.receiverTotal,
+      to_custodians: JSON.stringify(custodian.toCustodians),
+      from_custodians: JSON.stringify(custodian.fromCustodians),
+    })
+  })
+}
 
 async function run() {
   console.log(`connect to postgres`)
@@ -111,11 +125,21 @@ async function run() {
   })
   await db.schema.createTable(wordCloudCollection, (table) => {
     table.string('tag').primary()
-    table.decimal('weight')
+    table.integer('weight')
   })
   await db.schema.createTable(emailSentByDayCollection, (table) => {
     table.datetime('day_sent').primary()
     table.text('emailIds')
+  })
+  await db.schema.createTable(custodianCollection, (table) => {
+    table.string('custodian_id').primary()
+    table.text('custodian_name')
+    table.text('title')
+    table.text('color')
+    table.integer('sender_total')
+    table.integer('receiver_total')
+    table.text('to_custodians')
+    table.text('from_custodians')
   })
 
   console.log(`insert emails`)
@@ -127,8 +151,8 @@ async function run() {
   console.log(`insert email sent`)
   await processEmailSentByDay(insertEmailSentByDay)
 
-  // console.log(`insert custodians`)
-  // await processCustodians(insertCustodians)
+  console.log(`insert custodians`)
+  await processCustodians(insertCustodians)
 
   console.log(`completed ${numEmails} emails`)
 }

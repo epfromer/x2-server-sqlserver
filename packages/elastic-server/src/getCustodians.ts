@@ -18,7 +18,6 @@ export async function getCustodians(
     const custodians = body.hits.hits.map((custodian) => ({
       id: custodian._source.id,
       name: custodian._source.name,
-      aliases: custodian._source.aliases,
       title: custodian._source.title,
       color: custodian._source.color,
       senderTotal: custodian._source.senderTotal,

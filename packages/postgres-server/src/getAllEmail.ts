@@ -21,7 +21,13 @@ const knex = require('knex')({
 const createSearchParams = (httpQuery: HTTPQuery) => {
   console.log(httpQuery)
 
-  const { allText, sent, timeSpan, from, to, subject, body } = httpQuery
+  let { allText, from, to, subject, body } = httpQuery
+  if (allText) allText = allText.toLowerCase()
+  if (from) from = from.toLowerCase()
+  if (to) to = to.toLowerCase()
+  if (subject) subject = subject.toLowerCase()
+  if (body) body = body.toLowerCase()
+  const { sent, timeSpan } = httpQuery
 
   let query = ''
 

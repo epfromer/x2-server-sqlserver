@@ -110,9 +110,6 @@ async function run() {
   console.log(`insert emails`)
   const numEmails = await walkFSfolder(insertEmails)
 
-  const res = await ftSearchAsync([dbName + emailCollection, 'super'])
-  console.log('search complete', res)
-
   // console.log(`insert word cloud`)
   // await processWordCloud(insertWordCloud)
 

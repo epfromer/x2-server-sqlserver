@@ -6,7 +6,15 @@ import {
 } from '@klonzo/common'
 import * as dotenv from 'dotenv'
 import { Request, Response } from 'express'
+import redis from 'redis'
+import redisearch from 'redis-redisearch'
+import { promisify } from 'util'
+
+redisearch(redis)
 dotenv.config()
+
+const client = redis.createClient()
+const ftSearchAsync = promisify(client.ft_search).bind(client)
 
 const createSearchParams = (httpQuery: HTTPQuery) => {
   // console.log(httpQuery)
@@ -89,7 +97,44 @@ const createSearchParams = (httpQuery: HTTPQuery) => {
 // HTTP GET /email/
 export async function getAllEmail(req: Request, res: Response): Promise<void> {
   try {
-    res.status(200).send('success')
+    const emailArr = await ftSearchAsync([dbName + emailCollection, 'super'])
+
+    const total = emailArr[0]
+    const emails = []
+    // Redis response is array of name followed by value, so need to do some funky
+    // assignments to get it into Object
+    for (let i = 1; i <= total; i++) {
+      const id = emailArr[i * 2 - 1]
+      const docArr = emailArr[i * 2]
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // 'document' is returned as array of name followed by value entries
+      // and they can be in any order, so need to convert to Object
+      const doc: any = {}
+      for (let j = 0; j < docArr.length; j = j + 2) {
+        doc[docArr[j]] = docArr[j + 1]
+      }
+      if (i === 1) console.log(doc)
+      emails.push({
+        id,
+        sent: new Date(doc.sent),
+        sentShort: new Date(doc.sent).toISOString().slice(0, 10),
+        from: doc.from,
+        fromCustodian: doc.fromCustodian,
+        to: doc.to,
+        toCustodians: doc.toCustodians.split(','),
+        cc: doc.cc,
+        bcc: doc.bcc,
+        subject: doc.subject,
+        body: doc.body,
+      })
+    }
+
+    // 1: 1, 2
+    // 2: 3, 4
+    // 3: 5, 6
+
+    res.json({ total, emails })
+
     // const query = createSearchParams(req.query)
     // const total = await knex(emailCollection).whereRaw(query).count()
     // const emails = await knex(emailCollection)

@@ -32,7 +32,6 @@ client.on('error', function (error) {
 const ftDropAsync = promisify(client.ft_drop).bind(client)
 const ftCreateAsync = promisify(client.ft_create).bind(client)
 const ftAddAsync = promisify(client.ft_add).bind(client)
-const ftSearchAsync = promisify(client.ft_search).bind(client)
 
 const insertEmails = async (emails: Email[]): Promise<void> => {
   emails.forEach(async (email) => {
@@ -47,7 +46,7 @@ const insertEmails = async (emails: Email[]): Promise<void> => {
       email.from,
       'fromCustodian',
       email.fromCustodian,
-      'to',
+      'emailto',
       email.to,
       'toCustodians',
       email.toCustodians.join(','),
@@ -91,7 +90,7 @@ async function run() {
     'SORTABLE',
     'fromCustodian',
     'TEXT',
-    'to',
+    'emailto',
     'TEXT',
     'SORTABLE',
     'toCustodians',

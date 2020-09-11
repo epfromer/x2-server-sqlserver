@@ -19,15 +19,11 @@ const client = redis.createClient()
 const ftSearchAsync = promisify(client.ft_search).bind(client)
 
 const createSearchParams = (httpQuery: HTTPQuery) => {
+  // https://oss.redislabs.com/redisearch/Query_Syntax.html#field_modifiers
+
   // console.log(httpQuery)
 
-  let { allText, from, to, subject, body } = httpQuery
-  if (allText) allText = allText.toLowerCase()
-  if (from) from = from.toLowerCase()
-  if (to) to = to.toLowerCase()
-  if (subject) subject = subject.toLowerCase()
-  if (body) body = body.toLowerCase()
-  const { sent, timeSpan } = httpQuery
+  const { from, to, subject, body, allText, sent, timeSpan } = httpQuery
 
   let query = ''
 
@@ -47,52 +43,18 @@ const createSearchParams = (httpQuery: HTTPQuery) => {
 
   if (allText) {
     // any text field?
-    query +=
-      (query ? ' and ' : '') +
-      `(` +
-      `email_from_lc like '%${allText}%' or ` +
-      `email_from_custodian_lc like '%${allText}%' or ` +
-      `email_to_lc like '%${allText}%' or ` +
-      `email_to_custodians_lc like '%${allText}%' or ` +
-      `email_cc_lc like '%${allText}%' or ` +
-      `email_bcc_lc like '%${allText}%' or ` +
-      `email_subject_lc like '%${allText}%' or ` +
-      `email_body_lc like '%${allText}%'` +
-      `)`
+    query += ` @from|fromCustodian|emailto|toCustodians|cc|bcc|subject|body:${allText} `
   } else {
     // Else, we have specific field searching.
-    if (from) {
-      query +=
-        (query ? ' and ' : '') +
-        `(` +
-        `email_from_lc like '%${from}%' or ` +
-        `email_from_custodian_lc like '%${from}%'` +
-        `)`
-    }
-    if (to) {
-      query +=
-        (query ? ' and ' : '') +
-        `(` +
-        `email_to_lc like '%${to}%' or ` +
-        `email_to_custodians_lc like '%${to}%' or ` +
-        `email_cc_lc like '%${to}%' or ` +
-        `email_bcc_lc like '%${to}%'` +
-        `)`
-    }
-    if (subject) {
-      query +=
-        (query ? ' and ' : '') +
-        `(` +
-        `email_subject_lc like '%${subject}%'` +
-        `)`
-    }
-    if (body) {
-      query +=
-        (query ? ' and ' : '') + `(` + `email_body_lc like '%${body}%'` + `)`
-    }
+    if (from) query += ` @from|fromCustodian:${from} `
+    if (to) query += ` @emailto|toCustodians|cc|bcc:${to} `
+    if (subject) query += ` @subject:${subject} `
+    if (body) query += ` @body:${body} `
   }
 
-  // console.log(query)
+  if (!query) query = '*'
+
+  console.log(query)
   return query
 }
 
@@ -101,7 +63,7 @@ export async function getAllEmail(req: Request, res: Response): Promise<void> {
   try {
     const emailArr = await ftSearchAsync([
       dbName + emailCollection,
-      '*',
+      createSearchParams(req.query),
       'LIMIT',
       req.query.skip ? +req.query.skip : 0,
       req.query.limit ? +req.query.limit : defaultLimit,
@@ -133,7 +95,7 @@ export async function getAllEmail(req: Request, res: Response): Promise<void> {
         sentShort: new Date(doc.sent).toISOString().slice(0, 10),
         from: doc.from,
         fromCustodian: doc.fromCustodian,
-        to: doc.to,
+        to: doc.emailto,
         toCustodians: doc.toCustodians ? doc.toCustodians.split(',') : [],
         cc: doc.cc,
         bcc: doc.bcc,
@@ -143,14 +105,6 @@ export async function getAllEmail(req: Request, res: Response): Promise<void> {
     }
 
     res.json({ total, emails })
-
-    // const query = createSearchParams(req.query)
-    // const emails = await knex(emailCollection)
-    //   .orderBy(
-    //     req.query.sort ? 'email_' + req.query.sort : 'email_sent',
-    //     req.query.order === '1' ? 'asc' : 'desc'
-    //   )
-    //   .whereRaw(query)
   } catch (err) {
     console.error(err.stack)
     res.status(500).send(err.msg)

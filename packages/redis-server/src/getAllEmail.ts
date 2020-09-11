@@ -13,6 +13,8 @@ import { promisify } from 'util'
 redisearch(redis)
 dotenv.config()
 
+// https://oss.redislabs.com/redisearch/Commands.html#ftsearch
+// https://oss.redislabs.com/redisearch/Query_Syntax.html#a_few_query_examples
 const client = redis.createClient()
 const ftSearchAsync = promisify(client.ft_search).bind(client)
 
@@ -97,23 +99,31 @@ const createSearchParams = (httpQuery: HTTPQuery) => {
 // HTTP GET /email/
 export async function getAllEmail(req: Request, res: Response): Promise<void> {
   try {
-    const emailArr = await ftSearchAsync([dbName + emailCollection, 'super'])
+    const emailArr = await ftSearchAsync([
+      dbName + emailCollection,
+      '*',
+      'LIMIT',
+      req.query.skip ? +req.query.skip : 0,
+      req.query.limit ? +req.query.limit : defaultLimit,
+    ])
 
     const total = emailArr[0]
     const emails = []
     // Redis response is array of name followed by value, so need to do some funky
     // assignments to get it into Object
-    for (let i = 1; i <= total; i++) {
-      const id = emailArr[i * 2 - 1]
-      const docArr = emailArr[i * 2]
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let i = 1
+    while (i < emailArr.length) {
+      const id = emailArr[i]
+      const docArr = emailArr[i + 1]
+      i = i + 2
       // 'document' is returned as array of name followed by value entries
       // and they can be in any order, so need to convert to Object
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const doc: any = {}
+      if (!docArr) console.log(id, docArr)
       for (let j = 0; j < docArr.length; j = j + 2) {
         doc[docArr[j]] = docArr[j + 1]
       }
-      if (i === 1) console.log(doc)
       emails.push({
         id,
         sent: new Date(doc.sent),
@@ -121,17 +131,13 @@ export async function getAllEmail(req: Request, res: Response): Promise<void> {
         from: doc.from,
         fromCustodian: doc.fromCustodian,
         to: doc.to,
-        toCustodians: doc.toCustodians.split(','),
+        toCustodians: doc.toCustodians ? doc.toCustodians.split(',') : [],
         cc: doc.cc,
         bcc: doc.bcc,
         subject: doc.subject,
         body: doc.body,
       })
     }
-
-    // 1: 1, 2
-    // 2: 3, 4
-    // 3: 5, 6
 
     res.json({ total, emails })
 
@@ -142,27 +148,7 @@ export async function getAllEmail(req: Request, res: Response): Promise<void> {
     //     req.query.sort ? 'email_' + req.query.sort : 'email_sent',
     //     req.query.order === '1' ? 'asc' : 'desc'
     //   )
-    //   .offset(req.query.skip ? +req.query.skip : 0)
-    //   .limit(req.query.limit ? +req.query.limit : defaultLimit)
     //   .whereRaw(query)
-    // res.json({
-    //   total: +total[0].count,
-    //   emails: emails.map((email) => ({
-    //     id: email.email_id,
-    //     sent: email.email_sent,
-    //     sentShort: new Date(email.email_sent).toISOString().slice(0, 10),
-    //     from: email.email_from,
-    //     fromCustodian: email.email_from_custodian,
-    //     to: email.email_to,
-    //     toCustodians: email.email_to_custodians
-    //       ? email.email_to_custodians.split(',')
-    //       : [],
-    //     cc: email.email_cc,
-    //     bcc: email.email_bcc,
-    //     subject: email.email_subject,
-    //     body: email.email_body,
-    //   })),
-    // })
   } catch (err) {
     console.error(err.stack)
     res.status(500).send(err.msg)

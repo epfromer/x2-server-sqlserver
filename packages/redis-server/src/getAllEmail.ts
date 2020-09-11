@@ -105,6 +105,9 @@ export async function getAllEmail(req: Request, res: Response): Promise<void> {
       'LIMIT',
       req.query.skip ? +req.query.skip : 0,
       req.query.limit ? +req.query.limit : defaultLimit,
+      'SORTBY',
+      req.query.sort ? req.query.sort : 'sent',
+      req.query.order === '1' ? 'asc' : 'desc',
     ])
 
     const total = emailArr[0]
@@ -142,7 +145,6 @@ export async function getAllEmail(req: Request, res: Response): Promise<void> {
     res.json({ total, emails })
 
     // const query = createSearchParams(req.query)
-    // const total = await knex(emailCollection).whereRaw(query).count()
     // const emails = await knex(emailCollection)
     //   .orderBy(
     //     req.query.sort ? 'email_' + req.query.sort : 'email_sent',

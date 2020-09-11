@@ -30,6 +30,7 @@ client.on('error', function (error) {
 })
 
 const ftDropAsync = promisify(client.ft_drop).bind(client)
+// https://oss.redislabs.com/redisearch/Commands.html#ftcreate
 const ftCreateAsync = promisify(client.ft_create).bind(client)
 const ftAddAsync = promisify(client.ft_add).bind(client)
 
@@ -41,7 +42,9 @@ const insertEmails = async (emails: Email[]): Promise<void> => {
       1.0,
       'FIELDS',
       'sent',
-      new Date(email.sent).toISOString(),
+      new Date(email.sent).getTime(),
+      'sentStr',
+      new Date(email.sent),
       'from',
       email.from,
       'fromCustodian',
@@ -83,8 +86,10 @@ async function run() {
     dbName + emailCollection,
     'SCHEMA',
     'sent',
-    'TEXT',
+    'NUMERIC',
     'SORTABLE',
+    'sentStr',
+    'TEXT',
     'from',
     'TEXT',
     'SORTABLE',

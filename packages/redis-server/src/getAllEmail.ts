@@ -36,9 +36,7 @@ const createSearchParams = (httpQuery: HTTPQuery) => {
       start.setDate(start.getDate() - +timeSpan)
       end.setDate(end.getDate() + +timeSpan)
     }
-    query +=
-      `(email_sent >= '${new Date(start).toISOString().slice(0, 10)}' and ` +
-      `email_sent <= '${new Date(end).toISOString().slice(0, 10)}')`
+    query += ` @sent:[${new Date(start).getTime()} ${new Date(end).getTime()}] `
   }
 
   if (allText) {
@@ -91,8 +89,8 @@ export async function getAllEmail(req: Request, res: Response): Promise<void> {
       }
       emails.push({
         id,
-        sent: new Date(doc.sent),
-        sentShort: new Date(doc.sent).toISOString().slice(0, 10),
+        sent: new Date(doc.sentStr),
+        sentShort: new Date(doc.sentStr).toISOString().slice(0, 10),
         from: doc.from,
         fromCustodian: doc.fromCustodian,
         to: doc.emailto,

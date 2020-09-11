@@ -1,6 +1,6 @@
-import { dbName, emailCollection, HTTPQuery } from '@klonzo/common'
-import { Request, Response } from 'express'
+import { dbName, emailCollection } from '@klonzo/common'
 import * as dotenv from 'dotenv'
+import { Request, Response } from 'express'
 import redis from 'redis'
 import redisearch from 'redis-redisearch'
 import { promisify } from 'util'

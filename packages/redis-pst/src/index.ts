@@ -65,7 +65,20 @@ const insertEmails = async (emails: Email[]): Promise<void> => {
   })
 }
 
-// const insertWordCloud = async (wordCloud: WordCloudTag[]): Promise<void> => {}
+const insertWordCloud = async (wordCloud: WordCloudTag[]): Promise<void> => {
+  wordCloud.forEach(async (word) => {
+    await ftAddAsync([
+      dbName + wordCloudCollection,
+      uuidv4(),
+      1.0,
+      'FIELDS',
+      'wordtag',
+      word.tag,
+      'wordweight',
+      word.weight,
+    ])
+  })
+}
 
 // const insertEmailSentByDay = async (
 //   emailSentByDay: EmailSentByDay[]
@@ -110,12 +123,20 @@ async function run() {
     'body',
     'TEXT',
   ])
+  await ftCreateAsync([
+    dbName + wordCloudCollection,
+    'SCHEMA',
+    'wordtag',
+    'TEXT',
+    'wordweight',
+    'NUMERIC',
+  ])
 
   console.log(`insert emails`)
   const numEmails = await walkFSfolder(insertEmails)
 
-  // console.log(`insert word cloud`)
-  // await processWordCloud(insertWordCloud)
+  console.log(`insert word cloud`)
+  await processWordCloud(insertWordCloud)
 
   // console.log(`insert email sent`)
   // await processEmailSentByDay(insertEmailSentByDay)

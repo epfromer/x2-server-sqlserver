@@ -20,24 +20,20 @@ export async function setCustodian(req: Request, res: Response): Promise<void> {
       dbName + custodianCollection,
       'custodians',
     ])
-    if (docArr.length) {
-      const custodians = JSON.parse(docArr[1]).map((custodian) => {
-        if (custodian.id === req.params.id) custodian.color = req.body.color
-        return custodian
-      })
-      await ftAddAsync([
-        dbName + custodianCollection,
-        'custodians',
-        1.0,
-        'REPLACE',
-        'FIELDS',
-        'custodians',
-        JSON.stringify(custodians),
-      ])
-      res.status(200).send('success')
-    } else {
-      res.status(404).send('no custodians found')
-    }
+    const custodians = JSON.parse(docArr[1]).map((custodian) => {
+      if (custodian.id === req.params.id) custodian.color = req.body.color
+      return custodian
+    })
+    await ftAddAsync([
+      dbName + custodianCollection,
+      'custodians',
+      1.0,
+      'REPLACE',
+      'FIELDS',
+      'custodians',
+      JSON.stringify(custodians),
+    ])
+    res.status(200).send('success')
   } catch (err) {
     console.error(err.stack)
     res.status(500).send(err.msg)

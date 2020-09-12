@@ -16,11 +16,7 @@ const ftGetAsync = promisify(client.ft_get).bind(client)
 export async function getWordCloud(req: Request, res: Response): Promise<void> {
   try {
     const docArr = await ftGetAsync([dbName + wordCloudCollection, 'wordcloud'])
-    if (docArr.length) {
-      res.json(JSON.parse(docArr[1]))
-    } else {
-      res.status(404).send('no word cloud found')
-    }
+    res.json(JSON.parse(docArr[1]))
   } catch (err) {
     console.error(err.stack)
     res.status(500).send(err.msg)

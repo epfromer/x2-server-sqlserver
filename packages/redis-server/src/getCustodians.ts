@@ -22,11 +22,7 @@ export async function getCustodians(
       dbName + custodianCollection,
       'custodians',
     ])
-    if (docArr.length) {
-      res.json(JSON.parse(docArr[1]))
-    } else {
-      res.status(404).send('no custodians found')
-    }
+    res.json(JSON.parse(docArr[1]))
   } catch (err) {
     console.error(err.stack)
     res.status(500).send(err.msg)

@@ -13,7 +13,7 @@
   "scripts": {
     "clean": "rimraf dist",
     "compile": "tsc --build --verbose",
-    "docker:run": "docker run --name redis -d -p 6379:6379 redislabs/redisearch:latest",
+    "docker:run": " docker run --name redis -d -p 6379:6379 redislabs/redisearch:latest --appendonly yes --aof-use-rdb-preamble yes --loadmodule /usr/lib/redis/modules/redisearch.so",
     "serve": "node dist/index.js",
     "start": "run-s clean compile serve",
     "test": "jest --forceExit --detectOpenHandles",

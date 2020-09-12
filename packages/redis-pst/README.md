@@ -5,7 +5,7 @@ Extract objects from MS Outlook/Exchange PST files and stores in Redis.
 To run Redis in a Docker container, use:
 
 ```bash
-docker run --name redis -d redis
+ docker run --name redis -d -p 6379:6379 redislabs/redisearch:latest --appendonly yes --aof-use-rdb-preamble yes --loadmodule /usr/lib/redis/modules/redisearch.so
 ```
 
 ## Enron Dataset

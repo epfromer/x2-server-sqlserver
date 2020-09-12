@@ -20,6 +20,3 @@ export const mongodbServer1 = 'mongodb://localhost:27017/x2'
 // ElasticSearch (via Docker)
 // https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html
 export const elasticServer = 'http://localhost:9200'
-
-// Postgres
-// https://hub.docker.com/_/postgres

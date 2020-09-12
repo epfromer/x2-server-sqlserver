@@ -24,9 +24,6 @@ dotenv.config()
 
 console.log(`connect to redis`)
 const client = redis.createClient()
-client.on('error', function (error) {
-  console.error(error)
-})
 
 const ftDropAsync = promisify(client.ft_drop).bind(client)
 // https://oss.redislabs.com/redisearch/Commands.html#ftcreate

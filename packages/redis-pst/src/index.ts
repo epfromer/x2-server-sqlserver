@@ -1,12 +1,7 @@
-import * as dotenv from 'dotenv'
-import redis from 'redis'
-import redisearch from 'redis-redisearch'
-import { promisify } from 'util'
 import {
   Custodian,
   custodianCollection,
   dbName,
-  elasticServer,
   Email,
   emailCollection,
   EmailSentByDay,
@@ -18,6 +13,10 @@ import {
   wordCloudCollection,
   WordCloudTag,
 } from '@klonzo/common'
+import * as dotenv from 'dotenv'
+import redis from 'redis'
+import redisearch from 'redis-redisearch'
+import { promisify } from 'util'
 import { v4 as uuidv4 } from 'uuid'
 
 redisearch(redis)
@@ -66,30 +65,47 @@ const insertEmails = async (emails: Email[]): Promise<void> => {
 }
 
 const insertWordCloud = async (wordCloud: WordCloudTag[]): Promise<void> => {
-  wordCloud.forEach(async (word) => {
-    await ftAddAsync([
-      dbName + wordCloudCollection,
-      uuidv4(),
-      1.0,
-      'FIELDS',
-      'wordtag',
-      word.tag,
-      'wordweight',
-      word.weight,
-    ])
-  })
+  await ftAddAsync([
+    dbName + wordCloudCollection,
+    'wordcloud',
+    1.0,
+    'FIELDS',
+    'wordcloud',
+    JSON.stringify(wordCloud),
+  ])
 }
 
-// const insertEmailSentByDay = async (
-//   emailSentByDay: EmailSentByDay[]
-// ): Promise<void> => {}
+const insertEmailSentByDay = async (
+  emailSentByDay: EmailSentByDay[]
+): Promise<void> => {
+  await ftAddAsync([
+    dbName + emailSentByDayCollection,
+    'emailSentByDay',
+    1.0,
+    'FIELDS',
+    'emailSentByDay',
+    JSON.stringify(emailSentByDay),
+  ])
+}
 
-// const insertCustodians = async (custodians: Custodian[]): Promise<void> => {}
+const insertCustodians = async (custodians: Custodian[]): Promise<void> => {
+  await ftAddAsync([
+    dbName + custodianCollection,
+    'custodians',
+    1.0,
+    'FIELDS',
+    'custodians',
+    JSON.stringify(custodians),
+  ])
+}
 
 async function run() {
   console.log(`drop database`)
   try {
     await ftDropAsync([dbName + emailCollection])
+    await ftDropAsync([dbName + wordCloudCollection])
+    await ftDropAsync([dbName + emailSentByDayCollection])
+    await ftDropAsync([dbName + custodianCollection])
   } catch (err) {
     console.error(err)
   }
@@ -126,10 +142,20 @@ async function run() {
   await ftCreateAsync([
     dbName + wordCloudCollection,
     'SCHEMA',
-    'wordtag',
+    'wordcloud',
     'TEXT',
-    'wordweight',
-    'NUMERIC',
+  ])
+  await ftCreateAsync([
+    dbName + emailSentByDayCollection,
+    'SCHEMA',
+    'emailsentbyday',
+    'TEXT',
+  ])
+  await ftCreateAsync([
+    dbName + custodianCollection,
+    'SCHEMA',
+    'custodians',
+    'TEXT',
   ])
 
   console.log(`insert emails`)
@@ -138,11 +164,11 @@ async function run() {
   console.log(`insert word cloud`)
   await processWordCloud(insertWordCloud)
 
-  // console.log(`insert email sent`)
-  // await processEmailSentByDay(insertEmailSentByDay)
+  console.log(`insert email sent`)
+  await processEmailSentByDay(insertEmailSentByDay)
 
-  // console.log(`insert custodians`)
-  // await processCustodians(insertCustodians)
+  console.log(`insert custodians`)
+  await processCustodians(insertCustodians)
 
   console.log(`completed ${numEmails} emails`)
 }

@@ -48,6 +48,6 @@ export async function getSpecificEmail(
     }
   } catch (err) {
     console.error(err.stack)
-    res.status(404).send(err.msg)
+    res.status(500).send(err.msg)
   }
 }

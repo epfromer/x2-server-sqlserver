@@ -10,17 +10,20 @@
     "build": "run-s clean compile",
     "clean": "rimraf dist",
     "compile": "tsc --build --verbose",
-    "docker:run": "docker run --name mysql -e MYSQL_ROOT_PASSWORD=f00bar -d mysql:latest",
+    "docker:run": "docker run --name mysql -e MYSQL_ROOT_PASSWORD=f00bar -d -p 3306:3306 mysql:latest",
     "serve": "node dist/index.js",
     "start": "run-s build serve"
   },
   "dependencies": {
+    "knex": "^0.21.5",
+    "mysql2": "^2.1.0",
     "pst-extractor": "^1.6.0",
     "uuid": "^8.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.11.6",
     "@klonzo/common": "*",
+    "@types/knex": "^0.16.1",
     "@types/node": "^14.6.4",
     "@typescript-eslint/eslint-plugin": "^4.1.0",
     "@typescript-eslint/parser": "^4.1.0",

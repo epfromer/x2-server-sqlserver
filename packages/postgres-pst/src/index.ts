@@ -14,87 +14,86 @@ import {
   WordCloudTag,
 } from '@klonzo/common'
 import * as dotenv from 'dotenv'
-import { Client } from 'pg'
 import { v4 as uuidv4 } from 'uuid'
-dotenv.config()
-
-const client = new Client()
-
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const knex = require('knex')
-let db
-
-const insertEmails = async (emails: Email[]): Promise<void> => {
-  emails.forEach(async (email) => {
-    await db(emailCollection).insert({
-      email_id: uuidv4(),
-      email_sent: email.sent,
-      email_from: email.from,
-      email_from_lc: email.from.toLowerCase(), // lower case of text fields for faster search
-      email_from_custodian: email.fromCustodian,
-      email_from_custodian_lc: email.fromCustodian.toLowerCase(),
-      email_to: email.to,
-      email_to_lc: email.to.toLowerCase(),
-      email_to_custodians: email.toCustodians.toString(),
-      email_to_custodians_lc: email.toCustodians.toString().toLowerCase(),
-      email_cc: email.cc,
-      email_cc_lc: email.cc.toLowerCase(),
-      email_bcc: email.bcc,
-      email_bcc_lc: email.bcc.toLowerCase(),
-      email_subject: email.subject,
-      email_subject_lc: email.subject.toLowerCase(),
-      email_body: email.body,
-      email_body_lc: email.body.toLowerCase(),
-    })
-  })
-}
-
-const insertWordCloud = async (wordCloud: WordCloudTag[]): Promise<void> => {
-  wordCloud.forEach(async (word) => {
-    await db(wordCloudCollection).insert({
-      tag: word.tag,
-      weight: word.weight,
-    })
-  })
-}
-
-const insertEmailSentByDay = async (
-  emailSentByDay: EmailSentByDay[]
-): Promise<void> => {
-  emailSentByDay.forEach(async (day) => {
-    await db(emailSentByDayCollection).insert({
-      day_sent: day.sent,
-      emailIds: day.emailIds.join(','),
-    })
-  })
-}
-
-const insertCustodians = async (custodians: Custodian[]): Promise<void> => {
-  custodians.forEach(async (custodian) => {
-    await db(custodianCollection).insert({
-      custodian_id: custodian.id,
-      custodian_name: custodian.name,
-      title: custodian.title,
-      color: custodian.color,
-      sender_total: custodian.senderTotal,
-      receiver_total: custodian.receiverTotal,
-      to_custodians: JSON.stringify(custodian.toCustodians),
-      from_custodians: JSON.stringify(custodian.fromCustodians),
-    })
-  })
-}
+dotenv.config()
 
 async function run() {
+  const insertEmails = async (emails: Email[]): Promise<void> => {
+    emails.forEach(async (email) => {
+      await db(emailCollection).insert({
+        email_id: uuidv4(),
+        email_sent: email.sent,
+        email_from: email.from,
+        email_from_lc: email.from.toLowerCase(), // lower case of text fields for faster search
+        email_from_custodian: email.fromCustodian,
+        email_from_custodian_lc: email.fromCustodian.toLowerCase(),
+        email_to: email.to,
+        email_to_lc: email.to.toLowerCase(),
+        email_to_custodians: email.toCustodians.toString(),
+        email_to_custodians_lc: email.toCustodians.toString().toLowerCase(),
+        email_cc: email.cc,
+        email_cc_lc: email.cc.toLowerCase(),
+        email_bcc: email.bcc,
+        email_bcc_lc: email.bcc.toLowerCase(),
+        email_subject: email.subject,
+        email_subject_lc: email.subject.toLowerCase(),
+        email_body: email.body,
+        email_body_lc: email.body.toLowerCase(),
+      })
+    })
+  }
+
+  const insertWordCloud = async (wordCloud: WordCloudTag[]): Promise<void> => {
+    wordCloud.forEach(async (word) => {
+      await db(wordCloudCollection).insert({
+        tag: word.tag,
+        weight: word.weight,
+      })
+    })
+  }
+
+  const insertEmailSentByDay = async (
+    emailSentByDay: EmailSentByDay[]
+  ): Promise<void> => {
+    emailSentByDay.forEach(async (day) => {
+      await db(emailSentByDayCollection).insert({
+        day_sent: day.sent,
+        emailIds: day.emailIds.join(','),
+      })
+    })
+  }
+
+  const insertCustodians = async (custodians: Custodian[]): Promise<void> => {
+    custodians.forEach(async (custodian) => {
+      await db(custodianCollection).insert({
+        custodian_id: custodian.id,
+        custodian_name: custodian.name,
+        title: custodian.title,
+        color: custodian.color,
+        sender_total: custodian.senderTotal,
+        receiver_total: custodian.receiverTotal,
+        to_custodians: JSON.stringify(custodian.toCustodians),
+        from_custodians: JSON.stringify(custodian.fromCustodians),
+      })
+    })
+  }
+
   console.log(`connect to postgres`)
-  await client.connect()
+  let db = knex({
+    client: 'pg',
+    connection: {
+      host: process.env.PGHOST,
+      password: process.env.PGPASSWORD,
+    },
+  })
 
   console.log(`drop database`)
-  await client.query('drop database if exists ' + dbName)
+  await db.raw('drop database if exists ' + dbName)
 
   console.log(`create database`)
-  await client.query('create database ' + dbName)
-  client.end()
-
+  await db.raw('create database ' + dbName)
   db = knex({
     client: 'pg',
     connection: {

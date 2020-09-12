@@ -6,6 +6,8 @@
     { "path": "packages/elastic-server" },
     { "path": "packages/mongodb-pst" },
     { "path": "packages/mongodb-server" },
+    { "path": "packages/mysql-pst" },
+    { "path": "packages/mysql-server" },
     { "path": "packages/postgres-pst" },
     { "path": "packages/postgres-server" },
     { "path": "packages/redis-pst" },

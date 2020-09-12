@@ -1,11 +1,11 @@
-# pst-solr
+# pst-mysql
 
-Extract objects from MS Outlook/Exchange PST files and stores in Solr.
+Extract objects from MS Outlook/Exchange PST files and stores in MySQL.
 
-To run Solr in a Docker container, see: <https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html>
+To run MySQL in a Docker container, see: <https://hub.docker.com/_/mysql>
 
 ```bash
-docker run --name solr -p 8983:8983 -t solr
+docker run --name mysql -e MYSQL_ROOT_PASSWORD=f00bar -d mysql:latest
 ```
 
 ## Enron Dataset

@@ -1,22 +1,30 @@
 import { dbName, wordCloudCollection } from '@klonzo/common'
 import * as dotenv from 'dotenv'
 import { Request, Response } from 'express'
-import redis from 'redis'
-import redisearch from 'redis-redisearch'
-import { promisify } from 'util'
-
-redisearch(redis)
 dotenv.config()
 
-// https://oss.redislabs.com/redisearch/Commands.html#ftget
-const client = redis.createClient()
-const ftGetAsync = promisify(client.ft_get).bind(client)
+// http://knexjs.org/#Builder
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const knex = require('knex')({
+  client: 'mysql2',
+  connection: {
+    host: process.env.PGHOST,
+    password: process.env.PGPASSWORD,
+    database: dbName,
+  },
+})
 
 // HTTP GET /wordcloud
 export async function getWordCloud(req: Request, res: Response): Promise<void> {
   try {
-    const docArr = await ftGetAsync([dbName + wordCloudCollection, 'wordcloud'])
-    res.json(JSON.parse(docArr[1]))
+    const wordCloud = await knex(wordCloudCollection)
+    res.json(
+      wordCloud.map((word) => ({
+        tag: word.tag,
+        weight: word.weight,
+      }))
+    )
   } catch (err) {
     console.error(err.stack)
     res.status(500).send(err.msg)

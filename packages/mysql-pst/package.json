@@ -15,6 +15,7 @@
     "start": "run-s build serve"
   },
   "dependencies": {
+    "dotenv": "^8.2.0",
     "knex": "^0.21.5",
     "mysql2": "^2.1.0",
     "pst-extractor": "^1.6.0",

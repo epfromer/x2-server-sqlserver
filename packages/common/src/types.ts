@@ -45,6 +45,8 @@ export interface WordCloudTag {
 }
 
 export interface HTTPQuery {
+  sort?: string
+  order?: number
   sent?: string
   timeSpan?: number
   allText?: string

@@ -11,7 +11,7 @@ import {
   processWordCloud,
   walkFSfolder,
   wordCloudCollection,
-  WordCloudTag,
+  WordCloudTag
 } from '@klonzo/common'
 import * as dotenv from 'dotenv'
 import { v4 as uuidv4 } from 'uuid'
@@ -26,10 +26,12 @@ async function run() {
         email_id: uuidv4(),
         email_sent: email.sent,
         email_from: email.from,
+        email_from_sort: email.from.slice(0, 254),
         email_from_lc: email.from.toLowerCase(), // lower case of text fields for faster search
         email_from_custodian: email.fromCustodian,
         email_from_custodian_lc: email.fromCustodian.toLowerCase(),
         email_to: email.to,
+        email_to_sort: email.to.slice(0, 254),
         email_to_lc: email.to.toLowerCase(),
         email_to_custodians: email.toCustodians.toString(),
         email_to_custodians_lc: email.toCustodians.toString().toLowerCase(),
@@ -38,6 +40,7 @@ async function run() {
         email_bcc: email.bcc,
         email_bcc_lc: email.bcc.toLowerCase(),
         email_subject: email.subject,
+        email_subject_sort: email.subject.slice(0, 254),
         email_subject_lc: email.subject.toLowerCase(),
         email_body: email.body,
         email_body_lc: email.body.toLowerCase(),
@@ -108,10 +111,12 @@ async function run() {
     table.string('email_id').primary()
     table.datetime('email_sent')
     table.text('email_from')
+    table.string('email_from_sort') // mysql has limitations for sorting text/blob
     table.text('email_from_lc') // lower case of text fields for faster search
     table.text('email_from_custodian')
     table.text('email_from_custodian_lc')
     table.text('email_to')
+    table.string('email_to_sort') // mysql has limitations for sorting text/blob
     table.text('email_to_lc')
     table.text('email_to_custodians')
     table.text('email_to_custodians_lc')
@@ -120,9 +125,17 @@ async function run() {
     table.text('email_bcc')
     table.text('email_bcc_lc')
     table.text('email_subject')
+    table.string('email_subject_sort') // mysql has limitations for sorting text/blob
     table.text('email_subject_lc')
     table.text('email_body')
     table.text('email_body_lc')
+
+    // mysql is finicky with need for indexes when sorting, and cannot index
+    // text/blobs, so create indexes on varchar versions
+    table.index('email_sent')
+    table.index('email_from_sort')
+    table.index('email_to_sort')
+    table.index('email_subject_sort')
   })
   await db.schema.createTable(wordCloudCollection, (table) => {
     table.string('tag').primary()

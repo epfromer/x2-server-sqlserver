@@ -10,7 +10,7 @@
     "build": "run-s clean compile",
     "clean": "rimraf dist",
     "compile": "tsc --build --verbose",
-    "docker:run": "docker run --name mysql -e MYSQL_ROOT_PASSWORD=f00bar -d -p 3306:3306 mysql:latest",
+    "docker:run": "docker run --name mysql -e MYSQL_ROOT_PASSWORD=f00bar -e -d -p 3306:3306 mysql:latest",
     "serve": "node dist/index.js",
     "start": "run-s build serve"
   },

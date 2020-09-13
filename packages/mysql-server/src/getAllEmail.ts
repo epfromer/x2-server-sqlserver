@@ -14,8 +14,9 @@ dotenv.config()
 const knex = require('knex')({
   client: 'mysql2',
   connection: {
-    host: process.env.PGHOST,
-    password: process.env.PGPASSWORD,
+    host: process.env.MYSQL_HOST,
+    user: process.env.MYSQL_USER,
+    password: process.env.MYSQL_ROOT_PASSWORD,
     database: dbName,
   },
 })
@@ -98,16 +99,20 @@ const createSearchParams = (httpQuery: HTTPQuery) => {
   return query
 }
 
+const sort = (httpQuery: HTTPQuery) => {
+  const { sort } = httpQuery
+  if (!sort || sort === 'sent') return 'email_sent'
+  return 'email_' + sort + '_sort'
+}
+
 // HTTP GET /email/
 export async function getAllEmail(req: Request, res: Response): Promise<void> {
   try {
+    console.log(sort(req.query))
     const query = createSearchParams(req.query)
     const total = await knex(emailCollection).whereRaw(query).count()
     const emails = await knex(emailCollection)
-      .orderBy(
-        req.query.sort ? 'email_' + req.query.sort : 'email_sent',
-        req.query.order === '1' ? 'asc' : 'desc'
-      )
+      .orderBy(sort(req.query), req.query.order === '1' ? 'asc' : 'desc')
       .offset(req.query.skip ? +req.query.skip : 0)
       .limit(req.query.limit ? +req.query.limit : defaultLimit)
       .whereRaw(query)

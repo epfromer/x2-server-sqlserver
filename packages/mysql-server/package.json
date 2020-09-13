@@ -13,7 +13,7 @@
   "scripts": {
     "clean": "rimraf dist",
     "compile": "tsc --build --verbose",
-    "docker:run": "docker run --name mysql -e MYSQL_ROOT_PASSWORD=f00bar -d mysql:latest",
+    "docker:run": "docker run --name mysql -e MYSQL_ROOT_PASSWORD=f00bar -e sort_buffer_size=1073741824 -d mysql:latest",
     "serve": "node dist/index.js",
     "start": "run-s clean compile serve",
     "watch": "ts-node-dev --respawn -- src/index.ts"

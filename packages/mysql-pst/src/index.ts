@@ -11,7 +11,7 @@ import {
   processWordCloud,
   walkFSfolder,
   wordCloudCollection,
-  WordCloudTag
+  WordCloudTag,
 } from '@klonzo/common'
 import * as dotenv from 'dotenv'
 import { v4 as uuidv4 } from 'uuid'

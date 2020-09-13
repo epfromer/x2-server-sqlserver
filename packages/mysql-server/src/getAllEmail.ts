@@ -108,7 +108,6 @@ const sort = (httpQuery: HTTPQuery) => {
 // HTTP GET /email/
 export async function getAllEmail(req: Request, res: Response): Promise<void> {
   try {
-    console.log(sort(req.query))
     const query = createSearchParams(req.query)
     const total = await knex(emailCollection).whereRaw(query).count()
     const emails = await knex(emailCollection)

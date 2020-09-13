@@ -84,9 +84,9 @@ async function run() {
   let db = knex({
     client: 'mssql',
     connection: {
-      host: 'localhost',
-      user: 'sa',
-      password: 'f0000Bar!',
+      host: process.env.SQL_HOST,
+      user: process.env.SQL_USER,
+      password: process.env.SQL_PASSWORD,
     },
   })
 
@@ -98,9 +98,9 @@ async function run() {
   db = knex({
     client: 'mssql',
     connection: {
-      host: 'localhost',
-      user: 'sa',
-      password: 'f0000Bar!',
+      host: process.env.SQL_HOST,
+      user: process.env.SQL_USER,
+      password: process.env.SQL_PASSWORD,
       database: dbName,
     },
   })

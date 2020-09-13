@@ -751,6 +751,16 @@
         "signature": "ad54f8e1b76fd15833256be9a4fe1af3a569ed1d561d55c57d57fe84c518d0b0",
         "affectsGlobalScope": false
       },
+      "../../node_modules/safe-buffer/index.d.ts": {
+        "version": "5e379df3d61561c2ed7789b5995b9ba2143bbba21a905e2381e16efe7d1fa424",
+        "signature": "5e379df3d61561c2ed7789b5995b9ba2143bbba21a905e2381e16efe7d1fa424",
+        "affectsGlobalScope": false
+      },
+      "../../node_modules/@types/readable-stream/index.d.ts": {
+        "version": "0d8b40bf50af939b854673143c83b174d87f3a4fdaa0b7979ebb94f374b38306",
+        "signature": "0d8b40bf50af939b854673143c83b174d87f3a4fdaa0b7979ebb94f374b38306",
+        "affectsGlobalScope": false
+      },
       "../../node_modules/@types/stack-utils/index.d.ts": {
         "version": "41422586881bcd739b4e62d9b91cd29909f8572aa3e3cdf316b7c50f14708d49",
         "signature": "41422586881bcd739b4e62d9b91cd29909f8572aa3e3cdf316b7c50f14708d49",
@@ -764,6 +774,11 @@
       "../../node_modules/@types/strip-json-comments/index.d.ts": {
         "version": "ab6aa3a65d473871ee093e3b7b71ed0f9c69e07d1d4295f45c9efd91a771241d",
         "signature": "ab6aa3a65d473871ee093e3b7b71ed0f9c69e07d1d4295f45c9efd91a771241d",
+        "affectsGlobalScope": false
+      },
+      "../../node_modules/@types/tunnel/index.d.ts": {
+        "version": "888eabbf43a9595dd96f6ded60597ee6c05660f8cb90d95bc91d00e46855a52a",
+        "signature": "888eabbf43a9595dd96f6ded60597ee6c05660f8cb90d95bc91d00e46855a52a",
         "affectsGlobalScope": false
       },
       "../../node_modules/@types/yargs-parser/index.d.ts": {
@@ -1773,6 +1788,18 @@
         "../../node_modules/@types/node/ts3.4/process.d.ts",
         "../../node_modules/@types/node/ts3.4/util.d.ts"
       ],
+      "../../node_modules/@types/readable-stream/index.d.ts": [
+        "../../node_modules/@types/graceful-fs/index.d.ts",
+        "../../node_modules/@types/node/index.d.ts",
+        "../../node_modules/@types/node/ts3.1/fs.d.ts",
+        "../../node_modules/@types/node/ts3.1/process.d.ts",
+        "../../node_modules/@types/node/ts3.1/stream.d.ts",
+        "../../node_modules/@types/node/ts3.1/util.d.ts",
+        "../../node_modules/@types/node/ts3.4/fs.d.ts",
+        "../../node_modules/@types/node/ts3.4/process.d.ts",
+        "../../node_modules/@types/node/ts3.4/util.d.ts",
+        "../../node_modules/safe-buffer/index.d.ts"
+      ],
       "../../node_modules/@types/serve-static/index.d.ts": [
         "../../node_modules/@types/express-serve-static-core/index.d.ts",
         "../../node_modules/@types/graceful-fs/index.d.ts",
@@ -1814,6 +1841,17 @@
       "../../node_modules/@types/strip-json-comments/index.d.ts": [
         "../../node_modules/@types/graceful-fs/index.d.ts",
         "../../node_modules/@types/node/ts3.1/fs.d.ts",
+        "../../node_modules/@types/node/ts3.1/process.d.ts",
+        "../../node_modules/@types/node/ts3.1/util.d.ts",
+        "../../node_modules/@types/node/ts3.4/fs.d.ts",
+        "../../node_modules/@types/node/ts3.4/process.d.ts",
+        "../../node_modules/@types/node/ts3.4/util.d.ts"
+      ],
+      "../../node_modules/@types/tunnel/index.d.ts": [
+        "../../node_modules/@types/graceful-fs/index.d.ts",
+        "../../node_modules/@types/node/index.d.ts",
+        "../../node_modules/@types/node/ts3.1/fs.d.ts",
+        "../../node_modules/@types/node/ts3.1/http.d.ts",
         "../../node_modules/@types/node/ts3.1/process.d.ts",
         "../../node_modules/@types/node/ts3.1/util.d.ts",
         "../../node_modules/@types/node/ts3.4/fs.d.ts",
@@ -2074,6 +2112,15 @@
         "../../node_modules/pst-extractor/dist/pstfile.class.d.ts",
         "../../node_modules/pst-extractor/dist/pstmessage.class.d.ts",
         "../../node_modules/pst-extractor/dist/psttablebc.class.d.ts"
+      ],
+      "../../node_modules/safe-buffer/index.d.ts": [
+        "../../node_modules/@types/graceful-fs/index.d.ts",
+        "../../node_modules/@types/node/ts3.1/fs.d.ts",
+        "../../node_modules/@types/node/ts3.1/process.d.ts",
+        "../../node_modules/@types/node/ts3.1/util.d.ts",
+        "../../node_modules/@types/node/ts3.4/fs.d.ts",
+        "../../node_modules/@types/node/ts3.4/process.d.ts",
+        "../../node_modules/@types/node/ts3.4/util.d.ts"
       ],
       "../../node_modules/typescript/lib/lib.es2015.collection.d.ts": [
         "../../node_modules/@types/graceful-fs/index.d.ts",
@@ -3420,6 +3467,18 @@
         "../../node_modules/@types/node/ts3.4/process.d.ts",
         "../../node_modules/@types/node/ts3.4/util.d.ts"
       ],
+      "../../node_modules/@types/readable-stream/index.d.ts": [
+        "../../node_modules/@types/graceful-fs/index.d.ts",
+        "../../node_modules/@types/node/index.d.ts",
+        "../../node_modules/@types/node/ts3.1/fs.d.ts",
+        "../../node_modules/@types/node/ts3.1/process.d.ts",
+        "../../node_modules/@types/node/ts3.1/stream.d.ts",
+        "../../node_modules/@types/node/ts3.1/util.d.ts",
+        "../../node_modules/@types/node/ts3.4/fs.d.ts",
+        "../../node_modules/@types/node/ts3.4/process.d.ts",
+        "../../node_modules/@types/node/ts3.4/util.d.ts",
+        "../../node_modules/safe-buffer/index.d.ts"
+      ],
       "../../node_modules/@types/serve-static/index.d.ts": [
         "../../node_modules/@types/express-serve-static-core/index.d.ts",
         "../../node_modules/@types/graceful-fs/index.d.ts",
@@ -3461,6 +3520,17 @@
       "../../node_modules/@types/strip-json-comments/index.d.ts": [
         "../../node_modules/@types/graceful-fs/index.d.ts",
         "../../node_modules/@types/node/ts3.1/fs.d.ts",
+        "../../node_modules/@types/node/ts3.1/process.d.ts",
+        "../../node_modules/@types/node/ts3.1/util.d.ts",
+        "../../node_modules/@types/node/ts3.4/fs.d.ts",
+        "../../node_modules/@types/node/ts3.4/process.d.ts",
+        "../../node_modules/@types/node/ts3.4/util.d.ts"
+      ],
+      "../../node_modules/@types/tunnel/index.d.ts": [
+        "../../node_modules/@types/graceful-fs/index.d.ts",
+        "../../node_modules/@types/node/index.d.ts",
+        "../../node_modules/@types/node/ts3.1/fs.d.ts",
+        "../../node_modules/@types/node/ts3.1/http.d.ts",
         "../../node_modules/@types/node/ts3.1/process.d.ts",
         "../../node_modules/@types/node/ts3.1/util.d.ts",
         "../../node_modules/@types/node/ts3.4/fs.d.ts",
@@ -3721,6 +3791,15 @@
         "../../node_modules/pst-extractor/dist/pstfile.class.d.ts",
         "../../node_modules/pst-extractor/dist/pstmessage.class.d.ts",
         "../../node_modules/pst-extractor/dist/psttablebc.class.d.ts"
+      ],
+      "../../node_modules/safe-buffer/index.d.ts": [
+        "../../node_modules/@types/graceful-fs/index.d.ts",
+        "../../node_modules/@types/node/ts3.1/fs.d.ts",
+        "../../node_modules/@types/node/ts3.1/process.d.ts",
+        "../../node_modules/@types/node/ts3.1/util.d.ts",
+        "../../node_modules/@types/node/ts3.4/fs.d.ts",
+        "../../node_modules/@types/node/ts3.4/process.d.ts",
+        "../../node_modules/@types/node/ts3.4/util.d.ts"
       ],
       "../../node_modules/typescript/lib/lib.es2015.collection.d.ts": [
         "../../node_modules/@types/graceful-fs/index.d.ts",
@@ -4090,11 +4169,13 @@
       "../../node_modules/@types/prettier/index.d.ts",
       "../../node_modules/@types/qs/index.d.ts",
       "../../node_modules/@types/range-parser/index.d.ts",
+      "../../node_modules/@types/readable-stream/index.d.ts",
       "../../node_modules/@types/serve-static/index.d.ts",
       "../../node_modules/@types/stack-utils/index.d.ts",
       "../../node_modules/@types/stopword/index.d.ts",
       "../../node_modules/@types/strip-bom/index.d.ts",
       "../../node_modules/@types/strip-json-comments/index.d.ts",
+      "../../node_modules/@types/tunnel/index.d.ts",
       "../../node_modules/@types/uuid/index.d.ts",
       "../../node_modules/@types/yargs-parser/index.d.ts",
       "../../node_modules/@types/yargs/index.d.ts",
@@ -4115,6 +4196,7 @@
       "../../node_modules/pst-extractor/dist/psttablebc.class.d.ts",
       "../../node_modules/pst-extractor/dist/psttableitem.class.d.ts",
       "../../node_modules/pst-extractor/dist/psttask.class.d.ts",
+      "../../node_modules/safe-buffer/index.d.ts",
       "../../node_modules/typescript/lib/lib.es2015.collection.d.ts",
       "../../node_modules/typescript/lib/lib.es2015.core.d.ts",
       "../../node_modules/typescript/lib/lib.es2015.d.ts",

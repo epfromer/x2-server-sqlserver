@@ -11,6 +11,8 @@
     { "path": "packages/postgres-pst" },
     { "path": "packages/postgres-server" },
     { "path": "packages/redis-pst" },
-    { "path": "packages/redis-server" }
+    { "path": "packages/redis-server" },
+    { "path": "packages/sqlserver-pst" },
+    { "path": "packages/sqlserver-server" }
   ]
 }

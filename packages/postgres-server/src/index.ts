@@ -7,6 +7,7 @@ import { getEmailSentByDay } from './getEmailSentByDay'
 import { getSpecificEmail } from './getSpecificEmail'
 import { getWordCloud } from './getWordCloud'
 import { setCustodian } from './setCustodian'
+import { importPST, importStatus } from './importPST'
 
 async function run() {
   const app: express.Application = express.default()
@@ -33,6 +34,8 @@ async function run() {
   app.route('/wordcloud').get(getWordCloud)
   app.route('/custodians').get(getCustodians)
   app.route('/custodians/:id').put(setCustodian)
+  app.route('/importpst').get(importPST)
+  app.route('/importstatus').get(importStatus)
 
   const port = process.env.PORT || 3000
   app.listen(port)

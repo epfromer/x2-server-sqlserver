@@ -44,12 +44,13 @@ export function addToWordCloud(
 
 // Process list for word cloud and store in db.
 export async function processWordCloud(
-  insertWordCloud: (words: Array<WordCloudTag>) => void
+  insertWordCloud: (words: Array<WordCloudTag>) => void,
+  log?: (msg: string) => void
 ): Promise<void> {
   const words: WordCloudTag[] = []
   wordCloudMap.forEach((v, k) => {
     words.push({ tag: k, weight: v })
   })
-  console.log('processWordCloud: ' + words.length + ' terms')
+  if (log) log('processWordCloud: ' + words.length + ' terms')
   await insertWordCloud(words)
 }

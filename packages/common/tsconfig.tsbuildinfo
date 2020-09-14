@@ -157,13 +157,13 @@
         "affectsGlobalScope": false
       },
       "./src/processcustodians.ts": {
-        "version": "20733f74d01a574c3131247f38ee543c0f08e7badffa96d61a55a1dc64826d91",
-        "signature": "431c6e58f332a9e6d355bd3d3615c666b1689233948f9ef9192415ee8c7861ea",
+        "version": "946286f07ecc2a761119c8491e2e97c43e656746d7488824fc1025bb74558ef3",
+        "signature": "2e025c17a37b7a07afc92dee148dfdb7550bb0c0dac6abe4b7d58c6fdc38555c",
         "affectsGlobalScope": false
       },
       "./src/processemailsent.ts": {
-        "version": "6513e54fce8315a9a6959591cf48b3ec31306472bfe8fdbc851f9542cf7cb7a5",
-        "signature": "11726b98e052af34f3630d699141a03e73cc866ed4ec6aa8471090f690cc00a9",
+        "version": "bd87c98b88b0af5e889d1aff86be83b9e6fffa3b3702231f4d8380d9d61e5014",
+        "signature": "5d1ab785b3e30b43757e8ed2b77d5b5670e72734fd13e1a0235036703f17866a",
         "affectsGlobalScope": false
       },
       "../../node_modules/@types/node/ts3.1/globals.d.ts": {
@@ -527,8 +527,8 @@
         "affectsGlobalScope": false
       },
       "./src/processwordcloud.ts": {
-        "version": "33a542ce2ba6c0d4cbe0cb52bc13fca52a6f69ad2dd800ef0c94eee03ff1f879",
-        "signature": "ce2be2de2a5c9e683e51b4aa77f65a3ebeca3b31608604791c47cdac6992e909",
+        "version": "e6bc4eccb5bc16a78f89d55d64a4e826b93bd2425745c3ad62422ec5864a34c8",
+        "signature": "f5a0b67d731ee51ed9bd0d9d24f61ef73cf2408d146904a62ac0bc2c7576f9c7",
         "affectsGlobalScope": false
       },
       "../../node_modules/@types/uuid/index.d.ts": {
@@ -542,8 +542,8 @@
         "affectsGlobalScope": false
       },
       "./src/walkfsfolder.ts": {
-        "version": "a5d30ccf9c7d164e7978c4a29a95f1f7a10669aad69f31361083e777d2843869",
-        "signature": "42add598c8770cce4323c230e14f5883f006c4479cd1695c0cdd82d6b2f35003",
+        "version": "06b06473544cf1ebdb625fda9c751316eb1d5ed72e6213e8144b8a029326b18d",
+        "signature": "26df470754ef22026cc59468323e26f172b05f708654b69021cd51f721f9a6a1",
         "affectsGlobalScope": false
       },
       "./src/index.ts": {

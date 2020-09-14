@@ -14,12 +14,13 @@ export function addToEmailSentByDay(sent: Date, id: string): void {
 
 // Process list for email sent and store in db.
 export async function processEmailSentByDay(
-  insertEmailSentByDay: (words: Array<EmailSentByDay>) => void
-): Promise<void> {
+  insertEmailSentByDay: (words: Array<EmailSentByDay>) => void,
+  log?: (msg: string) => void
+  ): Promise<void> {
   const email: EmailSentByDay[] = []
   emailSentByDay.forEach((value, key) =>
     email.push({ sent: key, emailIds: value })
   )
-  console.log('processEmailSentByDay: ' + email.length + ' records')
+  if (log) log('processEmailSentByDay: ' + email.length + ' records')
   await insertEmailSentByDay(email)
 }

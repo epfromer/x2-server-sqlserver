@@ -1,16 +1,10 @@
-import { dbName } from '@klonzo/common'
+import cp from 'child_process'
 import * as dotenv from 'dotenv'
-// import { v4 as uuidv4 } from 'uuid'
 import { Request, Response } from 'express'
 dotenv.config()
 
 const log = []
 let importing = false
-let i
-
-async function sleep(ms = 0) {
-  return new Promise((r) => setTimeout(r, ms))
-}
 
 // HTTP GET /importpst
 export async function importPST(req: Request, res: Response): Promise<void> {
@@ -20,16 +14,19 @@ export async function importPST(req: Request, res: Response): Promise<void> {
       return
     }
     res.status(202).json('Importing PSTs...')
-    i = 1
-    log.length = 0
+    log.length = 0 // truncate log
     importing = true
-    while (i < 30) {
-      await sleep(1000)
-      log.push(new Date().toISOString() + ': ' + i)
-      i++
-    }
-    importing = false
+
+    // fork long duration processing task
+    const importer = cp.fork('./src/doImport.ts', [], {
+      execArgv: ['-r', 'ts-node/register'],
+    })
+    importer.on('message', (msg) =>
+      log.push(new Date().toISOString() + ' postgres: ' + msg)
+    )
+    importer.on('close', () => (importing = false))
   } catch (err) {
+    importing = false
     console.error(err.stack)
     res.status(500).send(err.msg)
   }

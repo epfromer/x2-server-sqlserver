@@ -12,9 +12,7 @@ function ms(numDocs: number, msStart: number, msEnd: number): string {
   const min = sec / 60
   let s = ` ${numDocs} docs`
   s += `, ${ms} ms (~ ${Math.trunc(sec)} sec)`
-  if (min > 1) {
-    s += ` (~ ${Math.trunc(min)} min)`
-  }
+  if (min > 1) s += ` (~ ${Math.trunc(min)} min)`
   s += `, ~ ${Math.trunc(msPerDoc)} ms per doc`
   return s
 }
@@ -44,30 +42,30 @@ function walkPST(filename: string): Email[] {
   walkPSTFolder(emails, pstFile.getRootFolder())
   return emails
 }
-
 // Walk file system folder, processing each PST in it
 export async function walkFSfolder(
-  insertEmails: (emails: Email[]) => void
+  insertEmails: (emails: Email[]) => void,
+  log?: (msg: string) => void
 ): Promise<number> {
   let numEmails = 0
 
-  console.log(`walking ${fsFolder}`)
+  if (log) log(`walking ${fsFolder}`)
   const files = fs.readdirSync(fsFolder)
   for (const file of files) {
-    console.log(`processing ${file}\n`)
+    if (log) log(`processing ${file}\n`)
     const start = Date.now()
     const emails = walkPST(fsFolder + file)
-    console.log(file + '  complete, ' + ms(emails.length, start, Date.now()))
+    if (log) log(file + '  complete, ' + ms(emails.length, start, Date.now()))
 
     if (emails.length > 0) {
       // insert into db
       const start = Date.now()
-      console.log(`inserting ${emails.length} documents`)
+      if (log) log(`inserting ${emails.length} documents`)
       await insertEmails(emails)
-      console.log(file + '  complete, ' + ms(emails.length, start, Date.now()))
+      if (log) log(file + '  complete, ' + ms(emails.length, start, Date.now()))
       numEmails += emails.length
     } else {
-      console.log(file + ': complete, no emails')
+      if (log) log(file + ': complete, no emails')
     }
   }
 

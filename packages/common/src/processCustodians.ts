@@ -29,8 +29,9 @@ export function incReceiverTotal(toCustodian: string): void {
 
 // Process list for Custodians and store in db.
 export async function processCustodians(
-  insertCustodians: (words: Array<Custodian>) => void
+  insertCustodians: (words: Array<Custodian>) => void,
+  log?: (msg: string) => void
 ): Promise<void> {
-  console.log('processCustodians: ' + custodians.length + ' Custodians')
+  if (log) log('processCustodians: ' + custodians.length + ' Custodians')
   await insertCustodians(custodians)
 }

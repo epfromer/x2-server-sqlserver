@@ -16,7 +16,6 @@
     "docker:run": "docker run --name postgres -e POSTGRES_PASSWORD=f00bar -d -p 5432:5432 postgres",
     "serve": "node dist/index.js",
     "start": "run-s clean compile serve",
-    "test": "jest --forceExit --detectOpenHandles",
     "watch": "ts-node-dev --respawn -- src/index.ts"
   },
   "dependencies": {
@@ -25,7 +24,9 @@
     "express": "^4.17.1",
     "knex": "^0.21.5",
     "morgan": "^1.10.0",
-    "pg": "^8.3.3"
+    "pg": "^8.3.3",
+    "pst-extractor": "^1.6.0",
+    "uuid": "^8.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.11.6",

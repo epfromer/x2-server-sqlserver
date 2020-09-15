@@ -26,10 +26,12 @@ async function run() {
         email_id: uuidv4(),
         email_sent: email.sent,
         email_from: email.from,
+        email_from_sort: email.from.slice(0, 254),
         email_from_lc: email.from.toLowerCase(), // lower case of text fields for faster search
         email_from_custodian: email.fromCustodian,
         email_from_custodian_lc: email.fromCustodian.toLowerCase(),
         email_to: email.to,
+        email_to_sort: email.to.slice(0, 254),
         email_to_lc: email.to.toLowerCase(),
         email_to_custodians: email.toCustodians.toString(),
         email_to_custodians_lc: email.toCustodians.toString().toLowerCase(),
@@ -38,6 +40,7 @@ async function run() {
         email_bcc: email.bcc,
         email_bcc_lc: email.bcc.toLowerCase(),
         email_subject: email.subject,
+        email_subject_sort: email.subject.slice(0, 254),
         email_subject_lc: email.subject.toLowerCase(),
         email_body: email.body,
         email_body_lc: email.body.toLowerCase(),
@@ -80,7 +83,7 @@ async function run() {
     })
   }
 
-  console.log(`connect to sqlserver`)
+  process.send(`connect to sqlserver`)
   let db = knex({
     client: 'mssql',
     connection: {
@@ -90,10 +93,10 @@ async function run() {
     },
   })
 
-  console.log(`drop database`)
+  process.send(`drop database`)
   await db.raw('drop database if exists ' + dbName)
 
-  console.log(`create database`)
+  process.send(`create database`)
   await db.raw('create database ' + dbName)
   db = knex({
     client: 'mssql',
@@ -143,19 +146,20 @@ async function run() {
     table.text('from_custodians')
   })
 
-  console.log(`insert emails`)
-  const numEmails = await walkFSfolder(insertEmails)
+  process.send(`process emails`)
+  const numEmails = await walkFSfolder(insertEmails, (msg) => process.send(msg))
 
-  console.log(`insert word cloud`)
-  await processWordCloud(insertWordCloud)
+  process.send(`process word cloud`)
+  await processWordCloud(insertWordCloud, (msg) => process.send(msg))
 
-  console.log(`insert email sent`)
-  await processEmailSentByDay(insertEmailSentByDay)
+  process.send(`process email sent`)
+  await processEmailSentByDay(insertEmailSentByDay, (msg) => process.send(msg))
 
-  console.log(`insert custodians`)
-  await processCustodians(insertCustodians)
+  process.send(`create custodians`)
+  await processCustodians(insertCustodians, (msg) => process.send(msg))
 
-  console.log(`completed ${numEmails} emails`)
+  process.send(`completed ${numEmails} emails`)
+  // TODO proc not stopping?
 }
 
-run().catch(console.error)
+run().catch((err) => console.error(err))

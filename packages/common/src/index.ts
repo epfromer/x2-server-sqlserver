@@ -1,4 +1,5 @@
 export * from './constants'
+export * from './misc'
 export * from './processCustodians'
 export * from './processEmailSent'
 export * from './processWordCloud'

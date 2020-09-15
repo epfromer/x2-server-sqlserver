@@ -7,8 +7,12 @@ import {
   processEmailSentByDay,
   processWordCloud,
   walkFSfolder,
+  sleep,
   wordCloudCollection,
 } from '@klonzo/common'
+// import { Client } from 'pg'
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { Pool, Client } = require('pg')
 import * as dotenv from 'dotenv'
 import { v4 as uuidv4 } from 'uuid'
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -17,127 +21,160 @@ dotenv.config()
 
 async function run() {
   const insertEmails = async (emails) => {
-    emails.forEach(async (email) => {
-      await db(emailCollection).insert({
-        email_id: uuidv4(),
-        email_sent: email.sent,
-        email_from: email.from,
-        email_from_lc: email.from.toLowerCase(), // lower case of text fields for faster search
-        email_from_custodian: email.fromCustodian,
-        email_from_custodian_lc: email.fromCustodian.toLowerCase(),
-        email_to: email.to,
-        email_to_lc: email.to.toLowerCase(),
-        email_to_custodians: email.toCustodians.toString(),
-        email_to_custodians_lc: email.toCustodians.toString().toLowerCase(),
-        email_cc: email.cc,
-        email_cc_lc: email.cc.toLowerCase(),
-        email_bcc: email.bcc,
-        email_bcc_lc: email.bcc.toLowerCase(),
-        email_subject: email.subject,
-        email_subject_lc: email.subject.toLowerCase(),
-        email_body: email.body,
-        email_body_lc: email.body.toLowerCase(),
-      })
-    })
-  }
-
-  const insertWordCloud = async (wordCloud) => {
-    wordCloud.forEach(async (word) => {
-      await db(wordCloudCollection).insert({
-        tag: word.tag,
-        weight: word.weight,
-      })
-    })
-  }
-
-  const insertEmailSentByDay = async (emailSentByDay) => {
-    emailSentByDay.forEach(async (day) => {
-      await db(emailSentByDayCollection).insert({
-        day_sent: day.sent,
-        emailIds: day.emailIds.join(','),
-      })
-    })
-  }
-
-  const insertCustodians = async (custodians) => {
-    custodians.forEach(async (custodian) => {
-      await db(custodianCollection).insert({
-        custodian_id: custodian.id,
-        custodian_name: custodian.name,
-        title: custodian.title,
-        color: custodian.color,
-        sender_total: custodian.senderTotal,
-        receiver_total: custodian.receiverTotal,
-        to_custodians: JSON.stringify(custodian.toCustodians),
-        from_custodians: JSON.stringify(custodian.fromCustodians),
-      })
-    })
-  }
-
-  process.send(`connect`)
-  let db = knex({
-    client: 'pg',
-    connection: {
-      host: process.env.PGHOST,
-      password: process.env.PGPASSWORD,
-    },
-  })
-
-  process.send(`drop database`)
-  // await db.raw(`revoke connect on database ${dbName} from public`)
-  // await db.raw(
-  //   `select pg_terminate_backend(pg_stat_activity.pid) from pg_stat_activity where pg_stat_activity.datname = '${dbName}'`
-  // )
-  await db.raw('drop database if exists ' + dbName)
-
-  process.send(`create database`)
-  await db.raw('create database ' + dbName)
-  db = knex({
-    client: 'pg',
-    connection: {
+    return
+    const client = new Client({
+      user: process.env.PGUSER,
       host: process.env.PGHOST,
       password: process.env.PGPASSWORD,
       database: dbName,
-    },
-  })
-  await db.schema.createTable(emailCollection, (table) => {
-    table.string('email_id').primary()
-    table.datetime('email_sent')
-    table.text('email_from')
-    table.text('email_from_lc') // lower case of text fields for faster search
-    table.text('email_from_custodian')
-    table.text('email_from_custodian_lc')
-    table.text('email_to')
-    table.text('email_to_lc')
-    table.text('email_to_custodians')
-    table.text('email_to_custodians_lc')
-    table.text('email_cc')
-    table.text('email_cc_lc')
-    table.text('email_bcc')
-    table.text('email_bcc_lc')
-    table.text('email_subject')
-    table.text('email_subject_lc')
-    table.text('email_body')
-    table.text('email_body_lc')
-  })
-  await db.schema.createTable(wordCloudCollection, (table) => {
-    table.string('tag').primary()
-    table.integer('weight')
-  })
-  await db.schema.createTable(emailSentByDayCollection, (table) => {
-    table.datetime('day_sent').primary()
-    table.text('emailIds')
-  })
-  await db.schema.createTable(custodianCollection, (table) => {
-    table.string('custodian_id').primary()
-    table.text('custodian_name')
-    table.text('title')
-    table.text('color')
-    table.integer('sender_total')
-    table.integer('receiver_total')
-    table.text('to_custodians')
-    table.text('from_custodians')
-  })
+    })
+    await client.connect()
+    emails.forEach(async (email) => {
+      const q =
+        'insert into email (' +
+        'email_id,' +
+        'email_sent,' +
+        'email_from,' +
+        'email_from_lc,' +
+        'email_from_custodian,' +
+        'email_from_custodian_lc,' +
+        'email_to,' +
+        'email_to_lc,' +
+        'email_to_custodians,' +
+        'email_to_custodians_lc,' +
+        'email_cc,' +
+        'email_cc_lc,' +
+        'email_bcc,' +
+        'email_bcc_lc,' +
+        'email_subject,' +
+        'email_subject_lc,' +
+        'email_body,' +
+        'email_body_lc' +
+        ') values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18)'
+      const values = [
+        uuidv4(),
+        email.sent,
+        email.from,
+        email.from.toLowerCase(), // lower case of text fields for faster search
+        email.fromCustodian,
+        email.fromCustodian.toLowerCase(),
+        email.to,
+        email.to.toLowerCase(),
+        email.toCustodians.toString(),
+        email.toCustodians.toString().toLowerCase(),
+        email.cc,
+        email.cc.toLowerCase(),
+        email.bcc,
+        email.bcc.toLowerCase(),
+        email.subject,
+        email.subject.toLowerCase(),
+        email.body,
+        email.body.toLowerCase(),
+      ]
+      await client.query(q, values).catch((err) => console.error(err))
+    })
+    await client.end()
+  }
+
+  const insertWordCloud = async (wordCloud) => {
+    // TODO try using pools https://node-postgres.com/features/connecting
+
+    const pool = new Pool({
+      user: process.env.PGUSER,
+      host: process.env.PGHOST,
+      password: process.env.PGPASSWORD,
+      database: dbName,
+    })
+    const q = 'insert into wordcloud (tag, weight) values ($1, $2)'
+    wordCloud.forEach(async (word) => {
+      const values = [word.tag, word.weight]
+      await pool.query(q, values).catch((err) => console.error(err))
+    })
+    await pool.end()
+  }
+
+  // const insertEmailSentByDay = async (emailSentByDay) => {
+  //   emailSentByDay.forEach(async (day) => {
+  //     await db(emailSentByDayCollection).insert({
+  //       day_sent: day.sent,
+  //       emailIds: day.emailIds.join(','),
+  //     })
+  //   })
+  // }
+
+  // const insertCustodians = async (custodians) => {
+  //   custodians.forEach(async (custodian) => {
+  //     await db(custodianCollection).insert({
+  //       custodian_id: custodian.id,
+  //       custodian_name: custodian.name,
+  //       title: custodian.title,
+  //       color: custodian.color,
+  //       sender_total: custodian.senderTotal,
+  //       receiver_total: custodian.receiverTotal,
+  //       to_custodians: JSON.stringify(custodian.toCustodians),
+  //       from_custodians: JSON.stringify(custodian.fromCustodians),
+  //     })
+  //   })
+  // }
+
+  process.send(`connect`)
+  let client = new Client()
+  await client.connect()
+
+  // TODO use collection names
+
+  process.send(`drop database`)
+  try {
+    await client.query(`revoke connect on database ${dbName} from public`)
+    await client.query(
+      `select pg_terminate_backend(pg_stat_activity.pid) from pg_stat_activity where pg_stat_activity.datname = '${dbName}'`
+    )
+  } catch (err) {}
+  try {
+    await client.query('drop database if exists ' + dbName)
+  } catch (err) {}
+
+  process.send(`create database`)
+  await client.query('create database ' + dbName)
+  await client.end()
+
+  client = new Client({ database: dbName })
+  await client.connect()
+  await client.query(
+    'create table "email" ("email_id" varchar(255), "email_sent" timestamptz, "email_from" text, "email_from_lc" text, "email_from_custodian" text, "email_from_custodian_lc" text, "email_to" text, "email_to_lc" text, "email_to_custodians" text, "email_to_custodians_lc" text, "email_cc" text, "email_cc_lc" text, "email_bcc" text, "email_bcc_lc" text, "email_subject" text, "email_subject_lc" text, "email_body" text, "email_body_lc" text)'
+  )
+  await client.query(
+    'alter table "email" add constraint "email_pkey" primary key ("email_id")'
+  )
+  await client.query(
+    'create table "wordcloud" ("tag" varchar(255), "weight" integer)'
+  )
+  await client.query(
+    'alter table "wordcloud" add constraint "wordcloud_pkey" primary key ("tag")'
+  )
+  await client.query(
+    'create table "emailsentbyday" ("day_sent" timestamptz, "emailIds" text)'
+  )
+  await client.query(
+    'alter table "emailsentbyday" add constraint "emailsentbyday_pkey" primary key ("day_sent")'
+  )
+  await client.query(
+    'create table "custodians" ("custodian_id" varchar(255), "custodian_name" text, "title" text, "color" text, "sender_total" integer, "receiver_total" integer, "to_custodians" text, "from_custodians" text)'
+  )
+  await client.query(
+    'alter table "custodians" add constraint "custodians_pkey" primary key ("custodian_id")'
+  )
+  await client.end()
+
+  // const db = knex({
+  //   client: 'pg',
+  //   debug: true,
+  //   connection: {
+  //     host: process.env.PGHOST,
+  //     password: process.env.PGPASSWORD,
+  //     database: dbName,
+  //   },
+  // })
 
   process.send(`process emails`)
   const numEmails = await walkFSfolder(insertEmails, (msg) => process.send(msg))
@@ -145,14 +182,17 @@ async function run() {
   process.send(`process word cloud`)
   await processWordCloud(insertWordCloud, (msg) => process.send(msg))
 
-  process.send(`process email sent`)
-  await processEmailSentByDay(insertEmailSentByDay, (msg) => process.send(msg))
+  // process.send(`process email sent`)
+  // await processEmailSentByDay(insertEmailSentByDay, (msg) => process.send(msg))
 
-  process.send(`process custodians`)
-  await processCustodians(insertCustodians, (msg) => process.send(msg))
+  // process.send(`process custodians`)
+  // await processCustodians(insertCustodians, (msg) => process.send(msg))
 
-  process.send(`completed ${numEmails} emails`)
-  process.exit()
+  // process.send(`completed ${numEmails} emails`)
+
+  // wait a bit for db stuff to complete and exit
+  // sleep(1000 * 60)
+  // process.exit()
 }
 
-run().catch((msg) => process.send(msg))
+run().catch((err) => console.error(err))

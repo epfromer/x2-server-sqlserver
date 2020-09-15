@@ -52,7 +52,7 @@ export async function walkFSfolder(
   if (log) log(`walking ${fsFolder}`)
   const files = fs.readdirSync(fsFolder)
   for (const file of files) {
-    if (log) log(`processing ${file}\n`)
+    if (log) log(`processing ${file}`)
     const start = Date.now()
     const emails = walkPST(fsFolder + file)
     if (log) log(file + '  complete, ' + ms(emails.length, start, Date.now()))

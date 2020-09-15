@@ -156,6 +156,11 @@
         "signature": "ce54da0783b9c65fa8dbca990e8815e4bb649ece4732b7322f2db8dd4dc4cef4",
         "affectsGlobalScope": false
       },
+      "./src/misc.ts": {
+        "version": "a3f0f0eb57997fa7b2569ed4601076846432c279ff0037c93aa74d2092073c86",
+        "signature": "3000ba213b1ebe78732e258a5b54a05c6a3fb50c9619596f107d6b217b2c1eb5",
+        "affectsGlobalScope": false
+      },
       "./src/processcustodians.ts": {
         "version": "946286f07ecc2a761119c8491e2e97c43e656746d7488824fc1025bb74558ef3",
         "signature": "2e025c17a37b7a07afc92dee148dfdb7550bb0c0dac6abe4b7d58c6fdc38555c",
@@ -542,13 +547,13 @@
         "affectsGlobalScope": false
       },
       "./src/walkfsfolder.ts": {
-        "version": "06b06473544cf1ebdb625fda9c751316eb1d5ed72e6213e8144b8a029326b18d",
+        "version": "5e03d3661d60693caacfcdc6cd17b33f18836de3babf7647a040aa55675a4d7b",
         "signature": "26df470754ef22026cc59468323e26f172b05f708654b69021cd51f721f9a6a1",
         "affectsGlobalScope": false
       },
       "./src/index.ts": {
-        "version": "3c221ee216e219d6d2675be7a3245f80927ce4dc31e4f643c2ae8b05af179b5b",
-        "signature": "1780892a23dde5e7c7b4228efed0e1838ba641fcf70c444aa36958e8b6fa7dac",
+        "version": "4768710f509a9be93f00dd80294c89d16555cb607ff7adefe53aee4dfd8faa44",
+        "signature": "1090d516f5f1f537bf4bea98bba93b2c5326b753a5502bbf08c769329193ac54",
         "affectsGlobalScope": false
       },
       "../../node_modules/@babel/types/lib/index.d.ts": {
@@ -2402,11 +2407,21 @@
         "../../node_modules/@types/node/ts3.4/process.d.ts",
         "../../node_modules/@types/node/ts3.4/util.d.ts",
         "./src/constants.ts",
+        "./src/misc.ts",
         "./src/processcustodians.ts",
         "./src/processemailsent.ts",
         "./src/processwordcloud.ts",
         "./src/types.ts",
         "./src/walkfsfolder.ts"
+      ],
+      "./src/misc.ts": [
+        "../../node_modules/@types/graceful-fs/index.d.ts",
+        "../../node_modules/@types/node/ts3.1/fs.d.ts",
+        "../../node_modules/@types/node/ts3.1/process.d.ts",
+        "../../node_modules/@types/node/ts3.1/util.d.ts",
+        "../../node_modules/@types/node/ts3.4/fs.d.ts",
+        "../../node_modules/@types/node/ts3.4/process.d.ts",
+        "../../node_modules/@types/node/ts3.4/util.d.ts"
       ],
       "./src/processcustodians.ts": [
         "../../node_modules/@types/graceful-fs/index.d.ts",
@@ -4049,6 +4064,7 @@
       ],
       "./src/index.ts": [
         "./src/constants.ts",
+        "./src/misc.ts",
         "./src/processcustodians.ts",
         "./src/processemailsent.ts",
         "./src/processwordcloud.ts",
@@ -4228,6 +4244,7 @@
       "./src/custodians.ts",
       "./src/hash.ts",
       "./src/index.ts",
+      "./src/misc.ts",
       "./src/processcustodians.ts",
       "./src/processemail.ts",
       "./src/processemailsent.ts",

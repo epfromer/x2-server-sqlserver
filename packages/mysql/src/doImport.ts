@@ -83,7 +83,7 @@ async function run() {
     })
   }
 
-  console.log(`connect to mysql`)
+  process.send(`connect to mysql`)
   let db = knex({
     client: 'mysql2',
     connection: {
@@ -93,10 +93,10 @@ async function run() {
     },
   })
 
-  console.log(`drop database`)
+  process.send(`drop database`)
   await db.raw('drop database if exists ' + dbName)
 
-  console.log(`create database`)
+  process.send(`create database`)
   await db.raw('create database ' + dbName)
   db = knex({
     client: 'mysql2',
@@ -156,19 +156,20 @@ async function run() {
     table.text('from_custodians')
   })
 
-  console.log(`insert emails`)
-  const numEmails = await walkFSfolder(insertEmails)
+  process.send(`process emails`)
+  const numEmails = await walkFSfolder(insertEmails, (msg) => process.send(msg))
 
-  console.log(`insert word cloud`)
-  await processWordCloud(insertWordCloud)
+  process.send(`process word cloud`)
+  await processWordCloud(insertWordCloud, (msg) => process.send(msg))
 
-  console.log(`insert email sent`)
-  await processEmailSentByDay(insertEmailSentByDay)
+  process.send(`process email sent`)
+  await processEmailSentByDay(insertEmailSentByDay, (msg) => process.send(msg))
 
-  console.log(`insert custodians`)
-  await processCustodians(insertCustodians)
+  process.send(`create custodians`)
+  await processCustodians(insertCustodians, (msg) => process.send(msg))
 
-  console.log(`completed ${numEmails} emails`)
+  process.send(`completed ${numEmails} emails`)
+  // TODO proc not stopping?
 }
 
-run().catch(console.error)
+run().catch((err) => console.error(err))

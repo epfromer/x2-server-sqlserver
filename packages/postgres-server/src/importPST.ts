@@ -1,9 +1,11 @@
+import { ImportLogEntry } from '@klonzo/common'
 import cp from 'child_process'
 import * as dotenv from 'dotenv'
 import { Request, Response } from 'express'
+import { v4 as uuidv4 } from 'uuid'
 dotenv.config()
 
-const log = []
+const log: Array<ImportLogEntry> = []
 let importing = false
 
 // HTTP GET /importpst
@@ -22,7 +24,11 @@ export async function importPST(req: Request, res: Response): Promise<void> {
       execArgv: ['-r', 'ts-node/register'],
     })
     importer.on('message', (msg) =>
-      log.push(new Date().toISOString() + ' postgres: ' + msg)
+      log.push({
+        id: uuidv4(),
+        timestamp: new Date().toISOString(),
+        entry: 'postgres: ' + msg,
+      })
     )
     importer.on('close', () => (importing = false))
   } catch (err) {

@@ -28,7 +28,7 @@ export async function getEmailSentByDay(
     res.json(
       emailSentByDay.map((day) => ({
         sent: day.day_sent,
-        emailIds: day.emailIds.split(','),
+        emailIds: day.email_ids.split(','),
       }))
     )
   } catch (err) {

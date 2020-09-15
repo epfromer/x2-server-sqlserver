@@ -55,3 +55,9 @@ export interface HTTPQuery {
   subject?: string
   body?: string
 }
+
+export interface ImportLogEntry {
+  id: string
+  timestamp: string
+  entry: string
+}

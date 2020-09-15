@@ -142,8 +142,8 @@
         "affectsGlobalScope": false
       },
       "./src/types.ts": {
-        "version": "19987ffeb9622c6c40cd1d569b0354df88884eef33ee96ac2ca82c8bbd2dde77",
-        "signature": "c6d18471c7af6723e43bf8a8724d4ec496b4357776a6b1828f5da63c2dd1e384",
+        "version": "480c6482a578cd99116950104b2800ee90728841f0c6e21f532184b7e2bb245e",
+        "signature": "f83398ef0f7de77d8dd7006f5612bc0452fca09f246c9464933f4d505706c5a4",
         "affectsGlobalScope": false
       },
       "./src/custodians.ts": {

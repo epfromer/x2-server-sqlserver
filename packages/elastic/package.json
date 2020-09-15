@@ -6,7 +6,7 @@
   "author": "Ed Pfromer epfromer@gmail.com",
   "description": "REST/CRUD interface on email in ElasticSearch for X2 client",
   "main": "index.js",
-  "elastic-version": "https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html",
+  "docker-version": "https://hub.docker.com/_/elasticsearch",
   "engines": {
     "node": ">= 12",
     "yarn": ">= 1"
@@ -14,17 +14,19 @@
   "scripts": {
     "clean": "rimraf dist",
     "compile": "tsc --build --verbose",
-    "docker:run": "docker run --name elastic -p 9200:9200 -p 9300:9300 -e 'discovery.type=single-node' docker.elastic.co/elasticsearch/elasticsearch:7.9.0",
+    "docker": "docker run --name elastic -p 9200:9200 -p 9300:9300 -e 'discovery.type=single-node' docker.elastic.co/elasticsearch/elasticsearch:7.9.1",
     "serve": "node dist/index.js",
     "start": "run-s clean compile serve",
-    "test": "jest --forceExit --detectOpenHandles",
     "watch": "ts-node-dev --respawn -- src/index.ts"
   },
   "dependencies": {
     "@elastic/elasticsearch": "^7.9.0",
     "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "pst-extractor": "^1.6.0",
+    "uuid": "^8.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.11.6",
@@ -49,6 +51,7 @@
     "npm-run-all": "^4.1.5",
     "prettier": "^2.1.1",
     "rimraf": "^3.0.2",
+    "ts-node": "^9.0.0",
     "ts-node-dev": "^1.0.0-pre.62",
     "typescript": "^4.0.2"
   },

@@ -6,6 +6,7 @@
   "author": "Ed Pfromer epfromer@gmail.com",
   "description": "REST/CRUD interface on email in PostgreSQL for X2 client",
   "main": "index.js",
+  "docker-version": "https://hub.docker.com/_/postgres",
   "engines": {
     "node": ">= 12",
     "yarn": ">= 1"
@@ -13,7 +14,7 @@
   "scripts": {
     "clean": "rimraf dist",
     "compile": "tsc --build --verbose",
-    "docker:run": "docker run --name postgres -e POSTGRES_PASSWORD=f00bar -d -p 5432:5432 postgres",
+    "docker": "docker run --name postgres -p 5432:5432 -e POSTGRES_PASSWORD=f00bar -d postgres",
     "serve": "node dist/index.js",
     "start": "run-s clean compile serve",
     "watch": "ts-node-dev --respawn -- src/index.ts"

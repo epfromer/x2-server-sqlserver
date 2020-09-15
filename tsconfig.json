@@ -2,16 +2,11 @@
   "files": [],
   "references": [
     { "path": "packages/common" },
-    { "path": "packages/elastic-pst" },
     { "path": "packages/elastic" },
-    { "path": "packages/mongodb-pst" },
     { "path": "packages/mongodb" },
-    { "path": "packages/mysql-pst" },
     { "path": "packages/mysql" },
     { "path": "packages/postgres" },
-    { "path": "packages/redis-pst" },
     { "path": "packages/redis" },
-    { "path": "packages/sqlserver-pst" },
     { "path": "packages/sqlserver" }
   ]
 }

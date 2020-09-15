@@ -6,8 +6,8 @@ import { getCustodians } from './getCustodians'
 import { getEmailSentByDay } from './getEmailSentByDay'
 import { getSpecificEmail } from './getSpecificEmail'
 import { getWordCloud } from './getWordCloud'
-import { setCustodian } from './setCustodian'
 import { importPST, importStatus } from './importPST'
+import { setCustodian } from './setCustodian'
 
 async function run() {
   const app: express.Application = express.default()

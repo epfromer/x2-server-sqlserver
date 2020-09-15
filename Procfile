@@ -1,1 +1,1 @@
-web: node packages/mongodb-server/dist/index.js
+web: node packages/mongodb/dist/index.js

@@ -1,11 +1,12 @@
 {
-  "name": "@klonzo/redis-server",
+  "name": "@klonzo/redis",
   "version": "0.0.1",
   "private": true,
   "license": "MIT",
   "author": "Ed Pfromer epfromer@gmail.com",
   "description": "REST/CRUD interface on email in Redis for X2 client",
   "main": "index.js",
+  "docker-version": "https://hub.docker.com/_/redis",
   "engines": {
     "node": ">= 12",
     "yarn": ">= 1"
@@ -16,7 +17,6 @@
     "docker:run": "docker run --name redis -d -p 6379:6379 redislabs/redisearch:latest --appendonly yes --aof-use-rdb-preamble yes --loadmodule /usr/lib/redis/modules/redisearch.so",
     "serve": "node dist/index.js",
     "start": "run-s clean compile serve",
-    "test": "jest --forceExit --detectOpenHandles",
     "watch": "ts-node-dev --respawn -- src/index.ts"
   },
   "dependencies": {
@@ -24,8 +24,10 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "morgan": "^1.10.0",
+    "pst-extractor": "^1.6.0",
     "redis": "^3.0.2",
-    "redis-redisearch": "^1.0.1"
+    "redis-redisearch": "^1.0.1",
+    "uuid": "^8.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.11.6",

@@ -1,5 +1,5 @@
 {
-  "name": "@klonzo/postgres-server",
+  "name": "@klonzo/postgres",
   "version": "0.0.1",
   "private": true,
   "license": "MIT",

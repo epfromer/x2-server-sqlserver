@@ -24,14 +24,7 @@ export async function importPST(req: Request, res: Response): Promise<void> {
     importer.on('message', (msg) =>
       log.push(new Date().toISOString() + ' postgres: ' + msg)
     )
-    importer.on('close', () => {
-      importing = false
-      console.log('close')
-    })
-    importer.on('exit', () => {
-      importing = false
-      console.log('exit')
-    })
+    importer.on('close', () => (importing = false))
   } catch (err) {
     importing = false
     console.error(err.stack)

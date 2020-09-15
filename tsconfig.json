@@ -3,16 +3,15 @@
   "references": [
     { "path": "packages/common" },
     { "path": "packages/elastic-pst" },
-    { "path": "packages/elastic-server" },
+    { "path": "packages/elastic" },
     { "path": "packages/mongodb-pst" },
-    { "path": "packages/mongodb-server" },
+    { "path": "packages/mongodb" },
     { "path": "packages/mysql-pst" },
-    { "path": "packages/mysql-server" },
-    { "path": "packages/postgres-pst" },
-    { "path": "packages/postgres-server" },
+    { "path": "packages/mysql" },
+    { "path": "packages/postgres" },
     { "path": "packages/redis-pst" },
-    { "path": "packages/redis-server" },
+    { "path": "packages/redis" },
     { "path": "packages/sqlserver-pst" },
-    { "path": "packages/sqlserver-server" }
+    { "path": "packages/sqlserver" }
   ]
 }

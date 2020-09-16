@@ -15,6 +15,7 @@ import {
 } from '@klonzo/common'
 import * as dotenv from 'dotenv'
 import { v4 as uuidv4 } from 'uuid'
+import sql from 'mssql'
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const knex = require('knex')
 dotenv.config()
@@ -84,22 +85,46 @@ async function run() {
   }
 
   process.send(`connect to sqlserver`)
-  let db = knex({
-    client: 'mssql',
-    connection: {
-      host: process.env.SQL_HOST,
-      user: process.env.SQL_USER,
-      password: process.env.SQL_PASSWORD,
-    },
+  let pool = await sql.connect({
+    server: process.env.SQL_HOST,
+    user: process.env.SQL_USER,
+    password: process.env.SQL_PASSWORD,
   })
 
   process.send(`drop database`)
-  await db.raw('drop database if exists ' + dbName)
+  await pool.query('drop database if exists ' + dbName)
 
   process.send(`create database`)
-  await db.raw('create database ' + dbName)
-  db = knex({
+  await pool.query('create database ' + dbName)
+
+  pool = await sql.connect({
+    server: process.env.SQL_HOST,
+    user: process.env.SQL_USER,
+    password: process.env.SQL_PASSWORD,
+    database: dbName,
+  })
+  await pool.query(
+    `CREATE TABLE [${emailCollection}] ([email_id] nvarchar(255), [email_sent] datetime2, [email_from] nvarchar(max), [email_from_lc] nvarchar(max), [email_from_custodian] nvarchar(max), [email_from_custodian_lc] nvarchar(max), [email_to] nvarchar(max), [email_to_lc] nvarchar(max), [email_to_custodians] nvarchar(max), [email_to_custodians_lc] nvarchar(max), [email_cc] nvarchar(max), [email_cc_lc] nvarchar(max), [email_bcc] nvarchar(max), [email_bcc_lc] nvarchar(max), [email_subject] nvarchar(max), [email_subject_lc] nvarchar(max), [email_body] nvarchar(max), [email_body_lc] nvarchar(max), CONSTRAINT [email_pkey] PRIMARY KEY ([email_id]))`
+  )
+  await pool.query(
+    `CREATE TABLE [${wordCloudCollection}] ([tag] nvarchar(255), [weight] int, CONSTRAINT [wordcloud_pkey] PRIMARY KEY ([tag]))`
+  )
+  await pool.query(
+    `CREATE TABLE [${emailSentByDayCollection}] ([day_sent] datetime2, [emailIds] nvarchar(max), CONSTRAINT [emailsentbyday_pkey] PRIMARY KEY ([day_sent]))`
+  )
+  // await pool.query(
+  //   `alter table ${emailSentByDayCollection} add constraint emailsentbyday_pkey primary key (day_sent)`
+  // )
+  // await pool.query(
+  //   `create table ${custodianCollection} (custodian_id nvarchar(255), custodian_name nvarchar(max), title nvarchar(max), color nvarchar(max), sender_total integer, receiver_total integer, to_custodians nvarchar(max), from_custodians nvarchar(max))`
+  // )
+  // await pool.query(
+  //   `alter table ${custodianCollection} add constraint custodians_pkey primary key (custodian_id)`
+  // )
+
+  const db = knex({
     client: 'mssql',
+    debug: true,
     connection: {
       host: process.env.SQL_HOST,
       user: process.env.SQL_USER,
@@ -107,59 +132,37 @@ async function run() {
       database: dbName,
     },
   })
-  await db.schema.createTable(emailCollection, (table) => {
-    table.string('email_id').primary()
-    table.datetime('email_sent')
-    table.text('email_from')
-    table.text('email_from_lc') // lower case of text fields for faster search
-    table.text('email_from_custodian')
-    table.text('email_from_custodian_lc')
-    table.text('email_to')
-    table.text('email_to_lc')
-    table.text('email_to_custodians')
-    table.text('email_to_custodians_lc')
-    table.text('email_cc')
-    table.text('email_cc_lc')
-    table.text('email_bcc')
-    table.text('email_bcc_lc')
-    table.text('email_subject')
-    table.text('email_subject_lc')
-    table.text('email_body')
-    table.text('email_body_lc')
-  })
-  await db.schema.createTable(wordCloudCollection, (table) => {
-    table.string('tag').primary()
-    table.integer('weight')
-  })
+
   await db.schema.createTable(emailSentByDayCollection, (table) => {
     table.datetime('day_sent').primary()
     table.text('emailIds')
   })
-  await db.schema.createTable(custodianCollection, (table) => {
-    table.string('custodian_id').primary()
-    table.text('custodian_name')
-    table.text('title')
-    table.text('color')
-    table.integer('sender_total')
-    table.integer('receiver_total')
-    table.text('to_custodians')
-    table.text('from_custodians')
-  })
+  // await db.schema.createTable(custodianCollection, (table) => {
+  //   table.string('custodian_id').primary()
+  //   table.text('custodian_name')
+  //   table.text('title')
+  //   table.text('color')
+  //   table.integer('sender_total')
+  //   table.integer('receiver_total')
+  //   table.text('to_custodians')
+  //   table.text('from_custodians')
+  // })
 
-  process.send(`process emails`)
-  const numEmails = await walkFSfolder(insertEmails, (msg) => process.send(msg))
+  // process.send(`process emails`)
+  // const numEmails = await walkFSfolder(insertEmails, (msg) => process.send(msg))
 
-  process.send(`process word cloud`)
-  await processWordCloud(insertWordCloud, (msg) => process.send(msg))
+  // process.send(`process word cloud`)
+  // await processWordCloud(insertWordCloud, (msg) => process.send(msg))
 
-  process.send(`process email sent`)
-  await processEmailSentByDay(insertEmailSentByDay, (msg) => process.send(msg))
+  // process.send(`process email sent`)
+  // await processEmailSentByDay(insertEmailSentByDay, (msg) => process.send(msg))
 
-  process.send(`create custodians`)
-  await processCustodians(insertCustodians, (msg) => process.send(msg))
+  // process.send(`create custodians`)
+  // await processCustodians(insertCustodians, (msg) => process.send(msg))
 
-  process.send(`completed ${numEmails} emails`)
+  // process.send(`completed ${numEmails} emails`)
   // TODO proc not stopping?
+  console.log('foo')
 }
 
 run().catch((err) => console.error(err))

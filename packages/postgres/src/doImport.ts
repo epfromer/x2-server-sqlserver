@@ -83,7 +83,7 @@ async function run() {
     })
   }
 
-  process.send(`connect`)
+  process.send(`connect to postgres`)
   let pool = new Pool()
 
   process.send(`drop database`)

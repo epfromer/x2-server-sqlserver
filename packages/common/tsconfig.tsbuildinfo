@@ -606,16 +606,6 @@
         "signature": "f0cb4b3ab88193e3e51e9e2622e4c375955003f1f81239d72c5b7a95415dad3e",
         "affectsGlobalScope": false
       },
-      "../../node_modules/@types/elasticsearch/src/lib/connectors/http.d.ts": {
-        "version": "e37ee3ddf6cd3a7f130317c2200a37a8f1c14bd293966fd581ed9c345c311faf",
-        "signature": "e37ee3ddf6cd3a7f130317c2200a37a8f1c14bd293966fd581ed9c345c311faf",
-        "affectsGlobalScope": false
-      },
-      "../../node_modules/@types/elasticsearch/index.d.ts": {
-        "version": "dc2ec68dcbe5ecc12e4a43b16fe47d6b546eb7e761d95dc137467ecfdce195a7",
-        "signature": "dc2ec68dcbe5ecc12e4a43b16fe47d6b546eb7e761d95dc137467ecfdce195a7",
-        "affectsGlobalScope": false
-      },
       "../../node_modules/@types/range-parser/index.d.ts": {
         "version": "4e88b833be14c7f384e0dcd57bb30acd799e8e34d212635d693e41a75a71164b",
         "signature": "4e88b833be14c7f384e0dcd57bb30acd799e8e34d212635d693e41a75a71164b",
@@ -921,25 +911,6 @@
         "../../node_modules/@types/node/index.d.ts",
         "../../node_modules/@types/node/ts3.1/fs.d.ts",
         "../../node_modules/@types/node/ts3.1/http.d.ts",
-        "../../node_modules/@types/node/ts3.1/process.d.ts",
-        "../../node_modules/@types/node/ts3.1/util.d.ts",
-        "../../node_modules/@types/node/ts3.4/fs.d.ts",
-        "../../node_modules/@types/node/ts3.4/process.d.ts",
-        "../../node_modules/@types/node/ts3.4/util.d.ts"
-      ],
-      "../../node_modules/@types/elasticsearch/index.d.ts": [
-        "../../node_modules/@types/elasticsearch/src/lib/connectors/http.d.ts",
-        "../../node_modules/@types/graceful-fs/index.d.ts",
-        "../../node_modules/@types/node/ts3.1/fs.d.ts",
-        "../../node_modules/@types/node/ts3.1/process.d.ts",
-        "../../node_modules/@types/node/ts3.1/util.d.ts",
-        "../../node_modules/@types/node/ts3.4/fs.d.ts",
-        "../../node_modules/@types/node/ts3.4/process.d.ts",
-        "../../node_modules/@types/node/ts3.4/util.d.ts"
-      ],
-      "../../node_modules/@types/elasticsearch/src/lib/connectors/http.d.ts": [
-        "../../node_modules/@types/graceful-fs/index.d.ts",
-        "../../node_modules/@types/node/ts3.1/fs.d.ts",
         "../../node_modules/@types/node/ts3.1/process.d.ts",
         "../../node_modules/@types/node/ts3.1/util.d.ts",
         "../../node_modules/@types/node/ts3.4/fs.d.ts",
@@ -2616,25 +2587,6 @@
         "../../node_modules/@types/node/ts3.4/process.d.ts",
         "../../node_modules/@types/node/ts3.4/util.d.ts"
       ],
-      "../../node_modules/@types/elasticsearch/index.d.ts": [
-        "../../node_modules/@types/elasticsearch/src/lib/connectors/http.d.ts",
-        "../../node_modules/@types/graceful-fs/index.d.ts",
-        "../../node_modules/@types/node/ts3.1/fs.d.ts",
-        "../../node_modules/@types/node/ts3.1/process.d.ts",
-        "../../node_modules/@types/node/ts3.1/util.d.ts",
-        "../../node_modules/@types/node/ts3.4/fs.d.ts",
-        "../../node_modules/@types/node/ts3.4/process.d.ts",
-        "../../node_modules/@types/node/ts3.4/util.d.ts"
-      ],
-      "../../node_modules/@types/elasticsearch/src/lib/connectors/http.d.ts": [
-        "../../node_modules/@types/graceful-fs/index.d.ts",
-        "../../node_modules/@types/node/ts3.1/fs.d.ts",
-        "../../node_modules/@types/node/ts3.1/process.d.ts",
-        "../../node_modules/@types/node/ts3.1/util.d.ts",
-        "../../node_modules/@types/node/ts3.4/fs.d.ts",
-        "../../node_modules/@types/node/ts3.4/process.d.ts",
-        "../../node_modules/@types/node/ts3.4/util.d.ts"
-      ],
       "../../node_modules/@types/express-serve-static-core/index.d.ts": [
         "../../node_modules/@types/graceful-fs/index.d.ts",
         "../../node_modules/@types/node/index.d.ts",
@@ -4103,8 +4055,6 @@
       "../../node_modules/@types/bson/index.d.ts",
       "../../node_modules/@types/color-name/index.d.ts",
       "../../node_modules/@types/connect/index.d.ts",
-      "../../node_modules/@types/elasticsearch/index.d.ts",
-      "../../node_modules/@types/elasticsearch/src/lib/connectors/http.d.ts",
       "../../node_modules/@types/express-serve-static-core/index.d.ts",
       "../../node_modules/@types/express/index.d.ts",
       "../../node_modules/@types/glob/index.d.ts",

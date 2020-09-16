@@ -19,28 +19,26 @@ async function run() {
     const pool = new Pool({ database: dbName })
     const q = `insert into ${emailCollection} (email_id, email_sent, email_from, email_from_lc, email_from_custodian, email_from_custodian_lc, email_to, email_to_lc, email_to_custodians, email_to_custodians_lc, email_cc, email_cc_lc, email_bcc, email_bcc_lc, email_subject, email_subject_lc, email_body, email_body_lc) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18)`
     emails.forEach(async (email) => {
-      await pool
-        .query(q, [
-          uuidv4(),
-          email.sent,
-          email.from,
-          email.from.toLowerCase(), // lower case of text fields for faster search
-          email.fromCustodian,
-          email.fromCustodian.toLowerCase(),
-          email.to,
-          email.to.toLowerCase(),
-          email.toCustodians.toString(),
-          email.toCustodians.toString().toLowerCase(),
-          email.cc,
-          email.cc.toLowerCase(),
-          email.bcc,
-          email.bcc.toLowerCase(),
-          email.subject,
-          email.subject.toLowerCase(),
-          email.body,
-          email.body.toLowerCase(),
-        ])
-        .catch((err) => console.error(err))
+      await pool.query(q, [
+        uuidv4(),
+        email.sent,
+        email.from,
+        email.from.toLowerCase(), // lower case of text fields for faster search
+        email.fromCustodian,
+        email.fromCustodian.toLowerCase(),
+        email.to,
+        email.to.toLowerCase(),
+        email.toCustodians.toString(),
+        email.toCustodians.toString().toLowerCase(),
+        email.cc,
+        email.cc.toLowerCase(),
+        email.bcc,
+        email.bcc.toLowerCase(),
+        email.subject,
+        email.subject.toLowerCase(),
+        email.body,
+        email.body.toLowerCase(),
+      ])
     })
   }
 
@@ -48,9 +46,7 @@ async function run() {
     const pool = new Pool({ database: dbName })
     const q = `insert into ${wordCloudCollection} (tag, weight) values ($1, $2)`
     wordCloud.forEach(async (word) => {
-      await pool
-        .query(q, [word.tag, word.weight])
-        .catch((err) => console.error(err))
+      await pool.query(q, [word.tag, word.weight])
     })
   }
 
@@ -58,9 +54,7 @@ async function run() {
     const pool = new Pool({ database: dbName })
     const q = `insert into ${emailSentByDayCollection} (day_sent, email_ids) values ($1, $2)`
     emailSentByDay.forEach(async (day) => {
-      await pool
-        .query(q, [day.sent, day.emailIds.join(',')])
-        .catch((err) => console.error(err))
+      await pool.query(q, [day.sent, day.emailIds.join(',')])
     })
   }
 
@@ -68,18 +62,16 @@ async function run() {
     const pool = new Pool({ database: dbName })
     const q = `insert into ${custodianCollection} (custodian_id, custodian_name, title, color, sender_total, receiver_total, to_custodians, from_custodians) values ($1, $2, $3, $4, $5, $6, $7, $8)`
     custodians.forEach(async (custodian) => {
-      await pool
-        .query(q, [
-          custodian.id,
-          custodian.name,
-          custodian.title,
-          custodian.color,
-          custodian.senderTotal,
-          custodian.receiverTotal,
-          JSON.stringify(custodian.toCustodians),
-          JSON.stringify(custodian.fromCustodians),
-        ])
-        .catch((err) => console.error(err))
+      await pool.query(q, [
+        custodian.id,
+        custodian.name,
+        custodian.title,
+        custodian.color,
+        custodian.senderTotal,
+        custodian.receiverTotal,
+        JSON.stringify(custodian.toCustodians),
+        JSON.stringify(custodian.fromCustodians),
+      ])
     })
   }
 

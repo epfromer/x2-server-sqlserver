@@ -1,19 +1,8 @@
 import { custodianCollection, dbName } from '@klonzo/common'
 import * as dotenv from 'dotenv'
 import { Request, Response } from 'express'
+import { Pool } from 'pg'
 dotenv.config()
-
-// http://knexjs.org/#Builder
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const knex = require('knex')({
-  client: 'pg',
-  connection: {
-    host: process.env.PGHOST,
-    password: process.env.PGPASSWORD,
-    database: dbName,
-  },
-})
 
 // HTTP GET /custodians
 export async function getCustodians(
@@ -21,12 +10,12 @@ export async function getCustodians(
   res: Response
 ): Promise<void> {
   try {
-    const custodians = await knex(custodianCollection).orderBy(
-      'custodian_id ',
-      'asc'
+    const pool = new Pool({ database: dbName })
+    const result = await pool.query(
+      `select * from ${custodianCollection} order by custodian_id asc`
     )
     res.json(
-      custodians.map((custodian) => ({
+      result.rows.map((custodian) => ({
         id: custodian.custodian_id,
         name: custodian.custodian_name,
         title: custodian.title,

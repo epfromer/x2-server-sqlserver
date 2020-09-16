@@ -1,26 +1,16 @@
 import { dbName, wordCloudCollection } from '@klonzo/common'
 import * as dotenv from 'dotenv'
 import { Request, Response } from 'express'
+import { Pool } from 'pg'
 dotenv.config()
-
-// http://knexjs.org/#Builder
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const knex = require('knex')({
-  client: 'pg',
-  connection: {
-    host: process.env.PGHOST,
-    password: process.env.PGPASSWORD,
-    database: dbName,
-  },
-})
 
 // HTTP GET /wordcloud
 export async function getWordCloud(req: Request, res: Response): Promise<void> {
   try {
-    const wordCloud = await knex(wordCloudCollection)
+    const pool = new Pool({ database: dbName })
+    const result = await pool.query(`select * from ${wordCloudCollection}`)
     res.json(
-      wordCloud.map((word) => ({
+      result.rows.map((word) => ({
         tag: word.tag,
         weight: word.weight,
       }))

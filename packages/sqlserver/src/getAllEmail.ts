@@ -2,7 +2,7 @@ import {
   dbName,
   defaultLimit,
   emailCollection,
-  HTTPQuery,
+  HTTPQuery
 } from '@klonzo/common'
 import * as dotenv from 'dotenv'
 import { Request, Response } from 'express'

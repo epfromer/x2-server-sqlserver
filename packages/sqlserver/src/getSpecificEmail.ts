@@ -19,7 +19,6 @@ export async function getSpecificEmail(
     const result = await pool.query(
       `select * from ${emailCollection} where email_id = '${req.params.id}'`
     )
-
     const email = result.recordset[0]
     res.json({
       id: email.email_id,

@@ -1,19 +1,8 @@
 import { dbName, emailSentByDayCollection } from '@klonzo/common'
 import * as dotenv from 'dotenv'
 import { Request, Response } from 'express'
+import { Pool } from 'pg'
 dotenv.config()
-
-// http://knexjs.org/#Builder
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const knex = require('knex')({
-  client: 'pg',
-  connection: {
-    host: process.env.PGHOST,
-    password: process.env.PGPASSWORD,
-    database: dbName,
-  },
-})
 
 // HTTP GET /emailsent
 export async function getEmailSentByDay(
@@ -21,12 +10,12 @@ export async function getEmailSentByDay(
   res: Response
 ): Promise<void> {
   try {
-    const emailSentByDay = await knex(emailSentByDayCollection).orderBy(
-      'day_sent',
-      'asc'
+    const pool = new Pool({ database: dbName })
+    const result = await pool.query(
+      `select * from ${emailSentByDayCollection} order by day_sent asc`
     )
     res.json(
-      emailSentByDay.map((day) => ({
+      result.rows.map((day) => ({
         sent: day.day_sent,
         emailIds: day.email_ids.split(','),
       }))

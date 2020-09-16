@@ -6,21 +6,10 @@ import {
 } from '@klonzo/common'
 import * as dotenv from 'dotenv'
 import { Request, Response } from 'express'
+import { Pool } from 'pg'
 dotenv.config()
 
-// http://knexjs.org/#Builder
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const knex = require('knex')({
-  client: 'pg',
-  connection: {
-    host: process.env.PGHOST,
-    password: process.env.PGPASSWORD,
-    database: dbName,
-  },
-})
-
-const createSearchParams = (httpQuery: HTTPQuery) => {
+const createWhereClause = (httpQuery: HTTPQuery) => {
   // console.log(httpQuery)
 
   let { allText, from, to, subject, body } = httpQuery
@@ -101,19 +90,30 @@ const createSearchParams = (httpQuery: HTTPQuery) => {
 // HTTP GET /email/
 export async function getAllEmail(req: Request, res: Response): Promise<void> {
   try {
-    const query = createSearchParams(req.query)
-    const total = await knex(emailCollection).whereRaw(query).count()
-    const emails = await knex(emailCollection)
-      .orderBy(
-        req.query.sort ? 'email_' + req.query.sort : 'email_sent',
-        req.query.order === '1' ? 'asc' : 'desc'
-      )
-      .offset(req.query.skip ? +req.query.skip : 0)
-      .limit(req.query.limit ? +req.query.limit : defaultLimit)
-      .whereRaw(query)
+    let qTotal = `select count(*) as total from ${emailCollection}`
+    let q = `select * from ${emailCollection}`
+
+    const whereClause = createWhereClause(req.query)
+    if (whereClause) {
+      qTotal += ' where ' + whereClause
+      q += ' where ' + whereClause
+    }
+
+    q += ` order by ${
+      req.query.sort ? 'email_' + req.query.sort : 'email_sent'
+    } ${req.query.order === '1' ? 'asc' : 'desc'} offset ${
+      req.query.skip ? +req.query.skip : 0
+    } rows fetch next ${
+      req.query.limit ? +req.query.limit : defaultLimit
+    } rows only`
+
+    const pool = new Pool({ database: dbName })
+    const result = await pool.query(q)
+    const resultTotal = await pool.query(qTotal)
+
     res.json({
-      total: +total[0].count,
-      emails: emails.map((email) => ({
+      total: resultTotal.rows[0].total,
+      emails: result.rows.map((email) => ({
         id: email.email_id,
         sent: email.email_sent,
         sentShort: new Date(email.email_sent).toISOString().slice(0, 10),

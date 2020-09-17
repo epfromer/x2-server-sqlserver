@@ -3,7 +3,6 @@ import {
   Custodian,
   custodianCollection,
   dbName,
-  elasticServer,
   Email,
   EmailSentByDay,
   emailSentByDayCollection,
@@ -23,12 +22,11 @@ dotenv.config()
 // http://localhost:9200/x2
 // http://localhost:9200/x2/_search?q=*
 
-// TODO create this each request
-export let client: Client
-
 async function run() {
   process.send(`connect`)
-  client = new Client({ node: elasticServer })
+  const client = new Client({
+    node: `http://${process.env.ELASTIC_HOST}:${process.env.ELASTIC_PORT}`,
+  })
 
   const insertEmails = async (emails: Email[]): Promise<void> => {
     emails.forEach(async (email) => {

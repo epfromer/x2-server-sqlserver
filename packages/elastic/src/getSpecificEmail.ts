@@ -1,6 +1,8 @@
 import { Client } from '@elastic/elasticsearch'
-import { dbName, Email, elasticServer } from '@klonzo/common'
+import { dbName } from '@klonzo/common'
+import * as dotenv from 'dotenv'
 import { Request, Response } from 'express'
+dotenv.config()
 
 // HTTP GET /email/<id>
 export async function getSpecificEmail(
@@ -8,7 +10,9 @@ export async function getSpecificEmail(
   res: Response
 ): Promise<void> {
   try {
-    const client = new Client({ node: elasticServer })
+    const client = new Client({
+      node: `http://${process.env.ELASTIC_HOST}:${process.env.ELASTIC_PORT}`,
+    })
 
     const { body } = await client.search({
       index: dbName,

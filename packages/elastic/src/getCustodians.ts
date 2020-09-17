@@ -1,6 +1,8 @@
 import { Client } from '@elastic/elasticsearch'
-import { custodianCollection, dbName, elasticServer } from '@klonzo/common'
+import { custodianCollection, dbName } from '@klonzo/common'
+import * as dotenv from 'dotenv'
 import { Request, Response } from 'express'
+dotenv.config()
 
 // HTTP GET /custodians
 export async function getCustodians(
@@ -8,7 +10,10 @@ export async function getCustodians(
   res: Response
 ): Promise<void> {
   try {
-    const client = new Client({ node: elasticServer })
+    const client = new Client({
+      node: `http://${process.env.ELASTIC_HOST}:${process.env.ELASTIC_PORT}`,
+    })
+
     const { body } = await client.search({
       index: dbName + custodianCollection,
       q: '*',

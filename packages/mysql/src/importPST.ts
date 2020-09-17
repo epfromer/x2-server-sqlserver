@@ -31,8 +31,8 @@ export async function importPST(req: Request, res: Response): Promise<void> {
       })
     )
     importer.on('close', () => {
-      importing = false
       console.log('process exit')
+      importing = false
     })
   } catch (err) {
     importing = false

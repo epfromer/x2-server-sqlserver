@@ -18,15 +18,12 @@ import * as dotenv from 'dotenv'
 import * as mongodb from 'mongodb'
 dotenv.config()
 
-// TODO create this each request
-export let db: mongodb.Db
-
 async function run() {
   process.send(`connect`)
   const client = await mongodb.MongoClient.connect(mongodbServer, {
     useUnifiedTopology: false,
   })
-  db = client.db(dbName)
+  const db = client.db(dbName)
 
   const insertEmails = async (email: Email[]): Promise<void> => {
     await db.collection(emailCollection).insertMany(email)
@@ -65,7 +62,7 @@ async function run() {
   await db.collection(emailCollection).createIndex({ '$**': 'text' })
 
   process.send(`completed ${numEmails} emails`)
-  // TODO proc not stopping?
+  client.close()
 }
 
 run().catch((err) => console.error(err))

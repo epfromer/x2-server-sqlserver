@@ -1,6 +1,8 @@
 import { Client } from '@elastic/elasticsearch'
-import { dbName, defaultLimit, elasticServer } from '@klonzo/common'
+import { dbName, defaultLimit } from '@klonzo/common'
+import * as dotenv from 'dotenv'
 import { Request, Response } from 'express'
+dotenv.config()
 
 const createSearchParams = (httpQuery) => {
   // console.log(httpQuery)
@@ -81,7 +83,9 @@ const createSortOrder = (httpQuery) => {
 // HTTP GET /email/
 export async function getAllEmail(req: Request, res: Response): Promise<void> {
   try {
-    const client = new Client({ node: elasticServer })
+    const client = new Client({
+      node: `http://${process.env.ELASTIC_HOST}:${process.env.ELASTIC_PORT}`,
+    })
 
     const { body } = await client.search({
       index: dbName,

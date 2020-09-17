@@ -1,20 +1,9 @@
 import { dbName, emailSentByDayCollection } from '@klonzo/common'
 import * as dotenv from 'dotenv'
+import mysql from 'mysql2/promise'
 import { Request, Response } from 'express'
 dotenv.config()
 
-// http://knexjs.org/#Builder
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const knex = require('knex')({
-  client: 'mysql2',
-  connection: {
-    host: process.env.MYSQL_HOST,
-    user: process.env.MYSQL_USER,
-    password: process.env.MYSQL_ROOT_PASSWORD,
-    database: dbName,
-  },
-})
 
 // HTTP GET /emailsent
 export async function getEmailSentByDay(
@@ -22,12 +11,17 @@ export async function getEmailSentByDay(
   res: Response
 ): Promise<void> {
   try {
-    const emailSentByDay = await knex(emailSentByDayCollection).orderBy(
-      'day_sent',
-      'asc'
+    const connection = await mysql.createConnection({
+      host: process.env.MYSQL_HOST,
+      user: process.env.MYSQL_USER,
+      password: process.env.MYSQL_ROOT_PASSWORD,
+      database: dbName,
+    })
+    const [rows] = await connection.execute(
+      `select * from ${emailSentByDayCollection} order by day_sent asc`
     )
     res.json(
-      emailSentByDay.map((day) => ({
+      rows.map((day) => ({
         sent: day.day_sent,
         emailIds: day.email_ids.split(','),
       }))

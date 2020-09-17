@@ -1,20 +1,8 @@
 import { custodianCollection, dbName } from '@klonzo/common'
 import * as dotenv from 'dotenv'
 import { Request, Response } from 'express'
+import mysql from 'mysql2/promise'
 dotenv.config()
-
-// http://knexjs.org/#Builder
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const knex = require('knex')({
-  client: 'mysql2',
-  connection: {
-    host: process.env.MYSQL_HOST,
-    user: process.env.MYSQL_USER,
-    password: process.env.MYSQL_ROOT_PASSWORD,
-    database: dbName,
-  },
-})
 
 // HTTP GET /custodians
 export async function getCustodians(
@@ -22,12 +10,17 @@ export async function getCustodians(
   res: Response
 ): Promise<void> {
   try {
-    const custodians = await knex(custodianCollection).orderBy(
-      'custodian_id ',
-      'asc'
+    const connection = await mysql.createConnection({
+      host: process.env.MYSQL_HOST,
+      user: process.env.MYSQL_USER,
+      password: process.env.MYSQL_ROOT_PASSWORD,
+      database: dbName,
+    })
+    const [rows] = await connection.execute(
+      `select * from ${custodianCollection} order by custodian_id asc`
     )
     res.json(
-      custodians.map((custodian) => ({
+      rows.map((custodian) => ({
         id: custodian.custodian_id,
         name: custodian.custodian_name,
         title: custodian.title,

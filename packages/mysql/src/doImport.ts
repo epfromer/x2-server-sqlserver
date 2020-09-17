@@ -14,10 +14,8 @@ import {
   WordCloudTag,
 } from '@klonzo/common'
 import * as dotenv from 'dotenv'
-import { v4 as uuidv4 } from 'uuid'
 import mysql from 'mysql2/promise'
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const knex = require('knex')
+import { v4 as uuidv4 } from 'uuid'
 dotenv.config()
 
 async function run() {

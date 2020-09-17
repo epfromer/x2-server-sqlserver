@@ -16,11 +16,12 @@ export function addToEmailSentByDay(sent: Date, id: string): void {
 export async function processEmailSentByDay(
   insertEmailSentByDay: (words: Array<EmailSentByDay>) => void,
   log?: (msg: string) => void
-  ): Promise<void> {
+): Promise<void> {
   const email: EmailSentByDay[] = []
   emailSentByDay.forEach((value, key) =>
     email.push({ sent: key, emailIds: value })
   )
+  email.sort((a, b) => new Date(a.sent).getTime() - new Date(b.sent).getTime())
   if (log) log('processEmailSentByDay: ' + email.length + ' records')
   await insertEmailSentByDay(email)
 }

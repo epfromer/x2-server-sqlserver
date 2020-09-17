@@ -86,7 +86,7 @@ export async function getAllEmail(req: Request, res: Response): Promise<void> {
     const client = new Client({
       node: `http://${process.env.ELASTIC_HOST}:${process.env.ELASTIC_PORT}`,
     })
-
+    console.log(createSortOrder(req.query))
     const { body } = await client.search({
       index: dbName,
       from: req.query.skip ? +req.query.skip : 0,

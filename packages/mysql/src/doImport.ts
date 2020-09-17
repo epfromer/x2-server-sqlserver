@@ -153,7 +153,6 @@ async function run() {
 
   process.send(`completed ${numEmails} emails`)
   // connection.close()
-  console.log('end of import')
 }
 
 run().catch((err) => console.error(err))

@@ -30,7 +30,10 @@ export async function importPST(req: Request, res: Response): Promise<void> {
         entry: 'mysql: ' + msg,
       })
     )
-    importer.on('close', () => (importing = false))
+    importer.on('close', () => {
+      importing = false
+      console.log('process exit')
+    })
   } catch (err) {
     importing = false
     console.error(err.stack)

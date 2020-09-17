@@ -1,10 +1,16 @@
-import { wordCloudCollection } from '@klonzo/common'
+import { dbName, wordCloudCollection } from '@klonzo/common'
+import * as dotenv from 'dotenv'
 import { Request, Response } from 'express'
-import { db } from './index'
+import * as mongodb from 'mongodb'
+dotenv.config()
 
 // HTTP GET /wordcloud
 export async function getWordCloud(req: Request, res: Response): Promise<void> {
   try {
+    const client = await mongodb.MongoClient.connect(process.env.MONGODB_HOST, {
+      useUnifiedTopology: false,
+    })
+    const db = client.db(dbName)
     const wordCloud = await db.collection(wordCloudCollection).find().toArray()
     res.json(
       wordCloud.map((word) => ({

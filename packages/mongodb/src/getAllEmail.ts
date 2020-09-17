@@ -1,6 +1,13 @@
-import { defaultLimit, emailCollection, HTTPQuery } from '@klonzo/common'
+import {
+  dbName,
+  defaultLimit,
+  emailCollection,
+  HTTPQuery,
+} from '@klonzo/common'
+import * as dotenv from 'dotenv'
 import { Request, Response } from 'express'
-import { db } from './index'
+import * as mongodb from 'mongodb'
+dotenv.config()
 
 interface MongoSent {
   $gte: Date
@@ -77,7 +84,7 @@ const createSearchParams = (httpQuery: HTTPQuery): query => {
     if (queryArr.length) query.$and = queryArr
   }
 
-  console.log(query)
+  // console.log(query)
   return query
 }
 
@@ -95,6 +102,11 @@ const createSortOrder = (httpQuery) => {
 // HTTP GET /email/
 export async function getAllEmail(req: Request, res: Response): Promise<void> {
   try {
+    const client = await mongodb.MongoClient.connect(process.env.MONGODB_HOST, {
+      useUnifiedTopology: false,
+    })
+    const db = client.db(dbName)
+
     const query = createSearchParams(req.query)
 
     const total = await db.collection(emailCollection).countDocuments(query)

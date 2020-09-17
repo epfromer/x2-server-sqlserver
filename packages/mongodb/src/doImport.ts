@@ -6,7 +6,6 @@ import {
   emailCollection,
   EmailSentByDay,
   emailSentByDayCollection,
-  mongodbServer,
   processCustodians,
   processEmailSentByDay,
   processWordCloud,
@@ -20,7 +19,7 @@ dotenv.config()
 
 async function run() {
   process.send(`connect`)
-  const client = await mongodb.MongoClient.connect(mongodbServer, {
+  const client = await mongodb.MongoClient.connect(process.env.MONGODB_HOST, {
     useUnifiedTopology: false,
   })
   const db = client.db(dbName)

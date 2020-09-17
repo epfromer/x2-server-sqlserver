@@ -1,10 +1,16 @@
-import { custodianCollection } from '@klonzo/common'
+import { custodianCollection, dbName } from '@klonzo/common'
+import * as dotenv from 'dotenv'
 import { Request, Response } from 'express'
-import { db } from './index'
+import * as mongodb from 'mongodb'
+dotenv.config()
 
 // HTTP PUT /custodians/:id
 export async function setCustodian(req: Request, res: Response): Promise<void> {
   try {
+    const client = await mongodb.MongoClient.connect(process.env.MONGODB_HOST, {
+      useUnifiedTopology: false,
+    })
+    const db = client.db(dbName)
     await db
       .collection(custodianCollection)
       .findOneAndUpdate({ id: req.params.id }, { $set: req.body })

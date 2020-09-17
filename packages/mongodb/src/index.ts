@@ -1,7 +1,5 @@
-import { dbName, mongodbServer } from '@klonzo/common'
 import * as bodyParser from 'body-parser'
 import * as express from 'express'
-import * as mongodb from 'mongodb'
 import * as morgan from 'morgan'
 import { getAllEmail } from './getAllEmail'
 import { getCustodians } from './getCustodians'
@@ -11,17 +9,7 @@ import { getWordCloud } from './getWordCloud'
 import { importPST, importStatus } from './importPST'
 import { setCustodian } from './setCustodian'
 
-export let db: mongodb.Db
-
-// TODO - test moving connection to each HTTP req
 async function run() {
-  console.log(`connecting to ${mongodbServer}`)
-  const client = await mongodb.MongoClient.connect(mongodbServer, {
-    useUnifiedTopology: true,
-  })
-  db = client.db(dbName)
-  console.log(`connected to ${mongodbServer}`)
-
   const app: express.Application = express.default()
   app.use(morgan.default('dev'))
 

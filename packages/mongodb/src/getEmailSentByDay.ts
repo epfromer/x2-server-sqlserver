@@ -1,6 +1,9 @@
-import { emailSentByDayCollection } from '@klonzo/common'
+import { dbName, emailSentByDayCollection } from '@klonzo/common'
+import * as dotenv from 'dotenv'
 import { Request, Response } from 'express'
-import { db } from './index'
+import * as mongodb from 'mongodb'
+
+dotenv.config()
 
 // HTTP GET /emailsent
 export async function getEmailSentByDay(
@@ -8,6 +11,10 @@ export async function getEmailSentByDay(
   res: Response
 ): Promise<void> {
   try {
+    const client = await mongodb.MongoClient.connect(process.env.MONGODB_HOST, {
+      useUnifiedTopology: false,
+    })
+    const db = client.db(dbName)
     const emailSentByDay = await db
       .collection(emailSentByDayCollection)
       .find()

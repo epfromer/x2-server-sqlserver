@@ -1,6 +1,8 @@
-import { custodianCollection } from '@klonzo/common'
+import { custodianCollection, dbName } from '@klonzo/common'
+import * as dotenv from 'dotenv'
 import { Request, Response } from 'express'
-import { db } from './index'
+import * as mongodb from 'mongodb'
+dotenv.config()
 
 // HTTP GET /custodians
 export async function getCustodians(
@@ -8,6 +10,10 @@ export async function getCustodians(
   res: Response
 ): Promise<void> {
   try {
+    const client = await mongodb.MongoClient.connect(process.env.MONGODB_HOST, {
+      useUnifiedTopology: false,
+    })
+    const db = client.db(dbName)
     const custodians = await db.collection(custodianCollection).find().toArray()
     res.json(
       custodians.map((custodian) => ({

@@ -2,6 +2,7 @@
   "files": [],
   "references": [
     { "path": "packages/common" },
+    { "path": "packages/dynamodb" },
     { "path": "packages/elastic" },
     { "path": "packages/mongodb" },
     { "path": "packages/mysql" },

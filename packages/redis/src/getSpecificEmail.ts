@@ -34,7 +34,7 @@ export async function getSpecificEmail(
       sentShort: new Date(doc.sentStr).toISOString().slice(0, 10),
       from: doc.from,
       fromCustodian: doc.fromCustodian,
-      to: doc.emailto,
+      to: doc.to,
       toCustodians: doc.toCustodians ? doc.toCustodians.split(',') : [],
       cc: doc.cc,
       bcc: doc.bcc,

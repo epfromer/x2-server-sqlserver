@@ -45,7 +45,7 @@ const createSearchParams = (httpQuery: HTTPQuery) => {
   } else {
     // Else, we have specific field searching.
     if (from) query += ` @from|fromCustodian:${from} `
-    if (to) query += ` @emailto|toCustodians|cc|bcc:${to} `
+    if (to) query += ` @to|toCustodians|cc|bcc:${to} `
     if (subject) query += ` @subject:${subject} `
     if (body) query += ` @body:${body} `
   }
@@ -93,7 +93,7 @@ export async function getAllEmail(req: Request, res: Response): Promise<void> {
         sentShort: new Date(doc.sentStr).toISOString().slice(0, 10),
         from: doc.from,
         fromCustodian: doc.fromCustodian,
-        to: doc.emailto,
+        to: doc.to,
         toCustodians: doc.toCustodians ? doc.toCustodians.split(',') : [],
         cc: doc.cc,
         bcc: doc.bcc,

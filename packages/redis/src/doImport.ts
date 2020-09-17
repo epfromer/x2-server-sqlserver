@@ -46,7 +46,7 @@ async function run() {
         email.from,
         'fromCustodian',
         email.fromCustodian,
-        'emailto',
+        'to',
         email.to,
         'toCustodians',
         email.toCustodians.join(','),
@@ -121,7 +121,7 @@ async function run() {
     'SORTABLE',
     'fromCustodian',
     'TEXT',
-    'emailto',
+    'to',
     'TEXT',
     'SORTABLE',
     'toCustodians',
@@ -168,7 +168,7 @@ async function run() {
   await processCustodians(insertCustodians, (msg) => process.send(msg))
 
   process.send(`completed ${numEmails} emails`)
-  // TODO proc not stopping?
+  client.quit()
 }
 
 run().catch((err) => console.error(err))

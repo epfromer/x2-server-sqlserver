@@ -8,33 +8,30 @@ dotenv.config()
 
 async function run() {
   process.send(`connect to dynamodb`)
-  aws.config.update({ region: 'REGION' })
+  aws.config.update({ region: process.env.AWS_REGION })
   const client = new aws.DynamoDB({ endpoint: process.env.AWS_HOST })
 
   const insertEmails = async (emails: Email[]): Promise<void> => {
-    const email = emails[0]
-    // emails.forEach(async (email) => {
-    const row = {
-      Item: {
-        id: { S: uuidv4() },
-        sent: { N: email.sent.getTime().toString() }, // DDB expects string even though a number?
-        from: email.from ? { S: email.from } : { S: ' ' }, // can't have empty strings in DDB!
-        fromCustodian: email.fromCustodian
-          ? { S: email.fromCustodian }
-          : { S: ' ' },
-        to: email.to ? { S: email.to } : { S: ' ' },
-        toCustodians: email.toCustodians
-          ? { S: email.toCustodians.join(',') }
-          : { S: ' ' },
-        cc: email.cc ? { S: email.cc } : { S: ' ' },
-        bcc: email.bcc ? { S: email.bcc } : { S: ' ' },
-        subject: email.subject ? { S: email.subject } : { S: ' ' },
-        body: email.body ? { S: email.body } : { S: ' ' },
-      },
-      TableName: dbName + emailCollection,
-    }
-    await client.putItem(row).promise()
-    // })
+    emails.forEach(async (email) => {
+      const row = {
+        Item: {
+          id: { S: uuidv4() },
+          sent: { N: new Date(email.sent).getTime().toString() }, // DDB expects string even though a number?
+          from: { S: email.from },
+          fromCustodian: { S: email.fromCustodian },
+          to: { S: email.to },
+          toCustodians: email.toCustodians
+            ? { S: email.toCustodians.join(',') }
+            : { S: '' },
+          cc: { S: email.cc },
+          bcc: { S: email.bcc },
+          subject: { S: email.subject },
+          body: { S: email.body },
+        },
+        TableName: dbName + emailCollection,
+      }
+      await client.putItem(row).promise()
+    })
   }
 
   // const insertWordCloud = async (wordCloud: WordCloudTag[]): Promise<void> => {

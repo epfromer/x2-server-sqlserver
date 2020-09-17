@@ -1,7 +1,7 @@
 import * as bodyParser from 'body-parser'
 import * as express from 'express'
 import * as morgan from 'morgan'
-// import { getAllEmail } from './getAllEmail'
+import { getAllEmail } from './getAllEmail'
 // import { getCustodians } from './getCustodians'
 // import { getEmailSentByDay } from './getEmailSentByDay'
 // import { getSpecificEmail } from './getSpecificEmail'
@@ -28,7 +28,7 @@ async function run() {
 
   // set up routes
   // app.route('/').get(getAllEmail)
-  // app.route('/email').get(getAllEmail)
+  app.route('/email').get(getAllEmail)
   // app.route('/email/:id').get(getSpecificEmail)
   // app.route('/emailsentbyday').get(getEmailSentByDay)
   // app.route('/wordcloud').get(getWordCloud)

@@ -6,6 +6,7 @@ import {
   emailCollection,
   EmailSentByDay,
   emailSentByDayCollection,
+  getNumPSTs,
   processCustodians,
   processEmailSentByDay,
   processWordCloud,
@@ -13,12 +14,15 @@ import {
   wordCloudCollection,
   WordCloudTag,
 } from '@klonzo/common'
-import * as dotenv from 'dotenv'
-import mysql from 'mysql2/promise'
+import mysql, { ConnectionConfig } from 'mysql2/promise'
 import { v4 as uuidv4 } from 'uuid'
-dotenv.config()
 
 async function run() {
+  if (!getNumPSTs()) {
+    process.send(`no PSTs found`)
+    return
+  }
+
   const insertEmails = async (emails: Email[]): Promise<void> => {
     const q = `insert into ${emailCollection} (email_id, email_sent, email_from, email_from_sort, email_from_lc, email_from_custodian, email_from_custodian_lc, email_to, email_to_sort, email_to_lc, email_to_custodians, email_to_custodians_lc, email_cc, email_cc_lc, email_bcc, email_bcc_lc, email_subject, email_subject_sort, email_subject_lc, email_body, email_body_lc) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
     emails.forEach(async (email) => {
@@ -80,12 +84,12 @@ async function run() {
     })
   }
 
-  process.send(`connect to mysql`)
+  process.send(`connect to mysql at ${process.env.MYSQL_HOST}`)
   let connection = await mysql.createConnection({
     host: process.env.MYSQL_HOST,
     user: process.env.MYSQL_USER,
     password: process.env.MYSQL_ROOT_PASSWORD,
-  })
+  } as ConnectionConfig)
 
   process.send(`drop database`)
   await connection.execute('drop database if exists ' + dbName)
@@ -93,14 +97,14 @@ async function run() {
   process.send(`create database`)
   await connection.execute('create database ' + dbName)
 
-  connection.close()
+  connection.end()
 
   connection = await mysql.createConnection({
     host: process.env.MYSQL_HOST,
     user: process.env.MYSQL_USER,
     password: process.env.MYSQL_ROOT_PASSWORD,
     database: dbName,
-  })
+  } as ConnectionConfig)
 
   await connection.execute(
     `create table ${emailCollection} (email_id varchar(255), email_sent timestamp, email_from text, email_from_sort varchar(255), email_from_lc text, email_from_custodian text, email_from_custodian_lc text, email_to text, email_to_sort varchar(255), email_to_lc text, email_to_custodians text, email_to_custodians_lc text, email_cc text, email_cc_lc text, email_bcc text, email_bcc_lc text, email_subject text, email_subject_sort varchar(255), email_subject_lc text, email_body text, email_body_lc text)`

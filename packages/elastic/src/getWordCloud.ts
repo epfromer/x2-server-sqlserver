@@ -1,8 +1,6 @@
 import { Client } from '@elastic/elasticsearch'
 import { dbName, wordCloudCollection } from '@klonzo/common'
-import * as dotenv from 'dotenv'
 import { Request, Response } from 'express'
-dotenv.config()
 
 // HTTP GET /wordcloud
 export async function getWordCloud(req: Request, res: Response): Promise<void> {

@@ -1,9 +1,7 @@
 import { ImportLogEntry } from '@klonzo/common'
 import cp from 'child_process'
-import * as dotenv from 'dotenv'
 import { Request, Response } from 'express'
 import { v4 as uuidv4 } from 'uuid'
-dotenv.config()
 
 const log: Array<ImportLogEntry> = []
 let importing = false

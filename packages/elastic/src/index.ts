@@ -8,6 +8,8 @@ import { getSpecificEmail } from './getSpecificEmail'
 import { getWordCloud } from './getWordCloud'
 import { importPST, importStatus } from './importPST'
 import { setCustodian } from './setCustodian'
+import * as dotenv from 'dotenv'
+dotenv.config()
 
 // https://www.elastic.co/blog/new-elasticsearch-javascript-client-released
 // https://www.elastic.co/guide/en/elasticsearch/client/javascript-api/7.x/introduction.html

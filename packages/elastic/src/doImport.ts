@@ -6,6 +6,7 @@ import {
   Email,
   EmailSentByDay,
   emailSentByDayCollection,
+  getNumPSTs,
   processCustodians,
   processEmailSentByDay,
   processWordCloud,
@@ -23,7 +24,14 @@ dotenv.config()
 // http://localhost:9200/x2/_search?q=*
 
 async function run() {
-  process.send(`connect`)
+  if (!getNumPSTs()) {
+    process.send(`no PSTs found`)
+    return
+  }
+
+  process.send(
+    `connect to elastic at http://${process.env.ELASTIC_HOST}:${process.env.ELASTIC_PORT}`
+  )
   const client = new Client({
     node: `http://${process.env.ELASTIC_HOST}:${process.env.ELASTIC_PORT}`,
   })

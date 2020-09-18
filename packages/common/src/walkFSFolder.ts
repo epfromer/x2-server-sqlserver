@@ -71,3 +71,8 @@ export async function walkFSfolder(
 
   return numEmails
 }
+
+// Number of PSTs to process
+export function getNumPSTs(): number {
+  return fs.readdirSync(fsFolder).length
+}

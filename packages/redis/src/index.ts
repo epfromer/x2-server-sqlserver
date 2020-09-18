@@ -8,6 +8,8 @@ import { getSpecificEmail } from './getSpecificEmail'
 import { getWordCloud } from './getWordCloud'
 import { importPST, importStatus } from './importPST'
 import { setCustodian } from './setCustodian'
+import * as dotenv from 'dotenv'
+dotenv.config()
 
 async function run() {
   const app: express.Application = express.default()

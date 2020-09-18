@@ -522,8 +522,8 @@
         "affectsGlobalScope": false
       },
       "./src/walkfsfolder.ts": {
-        "version": "5e03d3661d60693caacfcdc6cd17b33f18836de3babf7647a040aa55675a4d7b",
-        "signature": "26df470754ef22026cc59468323e26f172b05f708654b69021cd51f721f9a6a1",
+        "version": "53430034e0f8ffcbbc316968e6202e580b0b771e0dd5df20a2447065342be369",
+        "signature": "58614d6319097949d2ddb4c7087229e52de5f6c67dfddbb687c7b51f68b9cbb6",
         "affectsGlobalScope": false
       },
       "./src/index.ts": {
@@ -706,6 +706,11 @@
         "signature": "b60af9a543b4d5b123f9162105b9b160858c5074eee087aa6cacb9837e76b563",
         "affectsGlobalScope": false
       },
+      "../../node_modules/@types/mysql/index.d.ts": {
+        "version": "e2ba19c1f9f0f2e48f3d4ff98202f43e1802f530e065f0402086f2ae1c7e5a0a",
+        "signature": "e2ba19c1f9f0f2e48f3d4ff98202f43e1802f530e065f0402086f2ae1c7e5a0a",
+        "affectsGlobalScope": false
+      },
       "../../node_modules/@types/normalize-package-data/index.d.ts": {
         "version": "c9ad058b2cc9ce6dc2ed92960d6d009e8c04bef46d3f5312283debca6869f613",
         "signature": "c9ad058b2cc9ce6dc2ed92960d6d009e8c04bef46d3f5312283debca6869f613",
@@ -872,6 +877,11 @@
       "../../node_modules/@types/morgan/index.d.ts": [
         "../../node_modules/@types/node/http.d.ts",
         "../../node_modules/@types/node/index.d.ts"
+      ],
+      "../../node_modules/@types/mysql/index.d.ts": [
+        "../../node_modules/@types/node/index.d.ts",
+        "../../node_modules/@types/node/stream.d.ts",
+        "../../node_modules/@types/node/tls.d.ts"
       ],
       "../../node_modules/@types/node/base.d.ts": [
         "../../node_modules/@types/node/assert.d.ts",
@@ -1304,6 +1314,11 @@
         "../../node_modules/@types/node/http.d.ts",
         "../../node_modules/@types/node/index.d.ts"
       ],
+      "../../node_modules/@types/mysql/index.d.ts": [
+        "../../node_modules/@types/node/index.d.ts",
+        "../../node_modules/@types/node/stream.d.ts",
+        "../../node_modules/@types/node/tls.d.ts"
+      ],
       "../../node_modules/@types/node/base.d.ts": [
         "../../node_modules/@types/node/assert.d.ts",
         "../../node_modules/@types/node/ts3.6/base.d.ts"
@@ -1661,6 +1676,7 @@
       "../../node_modules/@types/minimist/index.d.ts",
       "../../node_modules/@types/mongodb/index.d.ts",
       "../../node_modules/@types/morgan/index.d.ts",
+      "../../node_modules/@types/mysql/index.d.ts",
       "../../node_modules/@types/node/assert.d.ts",
       "../../node_modules/@types/node/async_hooks.d.ts",
       "../../node_modules/@types/node/base.d.ts",

@@ -1,8 +1,6 @@
 import { Client } from '@elastic/elasticsearch'
 import { dbName, defaultLimit } from '@klonzo/common'
-import * as dotenv from 'dotenv'
 import { Request, Response } from 'express'
-dotenv.config()
 
 const createSearchParams = (httpQuery) => {
   // console.log(httpQuery)

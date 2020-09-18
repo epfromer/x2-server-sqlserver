@@ -1,8 +1,6 @@
 import { Client } from '@elastic/elasticsearch'
 import { dbName } from '@klonzo/common'
-import * as dotenv from 'dotenv'
 import { Request, Response } from 'express'
-dotenv.config()
 
 // HTTP GET /email/<id>
 export async function getSpecificEmail(

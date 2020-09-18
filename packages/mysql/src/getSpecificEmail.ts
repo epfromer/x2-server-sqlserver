@@ -1,8 +1,6 @@
 import { dbName, emailCollection } from '@klonzo/common'
-import * as dotenv from 'dotenv'
 import { Request, Response } from 'express'
-import mysql from 'mysql2/promise'
-dotenv.config()
+import mysql, { ConnectionConfig } from 'mysql2/promise'
 
 // HTTP GET /email/<id>
 export async function getSpecificEmail(
@@ -15,7 +13,7 @@ export async function getSpecificEmail(
       user: process.env.MYSQL_USER,
       password: process.env.MYSQL_ROOT_PASSWORD,
       database: dbName,
-    })
+    } as ConnectionConfig)
     const [rows] = await connection.execute(
       `select * from ${emailCollection} where email_id = '${req.params.id}'`
     )

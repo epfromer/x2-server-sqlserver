@@ -4,10 +4,8 @@ import {
   emailCollection,
   HTTPQuery,
 } from '@klonzo/common'
-import * as dotenv from 'dotenv'
 import { Request, Response } from 'express'
 import { Pool } from 'pg'
-dotenv.config()
 
 const createWhereClause = (httpQuery: HTTPQuery) => {
   // console.log(httpQuery)

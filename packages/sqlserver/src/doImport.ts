@@ -6,6 +6,7 @@ import {
   emailCollection,
   EmailSentByDay,
   emailSentByDayCollection,
+  getNumPSTs,
   processCustodians,
   processEmailSentByDay,
   processWordCloud,
@@ -13,12 +14,15 @@ import {
   wordCloudCollection,
   WordCloudTag,
 } from '@klonzo/common'
-import * as dotenv from 'dotenv'
 import sql from 'mssql'
 import { v4 as uuidv4 } from 'uuid'
-dotenv.config()
 
 async function run() {
+  if (!getNumPSTs()) {
+    process.send(`no PSTs found`)
+    return
+  }
+
   const connect = async () =>
     await sql.connect({
       server: process.env.SQL_HOST,
@@ -176,7 +180,7 @@ async function run() {
     return pool.close()
   }
 
-  process.send(`connect to sqlserver`)
+  process.send(`connect to sqlserver at ${process.env.SQL_HOST}`)
   const pool = await sql.connect({
     server: process.env.SQL_HOST,
     user: process.env.SQL_USER,

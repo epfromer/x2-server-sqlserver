@@ -6,6 +6,7 @@ import {
   emailCollection,
   EmailSentByDay,
   emailSentByDayCollection,
+  getNumPSTs,
   processCustodians,
   processEmailSentByDay,
   processWordCloud,
@@ -13,12 +14,15 @@ import {
   wordCloudCollection,
   WordCloudTag,
 } from '@klonzo/common'
-import * as dotenv from 'dotenv'
 import * as mongodb from 'mongodb'
-dotenv.config()
 
 async function run() {
-  process.send(`connect`)
+  if (!getNumPSTs()) {
+    process.send(`no PSTs found`)
+    return
+  }
+
+  process.send(`connect to mongodb at ${process.env.MONGODB_HOST}`)
   const client = await mongodb.MongoClient.connect(process.env.MONGODB_HOST, {
     useUnifiedTopology: false,
   })

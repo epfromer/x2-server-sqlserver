@@ -1,11 +1,8 @@
 import { dbName, emailSentByDayCollection } from '@klonzo/common'
-import * as dotenv from 'dotenv'
 import { Request, Response } from 'express'
 import * as mongodb from 'mongodb'
 
-dotenv.config()
-
-// HTTP GET /emailsent
+// HTTP GET /emailsentbyday
 export async function getEmailSentByDay(
   req: Request,
   res: Response

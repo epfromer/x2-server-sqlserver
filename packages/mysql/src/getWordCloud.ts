@@ -1,8 +1,6 @@
 import { dbName, wordCloudCollection } from '@klonzo/common'
-import * as dotenv from 'dotenv'
 import { Request, Response } from 'express'
-import mysql from 'mysql2/promise'
-dotenv.config()
+import mysql, { ConnectionConfig } from 'mysql2/promise'
 
 // HTTP GET /wordcloud
 export async function getWordCloud(req: Request, res: Response): Promise<void> {
@@ -12,11 +10,13 @@ export async function getWordCloud(req: Request, res: Response): Promise<void> {
       user: process.env.MYSQL_USER,
       password: process.env.MYSQL_ROOT_PASSWORD,
       database: dbName,
-    })
+    } as ConnectionConfig)
     const [rows] = await connection.execute(
       `select * from ${wordCloudCollection}`
     )
     res.json(
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       rows.map((word) => ({
         tag: word.tag,
         weight: word.weight,

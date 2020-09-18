@@ -1,8 +1,6 @@
 import { dbName, emailCollection } from '@klonzo/common'
-import * as dotenv from 'dotenv'
 import { Request, Response } from 'express'
 import sql from 'mssql'
-dotenv.config()
 
 // HTTP GET /email/<id>
 export async function getSpecificEmail(

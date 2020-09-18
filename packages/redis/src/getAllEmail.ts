@@ -4,14 +4,12 @@ import {
   emailCollection,
   HTTPQuery,
 } from '@klonzo/common'
-import * as dotenv from 'dotenv'
 import { Request, Response } from 'express'
 import redis from 'redis'
 import redisearch from 'redis-redisearch'
 import { promisify } from 'util'
 
 redisearch(redis)
-dotenv.config()
 
 // https://oss.redislabs.com/redisearch/Commands.html#ftsearch
 // https://oss.redislabs.com/redisearch/Query_Syntax.html#a_few_query_examples

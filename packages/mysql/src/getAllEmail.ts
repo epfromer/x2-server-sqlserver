@@ -4,10 +4,8 @@ import {
   emailCollection,
   HTTPQuery,
 } from '@klonzo/common'
-import * as dotenv from 'dotenv'
 import { Request, Response } from 'express'
-import mysql from 'mysql2/promise'
-dotenv.config()
+import mysql, { ConnectionConfig } from 'mysql2/promise'
 
 const createWhereClause = (httpQuery: HTTPQuery) => {
   // console.log(httpQuery)
@@ -116,12 +114,14 @@ export async function getAllEmail(req: Request, res: Response): Promise<void> {
       user: process.env.MYSQL_USER,
       password: process.env.MYSQL_ROOT_PASSWORD,
       database: dbName,
-    })
+    } as ConnectionConfig)
     const [rows] = await connection.execute(q)
     const [resultTotal] = await connection.execute(qTotal)
 
     res.json({
       total: +resultTotal[0].total,
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       emails: rows.map((email) => ({
         id: email.email_id,
         sent: email.email_sent,

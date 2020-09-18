@@ -6,6 +6,7 @@ import {
   emailCollection,
   EmailSentByDay,
   emailSentByDayCollection,
+  getNumPSTs,
   processCustodians,
   processEmailSentByDay,
   processWordCloud,
@@ -13,17 +14,20 @@ import {
   wordCloudCollection,
   WordCloudTag,
 } from '@klonzo/common'
-import * as dotenv from 'dotenv'
 import redis from 'redis'
 import redisearch from 'redis-redisearch'
 import { promisify } from 'util'
 import { v4 as uuidv4 } from 'uuid'
 
 redisearch(redis)
-dotenv.config()
 
 async function run() {
-  process.send(`connect to redis`)
+  if (!getNumPSTs()) {
+    process.send(`no PSTs found`)
+    return
+  }
+
+  process.send(`connect to redis at localhost`)
   const client = redis.createClient()
 
   const ftDropAsync = promisify(client.ft_drop).bind(client)

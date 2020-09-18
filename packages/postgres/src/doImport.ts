@@ -3,18 +3,22 @@ import {
   dbName,
   emailCollection,
   emailSentByDayCollection,
+  getNumPSTs,
   processCustodians,
   processEmailSentByDay,
   processWordCloud,
   walkFSfolder,
   wordCloudCollection,
 } from '@klonzo/common'
-import * as dotenv from 'dotenv'
 import { Pool } from 'pg'
 import { v4 as uuidv4 } from 'uuid'
-dotenv.config()
 
 async function run() {
+  if (!getNumPSTs()) {
+    process.send(`no PSTs found`)
+    return
+  }
+
   const insertEmails = async (emails) => {
     const pool = new Pool({ database: dbName })
     const q = `insert into ${emailCollection} (email_id, email_sent, email_from, email_from_lc, email_from_custodian, email_from_custodian_lc, email_to, email_to_lc, email_to_custodians, email_to_custodians_lc, email_cc, email_cc_lc, email_bcc, email_bcc_lc, email_subject, email_subject_lc, email_body, email_body_lc) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18)`
@@ -75,7 +79,7 @@ async function run() {
     })
   }
 
-  process.send(`connect to postgres`)
+  process.send(`connect to postgres at ${process.env.PGHOST}`)
   let pool = new Pool()
 
   process.send(`drop database`)

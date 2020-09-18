@@ -1,9 +1,8 @@
 import { Client } from '@elastic/elasticsearch'
 import { dbName, emailSentByDayCollection } from '@klonzo/common'
-import * as dotenv from 'dotenv'
 import { Request, Response } from 'express'
-dotenv.config()
 
+// HTTP GET /emailsentbyday
 export async function getEmailSent(eq: Request, res: Response): Promise<void> {
   try {
     const client = new Client({

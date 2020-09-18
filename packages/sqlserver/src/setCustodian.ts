@@ -1,8 +1,6 @@
 import { custodianCollection, dbName } from '@klonzo/common'
-import * as dotenv from 'dotenv'
 import { Request, Response } from 'express'
 import sql from 'mssql'
-dotenv.config()
 
 // HTTP PUT /custodians/:id
 export async function setCustodian(req: Request, res: Response): Promise<void> {

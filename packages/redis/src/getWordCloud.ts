@@ -1,12 +1,10 @@
 import { dbName, wordCloudCollection } from '@klonzo/common'
-import * as dotenv from 'dotenv'
 import { Request, Response } from 'express'
 import redis from 'redis'
 import redisearch from 'redis-redisearch'
 import { promisify } from 'util'
 
 redisearch(redis)
-dotenv.config()
 
 // https://oss.redislabs.com/redisearch/Commands.html#ftget
 const client = redis.createClient()

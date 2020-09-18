@@ -1,8 +1,6 @@
 import { custodianCollection, dbName } from '@klonzo/common'
-import * as dotenv from 'dotenv'
 import { Request, Response } from 'express'
-import mysql from 'mysql2/promise'
-dotenv.config()
+import mysql, { ConnectionConfig } from 'mysql2/promise'
 
 // HTTP GET /custodians
 export async function getCustodians(
@@ -15,11 +13,13 @@ export async function getCustodians(
       user: process.env.MYSQL_USER,
       password: process.env.MYSQL_ROOT_PASSWORD,
       database: dbName,
-    })
+    } as ConnectionConfig)
     const [rows] = await connection.execute(
       `select * from ${custodianCollection} order by custodian_id asc`
     )
     res.json(
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       rows.map((custodian) => ({
         id: custodian.custodian_id,
         name: custodian.custodian_name,

@@ -1,11 +1,8 @@
 import { dbName, emailSentByDayCollection } from '@klonzo/common'
-import * as dotenv from 'dotenv'
-import mysql from 'mysql2/promise'
+import mysql, { ConnectionConfig } from 'mysql2/promise'
 import { Request, Response } from 'express'
-dotenv.config()
 
-
-// HTTP GET /emailsent
+// HTTP GET /emailsentbyday
 export async function getEmailSentByDay(
   req: Request,
   res: Response
@@ -16,11 +13,13 @@ export async function getEmailSentByDay(
       user: process.env.MYSQL_USER,
       password: process.env.MYSQL_ROOT_PASSWORD,
       database: dbName,
-    })
+    } as ConnectionConfig)
     const [rows] = await connection.execute(
       `select * from ${emailSentByDayCollection} order by day_sent asc`
     )
     res.json(
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       rows.map((day) => ({
         sent: day.day_sent,
         emailIds: day.email_ids.split(','),

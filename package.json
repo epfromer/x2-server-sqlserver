@@ -14,7 +14,6 @@
   "scripts": {
     "clean": "lerna clean",
     "build": "tsc --build --verbose",
-    "watch:dynamodb": "lerna run --scope @klonzo/dynamodb watch --stream",
     "watch:elastic": "lerna run --scope @klonzo/elastic watch --stream",
     "watch:mongodb": "lerna run --scope @klonzo/mongodb watch --stream",
     "watch:mysql": "lerna run --scope @klonzo/mysql watch --stream",

@@ -24,7 +24,7 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "morgan": "^1.10.0",
-    "pst-extractor": "^1.6.0",
+    "pst-extractor": "^1.7.0",
     "redis": "^3.0.2",
     "redis-redisearch": "^1.0.1",
     "uuid": "^8.3.0"

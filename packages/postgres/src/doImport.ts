@@ -44,6 +44,7 @@ async function run() {
         email.body.toLowerCase(),
       ])
     })
+    await pool.end()
   }
 
   const insertWordCloud = async (wordCloud) => {
@@ -52,6 +53,7 @@ async function run() {
     wordCloud.forEach(async (word) => {
       await pool.query(q, [word.tag, word.weight])
     })
+    await pool.end()
   }
 
   const insertEmailSentByDay = async (emailSentByDay) => {
@@ -60,6 +62,7 @@ async function run() {
     emailSentByDay.forEach(async (day) => {
       await pool.query(q, [day.sent, day.emailIds.join(',')])
     })
+    await pool.end()
   }
 
   const insertCustodians = async (custodians) => {
@@ -77,6 +80,7 @@ async function run() {
         JSON.stringify(custodian.fromCustodians),
       ])
     })
+    await pool.end()
   }
 
   process.send(`connect to postgres at ${process.env.PGHOST}`)
@@ -95,6 +99,7 @@ async function run() {
 
   process.send(`create database`)
   await pool.query('create database ' + dbName)
+  await pool.end()
 
   pool = new Pool({ database: dbName })
   await pool.query(
@@ -121,6 +126,7 @@ async function run() {
   await pool.query(
     `alter table ${custodianCollection} add constraint custodians_pkey primary key (custodian_id)`
   )
+  await pool.end()
 
   process.send(`process emails`)
   const numEmails = await walkFSfolder(insertEmails, (msg) => process.send(msg))

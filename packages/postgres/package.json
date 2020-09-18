@@ -25,7 +25,7 @@
     "express": "^4.17.1",
     "morgan": "^1.10.0",
     "pg": "^8.3.3",
-    "pst-extractor": "^1.6.0",
+    "pst-extractor": "^1.7.0",
     "uuid": "^8.3.0"
   },
   "devDependencies": {

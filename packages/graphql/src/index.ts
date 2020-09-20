@@ -33,6 +33,7 @@ const wordCloud = [
   },
 ]
 
+/*
 const WordCloudType = new GraphQLObjectType({
   name: 'word',
   fields: () => ({
@@ -52,18 +53,28 @@ const queryType = new GraphQLObjectType({
 })
 
 const schema = new GraphQLSchema({ query: queryType })
+*/
 
-// const schema = buildSchema(`
-//   type Query {
-//     hello: String
-//   }
-// `)
+const schema = buildSchema(`
+  type Word {
+    tag: String
+    weight: Int
+  }
+  type Query {
+    words: [Word]
+  }
+`)
+
+const root = {
+  words: () => wordCloud,
+}
 
 const app = express()
 app.use(
   '/graphql',
   graphqlHTTP({
     schema: schema,
+    rootValue: root,
     graphiql: true,
   })
 )

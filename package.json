@@ -15,6 +15,7 @@
     "clean": "lerna clean",
     "build": "tsc --build --verbose",
     "watch:elastic": "lerna run --scope @klonzo/elastic watch --stream",
+    "watch:graphql": "lerna run --scope @klonzo/graphql watch --stream",
     "watch:mongodb": "lerna run --scope @klonzo/mongodb watch --stream",
     "watch:mysql": "lerna run --scope @klonzo/mysql watch --stream",
     "watch:postgres": "lerna run --scope @klonzo/postgres watch --stream",

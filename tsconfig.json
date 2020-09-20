@@ -3,6 +3,7 @@
   "references": [
     { "path": "packages/common" },
     { "path": "packages/elastic" },
+    { "path": "packages/graphql" },
     { "path": "packages/mongodb" },
     { "path": "packages/mysql" },
     { "path": "packages/postgres" },

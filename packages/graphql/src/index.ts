@@ -61,12 +61,14 @@ const schema = buildSchema(`
     weight: Int
   }
   type Query {
-    words: [Word]
+    getWord(word: String): Word
+    getWordCloud: [Word]
   }
 `)
 
 const root = {
-  words: () => wordCloud,
+  getWord: ({ word }) => wordCloud.find((w) => w.tag === word),
+  getWordCloud: () => wordCloud,
 }
 
 const app = express()

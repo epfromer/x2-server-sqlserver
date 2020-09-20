@@ -1,75 +1,31 @@
+import * as dotenv from 'dotenv'
 import express from 'express'
 import { graphqlHTTP } from 'express-graphql'
-import {
-  buildSchema,
-  GraphQLObjectType,
-  GraphQLString,
-  GraphQLInt,
-  GraphQLList,
-  GraphQLSchema,
-} from 'graphql'
-import * as dotenv from 'dotenv'
+import root from './root'
+import schema from './schema'
+
 dotenv.config()
 
-// TODO https://docs.mongodb.com/realm/graphql/
-// TODO https://www.compose.com/articles/using-graphql-with-mongodb/
-
-const wordCloud = [
-  {
-    tag: 'avici',
-    weight: 32,
-  },
-  {
-    tag: 'azurix',
-    weight: 523,
-  },
-  {
-    tag: 'backbone',
-    weight: 150,
-  },
-  {
-    tag: 'braveheart',
-    weight: 29,
-  },
-]
-
 /*
-const WordCloudType = new GraphQLObjectType({
-  name: 'word',
-  fields: () => ({
-    tag: { type: GraphQLString },
-    weight: { type: GraphQLInt },
-  }),
-})
-
-const queryType = new GraphQLObjectType({
-  name: 'Query',
-  fields: () => ({
-    words: {
-      type: new GraphQLList(WordCloudType),
-      resolve: () => wordCloud,
-    },
-  }),
-})
-
-const schema = new GraphQLSchema({ query: queryType })
+  TODO
+  - get all initial data (wordcloud, emailsentbyday, custodians, etc) in one call
+  - tools to create schema (codegen)
+  - vscode tools
+  - leverage tools built into dbs: MongoDB 
+    - https://docs.mongodb.com/realm/graphql/
+    - https://www.compose.com/articles/using-graphql-with-mongodb/
 */
 
-const schema = buildSchema(`
-  type Word {
-    tag: String
-    weight: Int
-  }
-  type Query {
-    getWord(word: String): Word
-    getWordCloud: [Word]
-  }
-`)
-
-const root = {
-  getWord: ({ word }) => wordCloud.find((w) => w.tag === word),
-  getWordCloud: () => wordCloud,
-}
+/*
+{getWord(word: "avici") {
+  tag
+  weight
+}}
+{getWordCloud {
+  tag
+  weight
+}}
+*/
 
 const app = express()
 app.use(
@@ -80,4 +36,6 @@ app.use(
     graphiql: true,
   })
 )
-app.listen(4000, () => console.log('Now browse to localhost:4000/graphql'))
+
+const port = process.env.PORT || 3000
+app.listen(port, () => console.log(`running on PORT: ${port}`))

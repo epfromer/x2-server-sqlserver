@@ -6,8 +6,7 @@ const schema = buildSchema(`
     weight: Int
   }
   type Query {
-    getWord(word: String): Word
-    getWordCloud: [Word]
+    wordcloud: [Word]
   }
 `)
 

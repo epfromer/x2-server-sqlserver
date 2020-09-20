@@ -427,8 +427,8 @@
         "affectsGlobalScope": false
       },
       "../../node_modules/pst-extractor/dist/pstnodeinputstream.class.d.ts": {
-        "version": "5a784d7e1064177134abe1a91f787b1c95d8ba12921424d072a2379837b28219",
-        "signature": "5a784d7e1064177134abe1a91f787b1c95d8ba12921424d072a2379837b28219",
+        "version": "49f2fb3c767e85f933c08c65921b14d2011ebfb4b3ba91984408f72cd71284f7",
+        "signature": "49f2fb3c767e85f933c08c65921b14d2011ebfb4b3ba91984408f72cd71284f7",
         "affectsGlobalScope": false
       },
       "../../node_modules/pst-extractor/dist/nodeinfo.class.d.ts": {
@@ -511,6 +511,11 @@
         "signature": "f5a0b67d731ee51ed9bd0d9d24f61ef73cf2408d146904a62ac0bc2c7576f9c7",
         "affectsGlobalScope": false
       },
+      "./src/testdata.ts": {
+        "version": "35b010645f85eb88b000b4968f433e669083f4b7f5e5cb5ec25582db2f2f3342",
+        "signature": "80362d8d761e3140897ac42d5ef843b46a4ff583bbf2fe2a62a10780fee0d497",
+        "affectsGlobalScope": false
+      },
       "../../node_modules/@types/uuid/index.d.ts": {
         "version": "96b49a9de749afcf92b5bce1d8cc42cfae6816cdf5ea36584fd9256b8b2e5292",
         "signature": "96b49a9de749afcf92b5bce1d8cc42cfae6816cdf5ea36584fd9256b8b2e5292",
@@ -527,8 +532,8 @@
         "affectsGlobalScope": false
       },
       "./src/index.ts": {
-        "version": "4768710f509a9be93f00dd80294c89d16555cb607ff7adefe53aee4dfd8faa44",
-        "signature": "1090d516f5f1f537bf4bea98bba93b2c5326b753a5502bbf08c769329193ac54",
+        "version": "4b7fb286cb665e2b44799357dccd62621bbe0a6f1823b8e5531c3fdb454ef473",
+        "signature": "7fe106b1b22efb1bac8ced666e7e424e71fa69800e73472e96357bb8ab996982",
         "affectsGlobalScope": false
       },
       "../../node_modules/@babel/types/lib/index.d.ts": {
@@ -1182,6 +1187,7 @@
         "./src/processcustodians.ts",
         "./src/processemailsent.ts",
         "./src/processwordcloud.ts",
+        "./src/testdata.ts",
         "./src/types.ts",
         "./src/walkfsfolder.ts"
       ],
@@ -1212,6 +1218,9 @@
       ],
       "./src/terms.ts": [
         "../../node_modules/pst-extractor/dist/index.d.ts"
+      ],
+      "./src/testdata.ts": [
+        "./src/types.ts"
       ],
       "./src/walkfsfolder.ts": [
         "../../node_modules/@types/node/fs.d.ts",
@@ -1618,6 +1627,7 @@
         "./src/processcustodians.ts",
         "./src/processemailsent.ts",
         "./src/processwordcloud.ts",
+        "./src/testdata.ts",
         "./src/types.ts",
         "./src/walkfsfolder.ts"
       ],
@@ -1637,6 +1647,9 @@
       ],
       "./src/terms.ts": [
         "../../node_modules/pst-extractor/dist/index.d.ts"
+      ],
+      "./src/testdata.ts": [
+        "./src/types.ts"
       ],
       "./src/walkfsfolder.ts": [
         "./src/types.ts"
@@ -1793,6 +1806,7 @@
       "./src/processemailsent.ts",
       "./src/processwordcloud.ts",
       "./src/terms.ts",
+      "./src/testdata.ts",
       "./src/types.ts",
       "./src/walkfsfolder.ts"
     ]

@@ -17,17 +17,6 @@ dotenv.config()
     - https://www.compose.com/articles/using-graphql-with-mongodb/
 */
 
-/*
-{getWord(word: "avici") {
-  tag
-  weight
-}}
-{getWordCloud {
-  tag
-  weight
-}}
-*/
-
 const app = express()
 app.use(cors())
 app.use(

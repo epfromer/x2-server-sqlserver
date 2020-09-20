@@ -13,7 +13,7 @@ export interface Email {
 }
 
 export interface EmailSentByDay {
-  sent: Date
+  sent: Date | string
   emailIds: string[]
 }
 

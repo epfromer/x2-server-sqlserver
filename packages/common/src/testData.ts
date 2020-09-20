@@ -64,18 +64,18 @@ export const testCustodians: Array<Custodian> = [
 
 export const testEmailSentByDay: Array<EmailSentByDay> = [
   {
-    sent: new Date('1999-01-06'),
+    sent: '1999-01-06',
     emailIds: ['156f2431-d496-4c5f-832c-c2ea8af75d1c'],
   },
   {
-    sent: new Date('1999-01-07'),
+    sent: '1999-01-07',
     emailIds: [
       'bcb82244-1113-4d31-a992-e790c37b6e97',
       'e545749b-4f9f-43ef-8781-592e06aeb69e',
     ],
   },
   {
-    sent: new Date('1999-01-08'),
+    sent: '1999-01-08',
     emailIds: ['a5880429-906f-4cd4-8a22-849722e44445'],
   },
 ]

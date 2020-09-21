@@ -1,4 +1,5 @@
 export * from './constants'
+export * from './graphqlSchema'
 export * from './misc'
 export * from './processCustodians'
 export * from './processEmailSent'

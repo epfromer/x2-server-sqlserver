@@ -1,6 +1,6 @@
 import { buildSchema } from 'graphql'
 
-const schema = buildSchema(`
+export const graphqlSchema = buildSchema(`
   type Word {
     tag: String
     weight: Int
@@ -58,5 +58,3 @@ const schema = buildSchema(`
     email(id: ID, skip: Int, limit: Int = 20): EmailTotal
   }
 `)
-
-export default schema

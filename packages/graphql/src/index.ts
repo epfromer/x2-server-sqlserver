@@ -1,16 +1,15 @@
+import { graphqlSchema } from '@klonzo/common'
 import cors from 'cors'
 import * as dotenv from 'dotenv'
 import express from 'express'
 import { graphqlHTTP } from 'express-graphql'
-import root from './root'
-import schema from './schema'
 import * as morgan from 'morgan'
+import root from './root'
 
 dotenv.config()
 
 /*
   TODO
-  - get all initial data (wordcloud, emailsentbyday, custodians, etc) in one call
   - tools to create schema (codegen)
   - vscode tools
   - leverage tools built into dbs: MongoDB 
@@ -24,7 +23,7 @@ app.use(cors())
 app.use(
   '/graphql',
   graphqlHTTP({
-    schema: schema,
+    schema: graphqlSchema,
     rootValue: root,
     graphiql: true,
     customFormatErrorFn: (error) => ({

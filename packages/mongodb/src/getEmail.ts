@@ -2,9 +2,9 @@ import {
   dbName,
   defaultLimit,
   emailCollection,
+  EmailTotal,
   HTTPQuery,
 } from '@klonzo/common'
-import { Request, Response } from 'express'
 import * as mongodb from 'mongodb'
 
 interface MongoSent {
@@ -92,40 +92,27 @@ const createSortOrder = (httpQuery) => {
   }
   const sort: Sort = {}
   if (httpQuery.sort) {
-    sort[httpQuery.sort as string] = httpQuery.order === '1' ? 1 : -1
+    sort[httpQuery.sort as string] = httpQuery.order === 1 ? 1 : -1
   }
   return sort
 }
 
-// HTTP GET /email/
-export async function getAllEmail(req: Request, res: Response): Promise<void> {
+export async function getEmail(httpQuery: HTTPQuery): Promise<EmailTotal> {
   try {
+    console.log('httpQuery', httpQuery)
     const client = await mongodb.MongoClient.connect(process.env.MONGODB_HOST, {
       useUnifiedTopology: false,
     })
     const db = client.db(dbName)
-
-    const query = createSearchParams(req.query)
-
+    const query = createSearchParams(httpQuery)
     const total = await db.collection(emailCollection).countDocuments(query)
-
-    let emails
-    if (createSortOrder(req.query)) {
-      emails = await db
-        .collection(emailCollection)
-        .find(query)
-        .sort(createSortOrder(req.query))
-        .skip(req.query.skip ? +req.query.skip : 0)
-        .limit(req.query.limit ? +req.query.limit : defaultLimit)
-        .toArray()
-    } else {
-      emails = await db
-        .collection(emailCollection)
-        .find(query)
-        .skip(req.query.skip ? +req.query.skip : 0)
-        .limit(req.query.limit ? +req.query.limit : defaultLimit)
-        .toArray()
-    }
+    let emails = await db
+      .collection(emailCollection)
+      .find(query)
+      .sort(createSortOrder(httpQuery))
+      .skip(httpQuery.skip ? +httpQuery.skip : 0)
+      .limit(httpQuery.limit ? +httpQuery.limit : defaultLimit)
+      .toArray()
 
     emails = emails.map((email) => ({
       id: email.id,
@@ -141,12 +128,11 @@ export async function getAllEmail(req: Request, res: Response): Promise<void> {
       body: email.body,
     }))
 
-    res.json({
+    return {
       total,
       emails,
-    })
+    }
   } catch (err) {
     console.error(err.stack)
-    res.status(500).send(err.msg)
   }
 }

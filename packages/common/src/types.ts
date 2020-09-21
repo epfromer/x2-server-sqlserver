@@ -12,6 +12,11 @@ export interface Email {
   body: string
 }
 
+export interface EmailTotal {
+  emails: Array<Email>
+  total: number
+}
+
 export interface EmailSentByDay {
   sent: Date | string
   emailIds: string[]
@@ -45,6 +50,8 @@ export interface WordCloudTag {
 }
 
 export interface HTTPQuery {
+  skip?: number
+  limit?: number
   sort?: string
   order?: number
   sent?: string

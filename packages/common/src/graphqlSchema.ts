@@ -52,9 +52,9 @@ export const graphqlSchema = buildSchema(`
   }
 
   type Query {
-    wordcloud: [Word]
-    emailsentbyday: [EmailSentByDay]
-    custodians: [Custodian]
-    email(id: ID, skip: Int, limit: Int = 20): EmailTotal
+    getWordCloud: [Word]
+    getEmailSentByDay: [EmailSentByDay]
+    getCustodians: [Custodian]
+    getEmail(id: ID, skip: Int = 0, limit: Int = 20, sort: String = "sent", order: Int = 1): EmailTotal
   }
 `)

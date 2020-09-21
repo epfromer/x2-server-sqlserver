@@ -7,6 +7,7 @@ import {
   testEmailSentByDay,
   testWordCloud,
   WordCloudTag,
+  sleep,
 } from '@klonzo/common'
 
 interface EmailTotal {
@@ -19,14 +20,15 @@ interface Root {
   emailsentbyday: () => Array<EmailSentByDay>
   custodians: () => Array<Custodian>
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  email: (foo: any) => EmailTotal
+  email: (foo: any) => Promise<EmailTotal>
 }
 export const root: Root = {
   wordcloud: () => testWordCloud,
   emailsentbyday: () => testEmailSentByDay,
   custodians: () => testCustodians,
-  email: (foo) => {
+  email: async (foo) => {
     console.log('foo', foo)
+    await sleep(4000)
     return { emails: testEmail, total: 3 }
   },
 }

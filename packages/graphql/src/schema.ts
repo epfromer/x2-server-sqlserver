@@ -46,10 +46,16 @@ const schema = buildSchema(`
     body: String
   }
 
+  type EmailTotal {
+    emails: [Email]
+    total: Int
+  }
+
   type Query {
     wordcloud: [Word]
     emailsentbyday: [EmailSentByDay]
     custodians: [Custodian]
+    email(id: ID, skip: Int, limit: Int = 20): EmailTotal
   }
 `)
 

@@ -4,6 +4,7 @@ import express from 'express'
 import { graphqlHTTP } from 'express-graphql'
 import root from './root'
 import schema from './schema'
+import * as morgan from 'morgan'
 
 dotenv.config()
 
@@ -18,6 +19,7 @@ dotenv.config()
 */
 
 const app = express()
+app.use(morgan.default('dev'))
 app.use(cors())
 app.use(
   '/graphql',
@@ -25,6 +27,12 @@ app.use(
     schema: schema,
     rootValue: root,
     graphiql: true,
+    customFormatErrorFn: (error) => ({
+      message: error.message,
+      locations: error.locations,
+      stack: error.stack ? error.stack.split('\n') : [],
+      path: error.path,
+    }),
   })
 )
 

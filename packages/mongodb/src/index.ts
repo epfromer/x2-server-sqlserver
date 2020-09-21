@@ -3,12 +3,10 @@ import cors from 'cors'
 import * as dotenv from 'dotenv'
 import express from 'express'
 import { graphqlHTTP } from 'express-graphql'
-import * as morgan from 'morgan'
 import root from './root'
 dotenv.config()
 
 const app = express()
-app.use(morgan.default('dev'))
 app.use(cors())
 app.use(
   '/graphql',

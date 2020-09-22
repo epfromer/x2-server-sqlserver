@@ -1,5 +1,4 @@
 // Common vars
-export const fsFolder = 'c:/github/outlook/'
 export const dbName = 'x2'
 export const defaultLimit = 50
 export const onlyHot = true

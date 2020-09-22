@@ -17,12 +17,14 @@ import {
 import * as mongodb from 'mongodb'
 
 async function run() {
+  console.log(process.argv)
+
   if (!getNumPSTs()) {
-    process.send(`no PSTs found`)
+    process.send(`no PSTs found in ${process.argv[2]}`)
     return
   }
 
-  process.send(`connect to mongodb at ${process.env.MONGODB_HOST}`)
+  process.send(`connect to ${process.env.MONGODB_HOST}`)
   const client = await mongodb.MongoClient.connect(process.env.MONGODB_HOST, {
     useUnifiedTopology: false,
   })
@@ -64,7 +66,7 @@ async function run() {
   process.send(`create index`)
   await db.collection(emailCollection).createIndex({ '$**': 'text' })
 
-  process.send(`completed ${numEmails} emails`)
+  process.send(`completed ${numEmails} emails in ${process.argv[2]}`)
   client.close()
 }
 

@@ -11,7 +11,7 @@ export function importPST(httpQuery: HTTPQuery): string {
   importing = true
 
   // fork long duration processing task
-  const importer = cp.fork('./src/doImport.ts', [], {
+  const importer = cp.fork('./src/doImport.ts', [httpQuery.loc], {
     execArgv: ['-r', 'ts-node/register'],
   })
   importer.on('message', (msg) =>

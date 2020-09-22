@@ -13,6 +13,7 @@ interface MongoSent {
 }
 
 interface query {
+  id?: string
   sent?: MongoSent
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   $and?: any
@@ -25,9 +26,12 @@ interface query {
 const createSearchParams = (httpQuery: HTTPQuery): query => {
   // console.log(httpQuery)
 
-  const { allText, sent, timeSpan, from, to, subject, body } = httpQuery
+  const { id, allText, sent, timeSpan, from, to, subject, body } = httpQuery
 
   const query: query = {}
+
+  // get single email
+  if (id) return { id }
 
   if (sent) {
     const start = new Date(sent)
@@ -82,7 +86,7 @@ const createSearchParams = (httpQuery: HTTPQuery): query => {
     if (queryArr.length) query.$and = queryArr
   }
 
-  // console.log(query)
+  console.log(query)
   return query
 }
 

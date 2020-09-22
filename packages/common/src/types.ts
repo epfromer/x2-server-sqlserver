@@ -50,6 +50,7 @@ export interface WordCloudTag {
 }
 
 export interface HTTPQuery {
+  id?: string
   skip?: number
   limit?: number
   sort?: string

@@ -17,8 +17,6 @@ import {
 import * as mongodb from 'mongodb'
 
 async function run() {
-  console.log(process.argv)
-
   if (!getNumPSTs()) {
     process.send(`no PSTs found in ${process.argv[2]}`)
     return

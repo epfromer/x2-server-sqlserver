@@ -57,8 +57,12 @@ export const graphqlSchema = buildSchema(`
     entry: String
   }
 
+  type Mutation {
+    importPST(loc: String): String
+    setCustodianColor(id: ID, color: String): [Custodian]
+  }
+
   type Query {
-    importPST: String
     getImportStatus: [ImportLogEntry]
     getWordCloud: [Word]
     getEmailSentByDay: [EmailSentByDay]

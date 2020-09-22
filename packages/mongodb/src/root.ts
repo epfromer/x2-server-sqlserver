@@ -69,21 +69,49 @@ const getCustodians = async (): Promise<Array<Custodian>> => {
   }
 }
 
+const setCustodianColor = async (
+  httpQuery: HTTPQuery
+): Promise<Array<Custodian>> => {
+  const client = await mongodb.MongoClient.connect(process.env.MONGODB_HOST, {
+    useUnifiedTopology: false,
+  })
+  const db = client.db(dbName)
+  await db
+    .collection(custodianCollection)
+    .findOneAndUpdate(
+      { id: httpQuery.id },
+      { $set: { color: httpQuery.color } }
+    )
+  const custodians = await db.collection(custodianCollection).find().toArray()
+  return custodians.map((custodian) => ({
+    id: custodian.id,
+    name: custodian.name,
+    title: custodian.title,
+    color: custodian.color,
+    senderTotal: custodian.senderTotal,
+    receiverTotal: custodian.receiverTotal,
+    toCustodians: custodian.toCustodians,
+    fromCustodians: custodian.fromCustodians,
+  }))
+}
+
 interface Root {
-  importPST: () => string
+  importPST: (httpQuery) => string
   getImportStatus: () => Array<ImportLogEntry>
   getWordCloud: () => Promise<Array<WordCloudTag>>
   getEmailSentByDay: () => Promise<Array<EmailSentByDay>>
   getCustodians: () => Promise<Array<Custodian>>
   getEmail: (httpQuery: HTTPQuery) => Promise<EmailTotal>
+  setCustodianColor: (httpQuery: HTTPQuery) => Promise<Array<Custodian>>
 }
 export const root: Root = {
-  importPST: () => importPST(),
+  importPST: (httpQuery) => importPST(httpQuery),
   getImportStatus: () => getImportStatus(),
   getWordCloud: () => getWordCloud(),
   getEmailSentByDay: () => getEmailSentByDay(),
   getCustodians: () => getCustodians(),
   getEmail: (httpQuery) => getEmail(httpQuery),
+  setCustodianColor: (httpQuery) => setCustodianColor(httpQuery),
 }
 
 export default root

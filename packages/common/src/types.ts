@@ -62,6 +62,8 @@ export interface HTTPQuery {
   to?: string
   subject?: string
   body?: string
+  loc?: string
+  color?: string
 }
 
 export interface ImportLogEntry {

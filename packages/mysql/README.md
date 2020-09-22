@@ -1,6 +1,6 @@
 # x2-server-mysql
 
-REST/CRUD interface on email in MySQL for X2 client.
+GraphQL interface on email in MySQL for X2 client.
 
 To run MySQL in a Docker container, use:
 

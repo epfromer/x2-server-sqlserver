@@ -2,21 +2,25 @@ import {
   dbName,
   defaultLimit,
   emailCollection,
+  EmailTotal,
   HTTPQuery,
 } from '@klonzo/common'
-import { Request, Response } from 'express'
 import mysql, { ConnectionConfig } from 'mysql2/promise'
 
 const createWhereClause = (httpQuery: HTTPQuery) => {
   // console.log(httpQuery)
 
   let { allText, from, to, subject, body } = httpQuery
+
   if (allText) allText = allText.toLowerCase()
   if (from) from = from.toLowerCase()
   if (to) to = to.toLowerCase()
   if (subject) subject = subject.toLowerCase()
   if (body) body = body.toLowerCase()
-  const { sent, timeSpan } = httpQuery
+  const { id, sent, timeSpan } = httpQuery
+
+  // get single email?
+  if (id) return `email_id = '${id}'`
 
   let query = ''
 
@@ -91,22 +95,21 @@ const sort = (httpQuery: HTTPQuery) => {
   return 'email_' + sort + '_sort'
 }
 
-// HTTP GET /email/
-export async function getAllEmail(req: Request, res: Response): Promise<void> {
+export async function getEmail(httpQuery: HTTPQuery): Promise<EmailTotal> {
   try {
     let qTotal = `select count(*) as total from ${emailCollection}`
     let q = `select * from ${emailCollection}`
 
-    const whereClause = createWhereClause(req.query)
+    const whereClause = createWhereClause(httpQuery)
     if (whereClause) {
       qTotal += ' where ' + whereClause
       q += ' where ' + whereClause
     }
 
-    q += ` order by ${sort(req.query)} ${
-      req.query.order === '1' ? 'asc' : 'desc'
-    } limit ${req.query.limit ? +req.query.limit : defaultLimit} offset ${
-      req.query.skip ? +req.query.skip : 0
+    q += ` order by ${sort(httpQuery)} ${
+      httpQuery.order === 1 ? 'asc' : 'desc'
+    } limit ${httpQuery.limit ? +httpQuery.limit : defaultLimit} offset ${
+      httpQuery.skip ? +httpQuery.skip : 0
     } `
 
     const connection = await mysql.createConnection({
@@ -118,7 +121,7 @@ export async function getAllEmail(req: Request, res: Response): Promise<void> {
     const [rows] = await connection.execute(q)
     const [resultTotal] = await connection.execute(qTotal)
 
-    res.json({
+    return {
       total: +resultTotal[0].total,
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
@@ -137,9 +140,8 @@ export async function getAllEmail(req: Request, res: Response): Promise<void> {
         subject: email.email_subject,
         body: email.email_body,
       })),
-    })
+    }
   } catch (err) {
     console.error(err.stack)
-    res.status(500).send(err.msg)
   }
 }

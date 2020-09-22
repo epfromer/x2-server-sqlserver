@@ -642,7 +642,7 @@
         "affectsGlobalScope": false
       },
       "./src/graphqlschema.ts": {
-        "version": "5e1dacf6df0193f8f986ba938775bfbb69934846ff7253ac160f7713fcf65b9d",
+        "version": "d98ee83c894f3dcbef79a6f08a8f8e0770d3713f1b9fb8ebafe0d1a7934333aa",
         "signature": "94fbeed0623e48f8bcc6146bf95cc4f4fb64e542ccec58c90b76b23f254dd8d8",
         "affectsGlobalScope": false
       },

@@ -51,7 +51,15 @@ export const graphqlSchema = buildSchema(`
     total: Int
   }
 
+  type ImportLogEntry {
+    id: String
+    timestamp: String
+    entry: String
+  }
+
   type Query {
+    importPST: String
+    getImportStatus: [ImportLogEntry]
     getWordCloud: [Word]
     getEmailSentByDay: [EmailSentByDay]
     getCustodians: [Custodian]

@@ -6,11 +6,13 @@ import {
   emailSentByDayCollection,
   EmailTotal,
   HTTPQuery,
+  ImportLogEntry,
   wordCloudCollection,
   WordCloudTag,
 } from '@klonzo/common'
 import * as mongodb from 'mongodb'
 import { getEmail } from './getEmail'
+import { getImportStatus, importPST } from './importPST'
 
 const getWordCloud = async (): Promise<Array<WordCloudTag>> => {
   try {
@@ -68,12 +70,16 @@ const getCustodians = async (): Promise<Array<Custodian>> => {
 }
 
 interface Root {
+  importPST: () => string
+  getImportStatus: () => Array<ImportLogEntry>
   getWordCloud: () => Promise<Array<WordCloudTag>>
   getEmailSentByDay: () => Promise<Array<EmailSentByDay>>
   getCustodians: () => Promise<Array<Custodian>>
   getEmail: (httpQuery: HTTPQuery) => Promise<EmailTotal>
 }
 export const root: Root = {
+  importPST: () => importPST(),
+  getImportStatus: () => getImportStatus(),
   getWordCloud: () => getWordCloud(),
   getEmailSentByDay: () => getEmailSentByDay(),
   getCustodians: () => getCustodians(),

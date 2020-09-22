@@ -30,7 +30,7 @@ const createSearchParams = (httpQuery: HTTPQuery): query => {
 
   const query: query = {}
 
-  // get single email
+  // get single email?
   if (id) return { id }
 
   if (sent) {
@@ -86,7 +86,7 @@ const createSearchParams = (httpQuery: HTTPQuery): query => {
     if (queryArr.length) query.$and = queryArr
   }
 
-  console.log(query)
+  // console.log(query)
   return query
 }
 

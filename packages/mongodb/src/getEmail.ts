@@ -28,10 +28,10 @@ const createSearchParams = (httpQuery: HTTPQuery): query => {
 
   const { id, allText, sent, timeSpan, from, to, subject, body } = httpQuery
 
-  const query: query = {}
-
   // get single email?
   if (id) return { id }
+
+  const query: query = {}
 
   if (sent) {
     const start = new Date(sent)

@@ -1,6 +1,6 @@
 # x2-server-mongodb
 
-REST/CRUD interface on email in MongoDB for X2 client.
+GraphQL interface on email in MongoDB for X2 client.
 
 Hosted at https://x2-server-mongodb.herokuapp.com/email.
 

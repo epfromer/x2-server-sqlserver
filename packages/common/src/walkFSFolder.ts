@@ -1,6 +1,5 @@
 import * as fs from 'fs'
 import { PSTFile, PSTFolder, PSTMessage } from 'pst-extractor'
-import { fsFolder } from './constants'
 import { processEmail } from './processEmail'
 import { Email } from './types'
 
@@ -44,6 +43,7 @@ function walkPST(filename: string): Email[] {
 }
 // Walk file system folder, processing each PST in it
 export async function walkFSfolder(
+  fsFolder: string,
   insertEmails: (emails: Email[]) => void,
   log?: (msg: string) => void
 ): Promise<number> {
@@ -73,6 +73,6 @@ export async function walkFSfolder(
 }
 
 // Number of PSTs to process
-export function getNumPSTs(): number {
+export function getNumPSTs(fsFolder: string): number {
   return fs.readdirSync(fsFolder).length
 }

@@ -14,10 +14,13 @@ import { Pool } from 'pg'
 import { v4 as uuidv4 } from 'uuid'
 
 async function run() {
-  if (!getNumPSTs()) {
-    process.send(`no PSTs found`)
+  if (!getNumPSTs(process.argv[2])) {
+    process.send(`no PSTs found in ${process.argv[2]}`)
     return
   }
+
+  process.send(`connect to ${process.env.PGHOST}`)
+  let pool = new Pool()
 
   const insertEmails = async (emails) => {
     const pool = new Pool({ database: dbName })
@@ -83,9 +86,6 @@ async function run() {
     await pool.end()
   }
 
-  process.send(`connect to postgres at ${process.env.PGHOST}`)
-  let pool = new Pool()
-
   process.send(`drop database`)
   try {
     await pool.query(`revoke connect on database ${dbName} from public`)
@@ -129,7 +129,9 @@ async function run() {
   await pool.end()
 
   process.send(`process emails`)
-  const numEmails = await walkFSfolder(insertEmails, (msg) => process.send(msg))
+  const numEmails = await walkFSfolder(process.argv[2], insertEmails, (msg) =>
+    process.send(msg)
+  )
 
   process.send(`process word cloud`)
   await processWordCloud(insertWordCloud, (msg) => process.send(msg))
@@ -140,7 +142,7 @@ async function run() {
   process.send(`process custodians`)
   await processCustodians(insertCustodians, (msg) => process.send(msg))
 
-  process.send(`completed ${numEmails} emails`)
+  process.send(`completed ${numEmails} emails in ${process.argv[2]}`)
 }
 
 run().catch((err) => console.error(err))

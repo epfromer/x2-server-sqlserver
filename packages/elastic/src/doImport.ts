@@ -24,13 +24,13 @@ dotenv.config()
 // http://localhost:9200/x2/_search?q=*
 
 async function run() {
-  if (!getNumPSTs()) {
-    process.send(`no PSTs found`)
+  if (!getNumPSTs(process.argv[2])) {
+    process.send(`no PSTs found in ${process.argv[2]}`)
     return
   }
 
   process.send(
-    `connect to elastic at http://${process.env.ELASTIC_HOST}:${process.env.ELASTIC_PORT}`
+    `connect to http://${process.env.ELASTIC_HOST}:${process.env.ELASTIC_PORT}`
   )
   const client = new Client({
     node: `http://${process.env.ELASTIC_HOST}:${process.env.ELASTIC_PORT}`,
@@ -112,7 +112,9 @@ async function run() {
   await client.indices.create({ index: dbName + custodianCollection })
 
   process.send(`process emails`)
-  const numEmails = await walkFSfolder(insertEmails, (msg) => process.send(msg))
+  const numEmails = await walkFSfolder(process.argv[2], insertEmails, (msg) =>
+    process.send(msg)
+  )
 
   process.send(`process word cloud`)
   await processWordCloud(insertWordCloud, (msg) => process.send(msg))
@@ -126,7 +128,7 @@ async function run() {
   process.send(`refresh index`)
   await client.indices.refresh({ index: dbName })
 
-  process.send(`completed ${numEmails} emails`)
+  process.send(`completed ${numEmails} emails in ${process.argv[2]}`)
 }
 
 run().catch((err) => console.error(err))

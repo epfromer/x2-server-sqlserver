@@ -4,7 +4,7 @@
   "private": true,
   "license": "MIT",
   "author": "Ed Pfromer epfromer@gmail.com",
-  "description": "REST/CRUD interface on email in MongoDB for X2 client",
+  "description": "GraphQL interface on email in MongoDB for X2 client",
   "main": "index.js",
   "docker-version": "https://hub.docker.com/_/mongo",
   "engines": {

@@ -18,8 +18,8 @@ import sql from 'mssql'
 import { v4 as uuidv4 } from 'uuid'
 
 async function run() {
-  if (!getNumPSTs()) {
-    process.send(`no PSTs found`)
+  if (!getNumPSTs(process.argv[2])) {
+    process.send(`no PSTs found in ${process.argv[2]}`)
     return
   }
 
@@ -180,7 +180,7 @@ async function run() {
     return pool.close()
   }
 
-  process.send(`connect to sqlserver at ${process.env.SQL_HOST}`)
+  process.send(`connect to ${process.env.SQL_HOST}`)
   const pool = await sql.connect({
     server: process.env.SQL_HOST,
     user: process.env.SQL_USER,
@@ -196,7 +196,9 @@ async function run() {
   await pool.close()
 
   process.send(`process emails`)
-  const numEmails = await walkFSfolder(insertEmails, (msg) => process.send(msg))
+  const numEmails = await walkFSfolder(process.argv[2], insertEmails, (msg) =>
+    process.send(msg)
+  )
 
   process.send(`process word cloud`)
   await processWordCloud(insertWordCloud, (msg) => process.send(msg))
@@ -207,7 +209,7 @@ async function run() {
   process.send(`create custodians`)
   await processCustodians(insertCustodians, (msg) => process.send(msg))
 
-  process.send(`completed ${numEmails} emails`)
+  process.send(`completed ${numEmails} emails in ${process.argv[2]}`)
 }
 
 run().catch((err) => console.error(err))

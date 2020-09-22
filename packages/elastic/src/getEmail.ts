@@ -1,11 +1,13 @@
 import { Client } from '@elastic/elasticsearch'
-import { dbName, defaultLimit } from '@klonzo/common'
-import { Request, Response } from 'express'
+import { dbName, defaultLimit, EmailTotal, HTTPQuery } from '@klonzo/common'
 
 const createSearchParams = (httpQuery) => {
   // console.log(httpQuery)
 
-  const { allText, sent, timeSpan, from, to, subject, body } = httpQuery
+  const { id, allText, sent, timeSpan, from, to, subject, body } = httpQuery
+
+  // get single email?
+  if (id) return `id:${id}`
 
   let query = ''
 
@@ -72,25 +74,23 @@ const createSortOrder = (httpQuery) => {
     if (httpQuery.order) {
       sort +=
         (httpQuery.sort === 'sent' ? ':' : '.keyword:') +
-        (httpQuery.order === '1' ? 'asc' : 'desc')
+        (httpQuery.order === 1 ? 'asc' : 'desc')
     }
   }
   return sort
 }
 
-// HTTP GET /email/
-export async function getAllEmail(req: Request, res: Response): Promise<void> {
+export async function getEmail(httpQuery: HTTPQuery): Promise<EmailTotal> {
   try {
     const client = new Client({
       node: `http://${process.env.ELASTIC_HOST}:${process.env.ELASTIC_PORT}`,
     })
-    console.log(createSortOrder(req.query))
     const { body } = await client.search({
       index: dbName,
-      from: req.query.skip ? +req.query.skip : 0,
-      q: createSearchParams(req.query),
-      size: req.query.limit ? +req.query.limit : defaultLimit,
-      sort: createSortOrder(req.query),
+      from: httpQuery.skip ? +httpQuery.skip : 0,
+      q: createSearchParams(httpQuery),
+      size: httpQuery.limit ? +httpQuery.limit : defaultLimit,
+      sort: createSortOrder(httpQuery),
     })
 
     const emails = body.hits.hits.map((email) => ({
@@ -107,12 +107,11 @@ export async function getAllEmail(req: Request, res: Response): Promise<void> {
       body: email._source.body,
     }))
 
-    res.json({
+    return {
       total: body.hits.total.value,
       emails,
-    })
+    }
   } catch (err) {
     console.error(err.stack)
-    res.status(500).send(err.msg)
   }
 }

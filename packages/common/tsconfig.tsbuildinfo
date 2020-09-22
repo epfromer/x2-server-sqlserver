@@ -137,8 +137,8 @@
         "affectsGlobalScope": true
       },
       "./src/constants.ts": {
-        "version": "96bc2e59dc7813230bd9b08762ad52c20c5f21b3dc5e170253cc58f65eadab4c",
-        "signature": "3ae3aada910d5d595ae215f9c1ebfd0a7d2aa93744f3799d39badc651d67637a",
+        "version": "a54f861d47b15ad8ce8a1ef365d99e8f02c1e88928e799907e1b6242ebd0936d",
+        "signature": "8bcc6dc3c19e3f0473305fa009386376038167b1e009236a6a54eaad2bcec72d",
         "affectsGlobalScope": false
       },
       "./src/types.ts": {
@@ -1022,8 +1022,8 @@
         "affectsGlobalScope": false
       },
       "./src/walkfsfolder.ts": {
-        "version": "53430034e0f8ffcbbc316968e6202e580b0b771e0dd5df20a2447065342be369",
-        "signature": "58614d6319097949d2ddb4c7087229e52de5f6c67dfddbb687c7b51f68b9cbb6",
+        "version": "73c3fcbbc1e35b4e7faee80d3297cf4acdbdb51a0bdf9a3e11cd50bfb38a2bf7",
+        "signature": "9eae1de42a6e0bfd021940b9f36a92bd055ba380151f10bfc629bbb58c19d003",
         "affectsGlobalScope": false
       },
       "./src/index.ts": {
@@ -2202,7 +2202,6 @@
       "./src/walkfsfolder.ts": [
         "../../node_modules/@types/node/fs.d.ts",
         "../../node_modules/pst-extractor/dist/index.d.ts",
-        "./src/constants.ts",
         "./src/processemail.ts",
         "./src/types.ts"
       ]

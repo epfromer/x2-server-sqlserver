@@ -17,7 +17,7 @@ import {
 import * as mongodb from 'mongodb'
 
 async function run() {
-  if (!getNumPSTs()) {
+  if (!getNumPSTs(process.argv[2])) {
     process.send(`no PSTs found in ${process.argv[2]}`)
     return
   }
@@ -50,7 +50,9 @@ async function run() {
   await db.dropDatabase()
 
   process.send(`process emails`)
-  const numEmails = await walkFSfolder(insertEmails, (msg) => process.send(msg))
+  const numEmails = await walkFSfolder(process.argv[2], insertEmails, (msg) =>
+    process.send(msg)
+  )
 
   process.send(`process word cloud`)
   await processWordCloud(insertWordCloud, (msg) => process.send(msg))

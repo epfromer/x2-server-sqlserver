@@ -2,9 +2,9 @@ import {
   dbName,
   defaultLimit,
   emailCollection,
+  EmailTotal,
   HTTPQuery,
 } from '@klonzo/common'
-import { Request, Response } from 'express'
 import { Pool } from 'pg'
 
 const createWhereClause = (httpQuery: HTTPQuery) => {
@@ -16,7 +16,10 @@ const createWhereClause = (httpQuery: HTTPQuery) => {
   if (to) to = to.toLowerCase()
   if (subject) subject = subject.toLowerCase()
   if (body) body = body.toLowerCase()
-  const { sent, timeSpan } = httpQuery
+  const { id, sent, timeSpan } = httpQuery
+
+  // get single email?
+  if (id) return `email_id = '${id}'`
 
   let query = ''
 
@@ -86,30 +89,31 @@ const createWhereClause = (httpQuery: HTTPQuery) => {
 }
 
 // HTTP GET /email/
-export async function getAllEmail(req: Request, res: Response): Promise<void> {
+export async function getEmail(httpQuery: HTTPQuery): Promise<EmailTotal> {
   try {
     let qTotal = `select count(*) as total from ${emailCollection}`
     let q = `select * from ${emailCollection}`
 
-    const whereClause = createWhereClause(req.query)
+    const whereClause = createWhereClause(httpQuery)
     if (whereClause) {
       qTotal += ' where ' + whereClause
       q += ' where ' + whereClause
     }
 
     q += ` order by ${
-      req.query.sort ? 'email_' + req.query.sort : 'email_sent'
-    } ${req.query.order === '1' ? 'asc' : 'desc'} offset ${
-      req.query.skip ? +req.query.skip : 0
+      httpQuery.sort ? 'email_' + httpQuery.sort : 'email_sent'
+    } ${httpQuery.order === 1 ? 'asc' : 'desc'} offset ${
+      httpQuery.skip ? +httpQuery.skip : 0
     } rows fetch next ${
-      req.query.limit ? +req.query.limit : defaultLimit
+      httpQuery.limit ? +httpQuery.limit : defaultLimit
     } rows only`
 
     const pool = new Pool({ database: dbName })
     const result = await pool.query(q)
     const resultTotal = await pool.query(qTotal)
+    await pool.end()
 
-    res.json({
+    return {
       total: resultTotal.rows[0].total,
       emails: result.rows.map((email) => ({
         id: email.email_id,
@@ -126,9 +130,8 @@ export async function getAllEmail(req: Request, res: Response): Promise<void> {
         subject: email.email_subject,
         body: email.email_body,
       })),
-    })
+    }
   } catch (err) {
     console.error(err.stack)
-    res.status(500).send(err.msg)
   }
 }

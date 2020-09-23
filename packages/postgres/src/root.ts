@@ -10,24 +10,16 @@ import {
   wordCloudCollection,
   WordCloudTag,
 } from '@klonzo/common'
-import mysql, { ConnectionConfig } from 'mysql2/promise'
+import { Pool } from 'pg'
 import { getEmail } from './getEmail'
 import { getImportStatus, importPST } from './importPST'
 
 const getWordCloud = async (): Promise<Array<WordCloudTag>> => {
   try {
-    const connection = await mysql.createConnection({
-      host: process.env.MYSQL_HOST,
-      user: process.env.MYSQL_USER,
-      password: process.env.MYSQL_ROOT_PASSWORD,
-      database: dbName,
-    } as ConnectionConfig)
-    const [rows] = await connection.execute(
-      `select * from ${wordCloudCollection}`
-    )
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    return rows.map((word) => ({
+    const pool = new Pool({ database: dbName })
+    const result = await pool.query(`select * from ${wordCloudCollection}`)
+    await pool.end()
+    return result.rows.map((word) => ({
       tag: word.tag,
       weight: word.weight,
     }))
@@ -38,18 +30,12 @@ const getWordCloud = async (): Promise<Array<WordCloudTag>> => {
 
 const getEmailSentByDay = async (): Promise<Array<EmailSentByDay>> => {
   try {
-    const connection = await mysql.createConnection({
-      host: process.env.MYSQL_HOST,
-      user: process.env.MYSQL_USER,
-      password: process.env.MYSQL_ROOT_PASSWORD,
-      database: dbName,
-    } as ConnectionConfig)
-    const [rows] = await connection.execute(
+    const pool = new Pool({ database: dbName })
+    const result = await pool.query(
       `select * from ${emailSentByDayCollection} order by day_sent asc`
     )
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    return rows.map((day) => ({
+    await pool.end()
+    return result.rows.map((day) => ({
       sent: day.day_sent,
       emailIds: day.email_ids.split(','),
     }))
@@ -60,18 +46,12 @@ const getEmailSentByDay = async (): Promise<Array<EmailSentByDay>> => {
 
 const getCustodians = async (): Promise<Array<Custodian>> => {
   try {
-    const connection = await mysql.createConnection({
-      host: process.env.MYSQL_HOST,
-      user: process.env.MYSQL_USER,
-      password: process.env.MYSQL_ROOT_PASSWORD,
-      database: dbName,
-    } as ConnectionConfig)
-    const [rows] = await connection.execute(
+    const pool = new Pool({ database: dbName })
+    const result = await pool.query(
       `select * from ${custodianCollection} order by custodian_id asc`
     )
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    return rows.map((custodian) => ({
+    await pool.end()
+    return result.rows.map((custodian) => ({
       id: custodian.custodian_id,
       name: custodian.custodian_name,
       title: custodian.title,
@@ -89,21 +69,15 @@ const getCustodians = async (): Promise<Array<Custodian>> => {
 const setCustodianColor = async (
   httpQuery: HTTPQuery
 ): Promise<Array<Custodian>> => {
-  const connection = await mysql.createConnection({
-    host: process.env.MYSQL_HOST,
-    user: process.env.MYSQL_USER,
-    password: process.env.MYSQL_ROOT_PASSWORD,
-    database: dbName,
-  } as ConnectionConfig)
-  await connection.execute(
+  const pool = new Pool({ database: dbName })
+  await pool.query(
     `update ${custodianCollection} set color = '${httpQuery.color}' where custodian_id = '${httpQuery.id}'`
   )
-  const [rows] = await connection.execute(
+  const result = await pool.query(
     `select * from ${custodianCollection} order by custodian_id asc`
   )
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  return rows.map((custodian) => ({
+  await pool.end()
+  return result.rows.map((custodian) => ({
     id: custodian.custodian_id,
     name: custodian.custodian_name,
     title: custodian.title,

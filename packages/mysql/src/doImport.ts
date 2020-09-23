@@ -69,7 +69,7 @@ async function run() {
   const insertEmailSentByDay = async (
     emailSentByDay: EmailSentByDay[]
   ): Promise<void> => {
-    const q = `insert into ${emailSentByDayCollection} (day_sent, email_ids) values (?, ?)`
+    const q = `insert into ${emailSentByDayCollection} (day_sent, total) values (?, ?)`
     emailSentByDay.forEach(async (day) => {
       // TODO
       await connection.execute(q, [day.sent, day.total])
@@ -77,7 +77,7 @@ async function run() {
   }
 
   const insertCustodians = async (custodians: Custodian[]): Promise<void> => {
-    const q = `insert into ${custodianCollection} (custodian_id, custodian_name, title, color, sender_total, receiver_total, to_custodians, from_custodians) values (?, ?, ?, ?, ?, ?, ?, ?)`
+    const q = `insert into ${custodianCollection} (custodian_id, custodian_name, title, color, sender_total, receiver_total, to_custodians) values (?, ?, ?, ?, ?, ?, ?)`
     custodians.forEach(async (custodian) => {
       await connection.query(q, [
         custodian.id,
@@ -131,13 +131,13 @@ async function run() {
     `alter table ${wordCloudCollection} add primary key wordcloud_pkey(tag)`
   )
   await connection.query(
-    `create table ${emailSentByDayCollection} (day_sent varchar(25), email_ids text)`
+    `create table ${emailSentByDayCollection} (day_sent varchar(25), total integer)`
   )
   await connection.query(
     `alter table ${emailSentByDayCollection} add primary key emailsentbyday_pkey(day_sent)`
   )
   await connection.query(
-    `create table ${custodianCollection} (custodian_id varchar(25), custodian_name text, title text, color text, sender_total integer, receiver_total integer, to_custodians text, from_custodians text)`
+    `create table ${custodianCollection} (custodian_id varchar(25), custodian_name text, title text, color text, sender_total integer, receiver_total integer, to_custodians text)`
   )
   await connection.query(
     `alter table ${custodianCollection} add primary key custodians_pkey(custodian_id)`

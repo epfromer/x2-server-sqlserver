@@ -53,7 +53,7 @@ const getEmailSentByDay = async (): Promise<Array<EmailSentByDay>> => {
     // @ts-ignore
     return rows.map((day) => ({
       sent: day.day_sent,
-      emailIds: day.email_ids.split(','),
+      emailIds: day.total,
     }))
   } catch (err) {
     console.error(err.stack)
@@ -82,7 +82,6 @@ const getCustodians = async (): Promise<Array<Custodian>> => {
       senderTotal: custodian.sender_total,
       receiverTotal: custodian.receiver_total,
       toCustodians: JSON.parse(custodian.to_custodians),
-      fromCustodians: JSON.parse(custodian.from_custodians),
     }))
   } catch (err) {
     console.error(err.stack)
@@ -115,7 +114,6 @@ const setCustodianColor = async (
     senderTotal: custodian.sender_total,
     receiverTotal: custodian.receiver_total,
     toCustodians: JSON.parse(custodian.to_custodians),
-    fromCustodians: JSON.parse(custodian.from_custodians),
   }))
 }
 

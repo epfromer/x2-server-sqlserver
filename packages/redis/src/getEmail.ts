@@ -2,9 +2,9 @@ import {
   dbName,
   defaultLimit,
   emailCollection,
+  EmailTotal,
   HTTPQuery,
 } from '@klonzo/common'
-import { Request, Response } from 'express'
 import redis from 'redis'
 import redisearch from 'redis-redisearch'
 import { promisify } from 'util'
@@ -21,7 +21,10 @@ const createSearchParams = (httpQuery: HTTPQuery) => {
 
   // console.log(httpQuery)
 
-  const { from, to, subject, body, allText, sent, timeSpan } = httpQuery
+  const { id, from, to, subject, body, allText, sent, timeSpan } = httpQuery
+
+  // get single email?
+  if (id) return ` @id:${id} `
 
   let query = ''
 
@@ -55,17 +58,17 @@ const createSearchParams = (httpQuery: HTTPQuery) => {
 }
 
 // HTTP GET /email/
-export async function getAllEmail(req: Request, res: Response): Promise<void> {
+export async function getEmail(httpQuery: HTTPQuery): Promise<EmailTotal> {
   try {
     const emailArr = await ftSearchAsync([
       dbName + emailCollection,
-      createSearchParams(req.query),
+      createSearchParams(httpQuery),
       'LIMIT',
-      req.query.skip ? +req.query.skip : 0,
-      req.query.limit ? +req.query.limit : defaultLimit,
+      httpQuery.skip ? +httpQuery.skip : 0,
+      httpQuery.limit ? +httpQuery.limit : defaultLimit,
       'SORTBY',
-      req.query.sort ? req.query.sort : 'sent',
-      req.query.order === '1' ? 'asc' : 'desc',
+      httpQuery.sort ? httpQuery.sort : 'sent',
+      httpQuery.order === 1 ? 'asc' : 'desc',
     ])
 
     const total = emailArr[0]
@@ -99,10 +102,8 @@ export async function getAllEmail(req: Request, res: Response): Promise<void> {
         body: doc.body,
       })
     }
-
-    res.json({ total, emails })
+    return { total, emails }
   } catch (err) {
     console.error(err.stack)
-    res.status(500).send(err.msg)
   }
 }

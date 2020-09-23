@@ -127,12 +127,8 @@ async function run() {
     table.create = true
 
     table.columns.add('day_sent', sql.VarChar(30), { nullable: false })
-    table.columns.add('email_ids', sql.VarChar(sql.MAX), { nullable: false })
-
-    emailSentByDay.forEach((day) =>
-      // TODO
-      table.rows.add(day.sent, day.total)
-    )
+    table.columns.add('total', sql.Int, { nullable: false })
+    emailSentByDay.forEach((day) => table.rows.add(day.sent, day.total))
 
     const request = new sql.Request(pool)
     await request.bulk(table)
@@ -157,9 +153,6 @@ async function run() {
     table.columns.add('sender_total', sql.Int, { nullable: false })
     table.columns.add('receiver_total', sql.Int, { nullable: false })
     table.columns.add('to_custodians', sql.VarChar(sql.MAX), {
-      nullable: false,
-    })
-    table.columns.add('from_custodians', sql.VarChar(sql.MAX), {
       nullable: false,
     })
 

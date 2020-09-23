@@ -68,26 +68,31 @@ const getCustodians = async (): Promise<Array<Custodian>> => {
 const setCustodianColor = async (
   httpQuery: HTTPQuery
 ): Promise<Array<Custodian>> => {
-  const client = await mongodb.MongoClient.connect(process.env.MONGODB_HOST, {
-    useUnifiedTopology: false,
-  })
-  const db = client.db(dbName)
-  await db
-    .collection(custodianCollection)
-    .findOneAndUpdate(
-      { id: httpQuery.id },
-      { $set: { color: httpQuery.color } }
-    )
-  const custodians = await db.collection(custodianCollection).find().toArray()
-  return custodians.map((custodian) => ({
-    id: custodian.id,
-    name: custodian.name,
-    title: custodian.title,
-    color: custodian.color,
-    senderTotal: custodian.senderTotal,
-    receiverTotal: custodian.receiverTotal,
-    toCustodians: custodian.toCustodians,
-  }))
+  try {
+    console.log('set custo color')
+    const client = await mongodb.MongoClient.connect(process.env.MONGODB_HOST, {
+      useUnifiedTopology: false,
+    })
+    const db = client.db(dbName)
+    await db
+      .collection(custodianCollection)
+      .findOneAndUpdate(
+        { id: httpQuery.id },
+        { $set: { color: httpQuery.color } }
+      )
+    const custodians = await db.collection(custodianCollection).find().toArray()
+    return custodians.map((custodian) => ({
+      id: custodian.id,
+      name: custodian.name,
+      title: custodian.title,
+      color: custodian.color,
+      senderTotal: custodian.senderTotal,
+      receiverTotal: custodian.receiverTotal,
+      toCustodians: custodian.toCustodians,
+    }))
+  } catch (err) {
+    console.error(err.stack)
+  }
 }
 
 interface Root {

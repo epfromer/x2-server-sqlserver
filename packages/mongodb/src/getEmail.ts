@@ -113,6 +113,7 @@ export async function getEmail(httpQuery: HTTPQuery): Promise<EmailTotal> {
     let emails = await db
       .collection(emailCollection)
       .find(query)
+      .collation({ locale: 'en' })
       .sort(createSortOrder(httpQuery))
       .skip(httpQuery.skip ? +httpQuery.skip : 0)
       .limit(httpQuery.limit ? +httpQuery.limit : defaultLimit)

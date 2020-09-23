@@ -1,6 +1,6 @@
 # x2-server-sqlserver
 
-REST/CRUD interface on email in SQL Server for X2 client.
+GraphQL interface on email in SQL Server for X2 client.
 
 To run SQL Server in a Docker container, use:
 

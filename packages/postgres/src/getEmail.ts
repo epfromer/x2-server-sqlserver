@@ -88,7 +88,6 @@ const createWhereClause = (httpQuery: HTTPQuery) => {
   return query
 }
 
-// HTTP GET /email/
 export async function getEmail(httpQuery: HTTPQuery): Promise<EmailTotal> {
   try {
     let qTotal = `select count(*) as total from ${emailCollection}`

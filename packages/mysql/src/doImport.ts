@@ -158,9 +158,7 @@ async function run() {
   await processCustodians(insertCustodians, (msg) => process.send(msg))
 
   process.send(`completed ${numEmails} emails in ${process.argv[2]}`)
-  // TODO connection not released, so proc never issues exit to parent
-  // connection.close()
+  connection.end()
 }
 
 run().catch((err) => console.error(err))
-// .then(() => process.exit()) // force connection to be freed

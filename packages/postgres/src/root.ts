@@ -25,7 +25,6 @@ const getWordCloud = async (): Promise<Array<WordCloudTag>> => {
     const [rows] = await connection.execute(
       `select * from ${wordCloudCollection}`
     )
-    connection.end()
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     return rows.map((word) => ({
@@ -48,7 +47,6 @@ const getEmailSentByDay = async (): Promise<Array<EmailSentByDay>> => {
     const [rows] = await connection.execute(
       `select * from ${emailSentByDayCollection} order by day_sent asc`
     )
-    connection.end()
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     return rows.map((day) => ({
@@ -71,7 +69,6 @@ const getCustodians = async (): Promise<Array<Custodian>> => {
     const [rows] = await connection.execute(
       `select * from ${custodianCollection} order by custodian_id asc`
     )
-    connection.end()
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     return rows.map((custodian) => ({
@@ -104,7 +101,6 @@ const setCustodianColor = async (
   const [rows] = await connection.execute(
     `select * from ${custodianCollection} order by custodian_id asc`
   )
-  connection.end()
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   return rows.map((custodian) => ({

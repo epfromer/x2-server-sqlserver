@@ -1,6 +1,6 @@
 # x2-server-postgres
 
-REST/CRUD interface on email in PostgreSQL for X2 client.
+GraphQL interface on email in PostgreSQL for X2 client.
 
 To run PostgreSQL in a Docker container, use:
 

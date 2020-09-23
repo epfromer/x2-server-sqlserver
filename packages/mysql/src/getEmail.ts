@@ -120,6 +120,7 @@ export async function getEmail(httpQuery: HTTPQuery): Promise<EmailTotal> {
     } as ConnectionConfig)
     const [rows] = await connection.execute(q)
     const [resultTotal] = await connection.execute(qTotal)
+    connection.end()
 
     return {
       total: +resultTotal[0].total,

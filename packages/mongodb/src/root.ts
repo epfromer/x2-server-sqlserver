@@ -38,10 +38,7 @@ const getEmailSentByDay = async (): Promise<Array<EmailSentByDay>> => {
       .find()
       .sort({ sent: 1 })
       .toArray()
-    return emailSentByDay.map((day) => ({
-      sent: day.sent,
-      emailIds: day.emailIds,
-    }))
+    return emailSentByDay.map((day) => ({ sent: day.sent, total: day.total }))
   } catch (err) {
     console.error(err.stack)
   }
@@ -62,7 +59,6 @@ const getCustodians = async (): Promise<Array<Custodian>> => {
       senderTotal: custodian.senderTotal,
       receiverTotal: custodian.receiverTotal,
       toCustodians: custodian.toCustodians,
-      fromCustodians: custodian.fromCustodians,
     }))
   } catch (err) {
     console.error(err.stack)
@@ -91,7 +87,6 @@ const setCustodianColor = async (
     senderTotal: custodian.senderTotal,
     receiverTotal: custodian.receiverTotal,
     toCustodians: custodian.toCustodians,
-    fromCustodians: custodian.fromCustodians,
   }))
 }
 

@@ -130,7 +130,8 @@ async function run() {
     table.columns.add('email_ids', sql.VarChar(sql.MAX), { nullable: false })
 
     emailSentByDay.forEach((day) =>
-      table.rows.add(day.sent, day.emailIds.join(','))
+      // TODO
+      table.rows.add(day.sent, day.total)
     )
 
     const request = new sql.Request(pool)
@@ -170,8 +171,7 @@ async function run() {
         custodian.color,
         custodian.senderTotal,
         custodian.receiverTotal,
-        JSON.stringify(custodian.toCustodians),
-        JSON.stringify(custodian.fromCustodians)
+        JSON.stringify(custodian.toCustodians)
       )
     )
 

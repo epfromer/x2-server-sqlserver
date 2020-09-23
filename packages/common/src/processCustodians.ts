@@ -1,21 +1,21 @@
 import { custodians } from './custodians'
 import { Custodian } from './types'
 
+// Fast map of from/to: #
+const custodialInteractions = new Map()
+
 export function addCustodiansInteraction(
   fromCustodian: string,
-  toCustodians: string[],
-  emailId: string
+  toCustodians: string[]
 ): void {
-  // for the sender, add EmailSentToCustodians
-  custodians
-    .find((c) => c.id === fromCustodian)
-    .toCustodians.push({ emailId, custodianIds: toCustodians })
+  // console.log(fromCustodian, toCustodians)
 
-  // for each receiver, add EmailReceivedFromCustodians
-  toCustodians.forEach((toc) => {
-    custodians
-      .find((c) => c.id === toc)
-      .fromCustodians.push({ emailId, custodianId: fromCustodian })
+  toCustodians.forEach((toCustodian) => {
+    const key = fromCustodian + '/' + toCustodian
+    custodialInteractions.set(
+      key,
+      custodialInteractions.has(key) ? custodialInteractions.get(key) + 1 : 1
+    )
   })
 }
 
@@ -33,5 +33,16 @@ export async function processCustodians(
   log?: (msg: string) => void
 ): Promise<void> {
   if (log) log('processCustodians: ' + custodians.length + ' Custodians')
+
+  // console.log(custodialInteractions)
+
+  // split apart fast map into individual custodians
+  custodialInteractions.forEach((value, key) => {
+    const peeps = key.split('/')
+    custodians
+      .find((c) => c.id === peeps[0])
+      .toCustodians.push({ custodianId: peeps[1], total: value })
+  })
+
   await insertCustodians(custodians)
 }

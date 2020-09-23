@@ -89,7 +89,6 @@ async function run() {
           senderTotal: custodian.senderTotal,
           receiverTotal: custodian.receiverTotal,
           toCustodians: custodian.toCustodians,
-          fromCustodians: custodian.fromCustodians,
         },
       })
     })

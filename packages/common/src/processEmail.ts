@@ -8,7 +8,7 @@ import {
   incReceiverTotal,
   incSenderTotal,
 } from './processCustodians'
-import { addToEmailSentByDay } from './processEmailSent'
+import { incEmailSentByDay } from './processEmailSent'
 import { addToWordCloud } from './processWordCloud'
 import { hasTerms } from './terms'
 import { Email } from './types'
@@ -69,12 +69,12 @@ export function processEmail(email: PSTMessage, emails: Email[]): void {
   const emailId = uuidv4()
 
   if (fromCustodian && toCustodians.length) {
-    addCustodiansInteraction(fromCustodian, toCustodians, emailId)
+    addCustodiansInteraction(fromCustodian, toCustodians)
   }
   if (fromCustodian) incSenderTotal(fromCustodian)
   if (toCustodians.length) toCustodians.forEach((c) => incReceiverTotal(c))
 
-  addToEmailSentByDay(email.clientSubmitTime, emailId)
+  incEmailSentByDay(email.clientSubmitTime)
 
   addToWordCloud(email, fromCustodian, toCustodians.join(' '))
 

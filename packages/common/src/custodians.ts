@@ -26,7 +26,6 @@ export const custodians: Custodian[] = [
     senderTotal: 0,
     receiverTotal: 0,
     toCustodians: [],
-    fromCustodians: [],
   },
   {
     name: 'Fastow, Andrew',
@@ -52,7 +51,6 @@ export const custodians: Custodian[] = [
     senderTotal: 0,
     receiverTotal: 0,
     toCustodians: [],
-    fromCustodians: [],
   },
   {
     name: 'Fleming, Rosalee',
@@ -72,7 +70,6 @@ export const custodians: Custodian[] = [
     senderTotal: 0,
     receiverTotal: 0,
     toCustodians: [],
-    fromCustodians: [],
   },
   {
     name: 'Glisan, Ben',
@@ -94,7 +91,6 @@ export const custodians: Custodian[] = [
     senderTotal: 0,
     receiverTotal: 0,
     toCustodians: [],
-    fromCustodians: [],
   },
   {
     name: 'Lay, Kenneth',
@@ -168,7 +164,6 @@ export const custodians: Custodian[] = [
     senderTotal: 0,
     receiverTotal: 0,
     toCustodians: [],
-    fromCustodians: [],
   },
   {
     name: 'Skilling, Jeff',
@@ -205,7 +200,6 @@ export const custodians: Custodian[] = [
     senderTotal: 0,
     receiverTotal: 0,
     toCustodians: [],
-    fromCustodians: [],
   },
   {
     name: 'Whalley, Greg',
@@ -234,7 +228,6 @@ export const custodians: Custodian[] = [
     senderTotal: 0,
     receiverTotal: 0,
     toCustodians: [],
-    fromCustodians: [],
   },
   // {
   //   name: 'Watkins, Sherron',

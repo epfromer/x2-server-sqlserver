@@ -71,7 +71,8 @@ async function run() {
   ): Promise<void> => {
     const q = `insert into ${emailSentByDayCollection} (day_sent, email_ids) values (?, ?)`
     emailSentByDay.forEach(async (day) => {
-      await connection.execute(q, [day.sent, day.emailIds.join(',')])
+      // TODO
+      await connection.execute(q, [day.sent, day.total])
     })
   }
 
@@ -86,7 +87,6 @@ async function run() {
         custodian.senderTotal,
         custodian.receiverTotal,
         JSON.stringify(custodian.toCustodians),
-        JSON.stringify(custodian.fromCustodians),
       ])
     })
   }

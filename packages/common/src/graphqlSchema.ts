@@ -8,17 +8,12 @@ export const graphqlSchema = buildSchema(`
 
   type EmailSentByDay {
     sent: String
-    emailIds: [String]
+    total: Int
   }
 
-  type EmailSentToCustodians {
-    emailId: String
-    custodianIds: [String]
-  }
-  
-  type EmailReceivedFromCustodians {
-    emailId: String
+  type CustodianInteractions {
     custodianId: String
+    total: Int
   }
 
   type Custodian {
@@ -28,8 +23,7 @@ export const graphqlSchema = buildSchema(`
     color: String
     senderTotal: Int
     receiverTotal: Int
-    toCustodians: [EmailSentToCustodians]
-    fromCustodians: [EmailReceivedFromCustodians]
+    toCustodians: [CustodianInteractions]
   }
 
   type Email {

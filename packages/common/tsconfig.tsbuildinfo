@@ -142,12 +142,12 @@
         "affectsGlobalScope": false
       },
       "./src/types.ts": {
-        "version": "09502aacbe4871e844fb4fb1f62602dad7f3cd9e786c53dde8052b8bd0b1db94",
-        "signature": "0cac0e969dc91ca917c864a3673a15dc10f159bc20e6a69f50313e85d54dbd1b",
+        "version": "5cacabb6a64b5209a161dcbd45bc9e95aa3b0cd145a5e36cfd67c6059d6416ee",
+        "signature": "3e3ee04d7d73ac5b16858dd5552bd5fb27f1cf93b0ae0905df4031f1c3ce2ec9",
         "affectsGlobalScope": false
       },
       "./src/custodians.ts": {
-        "version": "a09a2eb380206e292a10f454557aa87c588f23197123efdd1685f67604708d08",
+        "version": "dff748c7fd4e9e731b38047d850fdefc9b7082b00a0883d7336ca9a4a39d0310",
         "signature": "8d4434e22fa2145864ea1b279b896d7f56d61ef66c1f155226f43e743da53240",
         "affectsGlobalScope": false
       },
@@ -642,7 +642,7 @@
         "affectsGlobalScope": false
       },
       "./src/graphqlschema.ts": {
-        "version": "927dba7183a6479d71c70b023805ac8ca92dc4404a6c15f40c14b195c2406993",
+        "version": "df11e608185acdcb8e6745cdb18fa11298f29d13d1dc7039f51ca80fc0948c80",
         "signature": "94fbeed0623e48f8bcc6146bf95cc4f4fb64e542ccec58c90b76b23f254dd8d8",
         "affectsGlobalScope": false
       },
@@ -657,13 +657,13 @@
         "affectsGlobalScope": false
       },
       "./src/processcustodians.ts": {
-        "version": "946286f07ecc2a761119c8491e2e97c43e656746d7488824fc1025bb74558ef3",
-        "signature": "2e025c17a37b7a07afc92dee148dfdb7550bb0c0dac6abe4b7d58c6fdc38555c",
+        "version": "9d28425d88f4fa24a6569303ab547147045114e6403a29c2640c887b0d2cca90",
+        "signature": "9ec13e73aa0e41779b4a6d03b2de4cf06617dbc5220c4f284e7b917df42c285d",
         "affectsGlobalScope": false
       },
       "./src/processemailsent.ts": {
-        "version": "b27b2d981fdc37c6e9e7b90f5666ccb06662cfd56b11293642a1ce8c3aab0851",
-        "signature": "5d1ab785b3e30b43757e8ed2b77d5b5670e72734fd13e1a0235036703f17866a",
+        "version": "2cc70e6e50ba86a665857fe016d9fc24050e5a567718f5a11928095e6d0ab367",
+        "signature": "16b91da135de5f778721b61614fbc6799b68c8e2c4fd57416e51fdc075f36813",
         "affectsGlobalScope": false
       },
       "../../node_modules/@types/node/globals.d.ts": {
@@ -1007,7 +1007,7 @@
         "affectsGlobalScope": false
       },
       "./src/testdata.ts": {
-        "version": "f7bca1112a6710c1f30f187cb45c90b34f21065700889412c48ebf53221c7f59",
+        "version": "a2d6f4134b0475b6b33775342e48c83987092ebfda54e16d11bac59f5e287a55",
         "signature": "80362d8d761e3140897ac42d5ef843b46a4ff583bbf2fe2a62a10780fee0d497",
         "affectsGlobalScope": false
       },
@@ -1017,7 +1017,7 @@
         "affectsGlobalScope": false
       },
       "./src/processemail.ts": {
-        "version": "6fdbc4d7581f0c2cab266734c3bba5326adcef477e5bac8cdba8be4372b76bdf",
+        "version": "9c5fe82eee305f9a53ba6a06cee63d2b79578f0abae42535831cde0af2748ea8",
         "signature": "f4af5f4f93eca86f363bedfcc6202e4166e801bb9507891186e285108ec3c6a3",
         "affectsGlobalScope": false
       },
@@ -1201,11 +1201,6 @@
         "signature": "7b8f2bb9eb595be5b4e1f0e9320611e7b906eac85ab5fca95cedb84831865239",
         "affectsGlobalScope": false
       },
-      "../../node_modules/@types/morgan/index.d.ts": {
-        "version": "b60af9a543b4d5b123f9162105b9b160858c5074eee087aa6cacb9837e76b563",
-        "signature": "b60af9a543b4d5b123f9162105b9b160858c5074eee087aa6cacb9837e76b563",
-        "affectsGlobalScope": false
-      },
       "../../node_modules/@types/mysql/index.d.ts": {
         "version": "e2ba19c1f9f0f2e48f3d4ff98202f43e1802f530e065f0402086f2ae1c7e5a0a",
         "signature": "e2ba19c1f9f0f2e48f3d4ff98202f43e1802f530e065f0402086f2ae1c7e5a0a",
@@ -1373,10 +1368,6 @@
         "../../node_modules/@types/node/index.d.ts",
         "../../node_modules/@types/node/stream.d.ts",
         "../../node_modules/@types/node/tls.d.ts"
-      ],
-      "../../node_modules/@types/morgan/index.d.ts": [
-        "../../node_modules/@types/node/http.d.ts",
-        "../../node_modules/@types/node/index.d.ts"
       ],
       "../../node_modules/@types/mysql/index.d.ts": [
         "../../node_modules/@types/node/index.d.ts",
@@ -2295,10 +2286,6 @@
         "../../node_modules/@types/node/stream.d.ts",
         "../../node_modules/@types/node/tls.d.ts"
       ],
-      "../../node_modules/@types/morgan/index.d.ts": [
-        "../../node_modules/@types/node/http.d.ts",
-        "../../node_modules/@types/node/index.d.ts"
-      ],
       "../../node_modules/@types/mysql/index.d.ts": [
         "../../node_modules/@types/node/index.d.ts",
         "../../node_modules/@types/node/stream.d.ts",
@@ -3146,7 +3133,6 @@
       "../../node_modules/@types/minimatch/index.d.ts",
       "../../node_modules/@types/minimist/index.d.ts",
       "../../node_modules/@types/mongodb/index.d.ts",
-      "../../node_modules/@types/morgan/index.d.ts",
       "../../node_modules/@types/mysql/index.d.ts",
       "../../node_modules/@types/node/assert.d.ts",
       "../../node_modules/@types/node/async_hooks.d.ts",

@@ -27,18 +27,7 @@ export const testCustodians: Array<Custodian> = [
     color: '#e91e63',
     senderTotal: 5,
     receiverTotal: 34,
-    toCustodians: [
-      {
-        emailId: 'e9ffa816-c8e9-45d4-8b59-b3f8f64a0f98',
-        custodianIds: ['lay'],
-      },
-    ],
-    fromCustodians: [
-      {
-        emailId: '6d55bb5e-e8d7-43d4-95b5-ad6ab1c8b8dc',
-        custodianId: 'fastow',
-      },
-    ],
+    toCustodians: [{ custodianId: 'lay', total: 1 }],
   },
   {
     id: 'lay',
@@ -47,37 +36,14 @@ export const testCustodians: Array<Custodian> = [
     color: '#ffff00',
     senderTotal: 40,
     receiverTotal: 2690,
-    toCustodians: [
-      {
-        emailId: '6d55bb5e-e8d7-43d4-95b5-ad6ab1c8b8dc',
-        custodianIds: ['fastow'],
-      },
-    ],
-    fromCustodians: [
-      {
-        emailId: 'e9ffa816-c8e9-45d4-8b59-b3f8f64a0f98',
-        custodianId: 'fastow',
-      },
-    ],
+    toCustodians: [{ custodianId: 'fastow', total: 1 }],
   },
 ]
 
 export const testEmailSentByDay: Array<EmailSentByDay> = [
-  {
-    sent: '1999-01-06',
-    emailIds: ['156f2431-d496-4c5f-832c-c2ea8af75d1c'],
-  },
-  {
-    sent: '1999-01-07',
-    emailIds: [
-      'bcb82244-1113-4d31-a992-e790c37b6e97',
-      'e545749b-4f9f-43ef-8781-592e06aeb69e',
-    ],
-  },
-  {
-    sent: '1999-01-08',
-    emailIds: ['a5880429-906f-4cd4-8a22-849722e44445'],
-  },
+  { sent: '1999-01-06', total: 1 },
+  { sent: '1999-01-07', total: 2 },
+  { sent: '1999-01-08', total: 3 },
 ]
 
 export const testEmail: Array<Email> = [

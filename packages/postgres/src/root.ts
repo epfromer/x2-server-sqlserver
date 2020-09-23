@@ -14,11 +14,12 @@ import { Pool } from 'pg'
 import { getEmail } from './getEmail'
 import { getImportStatus, importPST } from './importPST'
 
+// https://node-postgres.com/features/pooling
+
 const getWordCloud = async (): Promise<Array<WordCloudTag>> => {
   try {
     const pool = new Pool({ database: dbName })
     const result = await pool.query(`select * from ${wordCloudCollection}`)
-    await pool.end()
     return result.rows.map((word) => ({
       tag: word.tag,
       weight: word.weight,
@@ -34,10 +35,9 @@ const getEmailSentByDay = async (): Promise<Array<EmailSentByDay>> => {
     const result = await pool.query(
       `select * from ${emailSentByDayCollection} order by day_sent asc`
     )
-    await pool.end()
     return result.rows.map((day) => ({
       sent: day.day_sent,
-      emailIds: day.email_ids.split(','),
+      emailIds: day.total,
     }))
   } catch (err) {
     console.error(err.stack)
@@ -50,7 +50,6 @@ const getCustodians = async (): Promise<Array<Custodian>> => {
     const result = await pool.query(
       `select * from ${custodianCollection} order by custodian_id asc`
     )
-    await pool.end()
     return result.rows.map((custodian) => ({
       id: custodian.custodian_id,
       name: custodian.custodian_name,
@@ -59,7 +58,6 @@ const getCustodians = async (): Promise<Array<Custodian>> => {
       senderTotal: custodian.sender_total,
       receiverTotal: custodian.receiver_total,
       toCustodians: JSON.parse(custodian.to_custodians),
-      fromCustodians: JSON.parse(custodian.from_custodians),
     }))
   } catch (err) {
     console.error(err.stack)
@@ -76,7 +74,6 @@ const setCustodianColor = async (
   const result = await pool.query(
     `select * from ${custodianCollection} order by custodian_id asc`
   )
-  await pool.end()
   return result.rows.map((custodian) => ({
     id: custodian.custodian_id,
     name: custodian.custodian_name,
@@ -85,7 +82,6 @@ const setCustodianColor = async (
     senderTotal: custodian.sender_total,
     receiverTotal: custodian.receiver_total,
     toCustodians: JSON.parse(custodian.to_custodians),
-    fromCustodians: JSON.parse(custodian.from_custodians),
   }))
 }
 

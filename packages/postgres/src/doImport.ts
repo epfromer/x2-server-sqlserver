@@ -24,30 +24,48 @@ async function run() {
 
   const insertEmails = async (emails) => {
     const pool = new Pool({ database: dbName })
-    const q = `insert into ${emailCollection} (email_id, email_sent, email_from, email_from_lc, email_from_custodian, email_from_custodian_lc, email_to, email_to_lc, email_to_custodians, email_to_custodians_lc, email_cc, email_cc_lc, email_bcc, email_bcc_lc, email_subject, email_subject_lc, email_body, email_body_lc) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18)`
+    const q = `insert into ${emailCollection} (
+      email_id, 
+      email_sent, 
+      email_from, 
+      email_from_lc, 
+      email_from_custodian, 
+      email_from_custodian_lc, 
+      email_to, 
+      email_to_lc, 
+      email_to_custodians, 
+      email_to_custodians_lc, 
+      email_cc, 
+      email_cc_lc, 
+      email_bcc, 
+      email_bcc_lc, 
+      email_subject, 
+      email_subject_lc, 
+      email_body, 
+      email_body_lc) 
+      values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18)`
     emails.forEach(async (email) => {
       await pool.query(q, [
-        uuidv4(),
-        email.sent,
-        email.from,
-        email.from.toLowerCase(), // lower case of text fields for faster search
-        email.fromCustodian,
-        email.fromCustodian.toLowerCase(),
-        email.to,
-        email.to.toLowerCase(),
-        email.toCustodians.toString(),
-        email.toCustodians.toString().toLowerCase(),
-        email.cc,
-        email.cc.toLowerCase(),
-        email.bcc,
-        email.bcc.toLowerCase(),
-        email.subject,
-        email.subject.toLowerCase(),
-        email.body,
-        email.body.toLowerCase(),
+        uuidv4(), // email_id
+        email.sent, // email_sent
+        email.from, // email_from
+        email.from.toLowerCase(), // email_from_lc
+        email.fromCustodian, // email_from_custodian
+        email.fromCustodian.toLowerCase(), // email_from_custodian_lc
+        email.to, // email_to
+        email.to.toLowerCase(), // email_to_lc
+        email.toCustodians.toString(), // email_to_custodians
+        email.toCustodians.toString().toLowerCase(), // email_to_custodians_lc
+        email.cc, // email_cc
+        email.cc.toLowerCase(), // email_cc_lc
+        email.bcc, // email_bcc
+        email.bcc.toLowerCase(), // email_bcc_lc
+        email.subject, // email_subject
+        email.subject.toLowerCase(), // email_subject_lc
+        email.body, // email_body
+        email.body.toLowerCase(), // email_body_lc
       ])
     })
-    await pool.end()
   }
 
   const insertWordCloud = async (wordCloud) => {
@@ -56,21 +74,19 @@ async function run() {
     wordCloud.forEach(async (word) => {
       await pool.query(q, [word.tag, word.weight])
     })
-    await pool.end()
   }
 
   const insertEmailSentByDay = async (emailSentByDay) => {
     const pool = new Pool({ database: dbName })
-    const q = `insert into ${emailSentByDayCollection} (day_sent, email_ids) values ($1, $2)`
+    const q = `insert into ${emailSentByDayCollection} (day_sent, total) values ($1, $2)`
     emailSentByDay.forEach(async (day) => {
-      await pool.query(q, [day.sent, day.emailIds.join(',')])
+      await pool.query(q, [day.sent, day.total])
     })
-    await pool.end()
   }
 
   const insertCustodians = async (custodians) => {
     const pool = new Pool({ database: dbName })
-    const q = `insert into ${custodianCollection} (custodian_id, custodian_name, title, color, sender_total, receiver_total, to_custodians, from_custodians) values ($1, $2, $3, $4, $5, $6, $7, $8)`
+    const q = `insert into ${custodianCollection} (custodian_id, custodian_name, title, color, sender_total, receiver_total, to_custodians) values ($1, $2, $3, $4, $5, $6, $7)`
     custodians.forEach(async (custodian) => {
       await pool.query(q, [
         custodian.id,
@@ -80,10 +96,8 @@ async function run() {
         custodian.senderTotal,
         custodian.receiverTotal,
         JSON.stringify(custodian.toCustodians),
-        JSON.stringify(custodian.fromCustodians),
       ])
     })
-    await pool.end()
   }
 
   process.send(`drop database`)
@@ -115,13 +129,13 @@ async function run() {
     `alter table ${wordCloudCollection} add constraint wordcloud_pkey primary key (tag)`
   )
   await pool.query(
-    `create table ${emailSentByDayCollection} (day_sent timestamptz, email_ids text)`
+    `create table ${emailSentByDayCollection} (day_sent timestamptz, total integer)`
   )
   await pool.query(
     `alter table ${emailSentByDayCollection} add constraint emailsentbyday_pkey primary key (day_sent)`
   )
   await pool.query(
-    `create table ${custodianCollection} (custodian_id varchar(255), custodian_name text, title text, color text, sender_total integer, receiver_total integer, to_custodians text, from_custodians text)`
+    `create table ${custodianCollection} (custodian_id varchar(255), custodian_name text, title text, color text, sender_total integer, receiver_total integer, to_custodians text)`
   )
   await pool.query(
     `alter table ${custodianCollection} add constraint custodians_pkey primary key (custodian_id)`

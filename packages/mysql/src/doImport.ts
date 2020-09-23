@@ -31,30 +31,52 @@ async function run() {
   } as ConnectionConfig)
 
   const insertEmails = async (emails: Email[]): Promise<void> => {
-    const q = `insert into ${emailCollection} (email_id, email_sent, email_from, email_from_sort, email_from_lc, email_from_custodian, email_from_custodian_lc, email_to, email_to_sort, email_to_lc, email_to_custodians, email_to_custodians_lc, email_cc, email_cc_lc, email_bcc, email_bcc_lc, email_subject, email_subject_sort, email_subject_lc, email_body, email_body_lc) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+    const q = `insert into ${emailCollection} (
+      email_id, 
+      email_sent, 
+      email_from, 
+      email_from_sort, 
+      email_from_lc, 
+      email_from_custodian, 
+      email_from_custodian_lc, 
+      email_to, 
+      email_to_sort, 
+      email_to_lc, 
+      email_to_custodians, 
+      email_to_custodians_lc, 
+      email_cc, 
+      email_cc_lc, 
+      email_bcc, 
+      email_bcc_lc, 
+      email_subject, 
+      email_subject_sort, 
+      email_subject_lc, 
+      email_body, 
+      email_body_lc) 
+      values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
     emails.forEach(async (email) => {
       await connection.execute(q, [
-        uuidv4(),
-        email.sent,
-        email.from,
-        email.from.slice(0, 254),
-        email.from.toLowerCase(), // lower case of text fields for faster search
-        email.fromCustodian,
-        email.fromCustodian.toLowerCase(),
-        email.to,
-        email.to.slice(0, 254),
-        email.to.toLowerCase(),
-        email.toCustodians.toString(),
-        email.toCustodians.toString().toLowerCase(),
-        email.cc,
-        email.cc.toLowerCase(),
-        email.bcc,
-        email.bcc.toLowerCase(),
-        email.subject,
-        email.subject.slice(0, 254),
-        email.subject.toLowerCase(),
-        email.body,
-        email.body.toLowerCase(),
+        uuidv4(), // email_id
+        email.sent, // email_sent
+        email.from, // email_from
+        email.from.slice(0, 254), //email_from_sort
+        email.from.toLowerCase(), // email_from_lc
+        email.fromCustodian, // email_from_custodian
+        email.fromCustodian.toLowerCase(), // email_from_custodian_lc
+        email.to, // email_to
+        email.to.slice(0, 254), // email_to_sort
+        email.to.toLowerCase(), // email_to_lc
+        email.toCustodians.toString(), // email_to_custodians
+        email.toCustodians.toString().toLowerCase(), // email_to_custodians_lc
+        email.cc, // email_cc
+        email.cc.toLowerCase(), // email_cc_lc
+        email.bcc, // email_bcc
+        email.bcc.toLowerCase(), // email_bcc_lc
+        email.subject, // email_subject
+        email.subject.slice(0, 254), // email_subject_sort
+        email.subject.toLowerCase(), // email_subject_lc
+        email.body, // email_body
+        email.body.toLowerCase(), // email_body_lc
       ])
     })
   }

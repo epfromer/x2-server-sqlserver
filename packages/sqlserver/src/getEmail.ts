@@ -115,7 +115,6 @@ export async function getEmail(httpQuery: HTTPQuery): Promise<EmailTotal> {
     })
     const result = await pool.query(q)
     const resultTotal = await pool.query(qTotal)
-    // await pool.close()
 
     return {
       total: resultTotal.recordset[0].total,

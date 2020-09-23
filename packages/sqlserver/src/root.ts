@@ -23,7 +23,6 @@ const getWordCloud = async (): Promise<Array<WordCloudTag>> => {
       database: dbName,
     })
     const result = await pool.query(`select * from ${wordCloudCollection}`)
-    // await pool.close()
     return result.recordset
   } catch (err) {
     console.error(err.stack)
@@ -41,7 +40,6 @@ const getEmailSentByDay = async (): Promise<Array<EmailSentByDay>> => {
     const result = await pool.query(
       `select * from ${emailSentByDayCollection} order by day_sent asc`
     )
-    // await pool.close()
     return result.recordset.map((day) => ({
       sent: day.day_sent,
       emailIds: day.email_ids.split(','),
@@ -62,8 +60,7 @@ const getCustodians = async (): Promise<Array<Custodian>> => {
     const result = await pool.query(
       `select * from ${custodianCollection} order by custodian_id asc`
     )
-    // await pool.close()
-    return result.rows.map((custodian) => ({
+    return result.recordset.map((custodian) => ({
       id: custodian.custodian_id,
       name: custodian.custodian_name,
       title: custodian.title,
@@ -93,8 +90,7 @@ const setCustodianColor = async (
   const result = await pool.query(
     `select * from ${custodianCollection} order by custodian_id asc`
   )
-  await pool.close()
-  return result.rows.map((custodian) => ({
+  return result.recordset.map((custodian) => ({
     id: custodian.custodian_id,
     name: custodian.custodian_name,
     title: custodian.title,

@@ -69,7 +69,6 @@ const setCustodianColor = async (
   httpQuery: HTTPQuery
 ): Promise<Array<Custodian>> => {
   try {
-    console.log('set custo color')
     const client = await mongodb.MongoClient.connect(process.env.MONGODB_HOST, {
       useUnifiedTopology: false,
     })

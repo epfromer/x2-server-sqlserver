@@ -32,21 +32,11 @@ const createSearchParams = (httpQuery) => {
   } else {
     if (from) {
       query += query ? ' AND ' : ''
-      // check if searching only named Custodians, delimited with ()
-      if (from.indexOf('(') >= 0) {
-        query += `fromCustodian:"${from}" `
-      } else {
-        query += `from:"${from}" `
-      }
+      query += ` (from:"${from}" OR fromCustodian:"${from}") `
     }
     if (to) {
       query += query ? ' AND ' : ''
-      // check if searching only named Custodians, delimited with ()
-      if (to.indexOf('(') >= 0) {
-        query += `toCustodian:"${to}" `
-      } else {
-        query += `to:"${to}" `
-      }
+      query += ` (to:"${to}" OR toCustodian:"${to}" OR bcc:"${to}" OR cc:"${to}") `
     }
     if (subject) {
       query += query ? ' AND ' : ''

@@ -23,16 +23,14 @@ async function run() {
     return
   }
 
-  const connect = async () =>
-    await sql.connect({
-      server: process.env.SQL_HOST,
-      user: process.env.SQL_USER,
-      password: process.env.SQL_PASSWORD,
-      database: dbName,
-    })
+  process.send(`connect to ${process.env.SQL_HOST}`)
+  let pool = await sql.connect({
+    server: process.env.SQL_HOST,
+    user: process.env.SQL_USER,
+    password: process.env.SQL_PASSWORD,
+  })
 
   const insertEmails = async (emails: Email[]): Promise<void> => {
-    const pool = await connect()
     const table = new sql.Table(emailCollection)
     table.create = true
 
@@ -101,11 +99,9 @@ async function run() {
 
     const request = new sql.Request(pool)
     await request.bulk(table)
-    return pool.close()
   }
 
   const insertWordCloud = async (wordCloud: WordCloudTag[]): Promise<void> => {
-    const pool = await connect()
     const table = new sql.Table(wordCloudCollection)
     table.create = true
 
@@ -116,13 +112,11 @@ async function run() {
 
     const request = new sql.Request(pool)
     await request.bulk(table)
-    return pool.close()
   }
 
   const insertEmailSentByDay = async (
     emailSentByDay: EmailSentByDay[]
   ): Promise<void> => {
-    const pool = await connect()
     const table = new sql.Table(emailSentByDayCollection)
     table.create = true
 
@@ -132,7 +126,6 @@ async function run() {
 
     const request = new sql.Request(pool)
     await request.bulk(table)
-    return pool.close()
   }
 
   const insertCustodians = async (custodians: Custodian[]): Promise<void> => {
@@ -170,23 +163,21 @@ async function run() {
 
     const request = new sql.Request(pool)
     await request.bulk(table)
-    return pool.close()
   }
-
-  process.send(`connect to ${process.env.SQL_HOST}`)
-  const pool = await sql.connect({
-    server: process.env.SQL_HOST,
-    user: process.env.SQL_USER,
-    password: process.env.SQL_PASSWORD,
-  })
 
   process.send(`drop database`)
   await pool.query('drop database if exists ' + dbName)
 
   process.send(`create database`)
   await pool.query('create database ' + dbName)
-
   await pool.close()
+
+  pool = await sql.connect({
+    server: process.env.SQL_HOST,
+    user: process.env.SQL_USER,
+    password: process.env.SQL_PASSWORD,
+    database: dbName,
+  })
 
   process.send(`process emails`)
   const numEmails = await walkFSfolder(process.argv[2], insertEmails, (msg) =>
@@ -203,6 +194,7 @@ async function run() {
   await processCustodians(insertCustodians, (msg) => process.send(msg))
 
   process.send(`completed ${numEmails} emails in ${process.argv[2]}`)
+  await pool.close()
 }
 
 run().catch((err) => console.error(err))

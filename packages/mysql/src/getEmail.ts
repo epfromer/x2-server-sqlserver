@@ -5,7 +5,7 @@ import {
   EmailTotal,
   HTTPQuery,
 } from '@klonzo/common'
-import mysql, { ConnectionConfig } from 'mysql2/promise'
+import mysql from 'mysql2/promise'
 
 const createWhereClause = (httpQuery: HTTPQuery) => {
   // console.log(httpQuery)
@@ -117,7 +117,7 @@ export async function getEmail(httpQuery: HTTPQuery): Promise<EmailTotal> {
       user: process.env.MYSQL_USER,
       password: process.env.MYSQL_ROOT_PASSWORD,
       database: dbName,
-    } as ConnectionConfig)
+    })
     const [rows] = await connection.execute(q)
     const [resultTotal] = await connection.execute(qTotal)
     // connection.end()

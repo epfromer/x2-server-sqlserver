@@ -23,7 +23,6 @@ async function run() {
   let pool = new Pool()
 
   const insertEmails = async (emails) => {
-    const pool = new Pool({ database: dbName })
     const q = `insert into ${emailCollection} (
       email_id, 
       email_sent, 
@@ -69,7 +68,6 @@ async function run() {
   }
 
   const insertWordCloud = async (wordCloud) => {
-    const pool = new Pool({ database: dbName })
     const q = `insert into ${wordCloudCollection} (tag, weight) values ($1, $2)`
     wordCloud.forEach(async (word) => {
       await pool.query(q, [word.tag, word.weight])
@@ -77,7 +75,6 @@ async function run() {
   }
 
   const insertEmailSentByDay = async (emailSentByDay) => {
-    const pool = new Pool({ database: dbName })
     const q = `insert into ${emailSentByDayCollection} (day_sent, total) values ($1, $2)`
     emailSentByDay.forEach(async (day) => {
       await pool.query(q, [day.sent, day.total])
@@ -85,7 +82,6 @@ async function run() {
   }
 
   const insertCustodians = async (custodians) => {
-    const pool = new Pool({ database: dbName })
     const q = `insert into ${custodianCollection} (custodian_id, custodian_name, title, color, sender_total, receiver_total, to_custodians) values ($1, $2, $3, $4, $5, $6, $7)`
     custodians.forEach(async (custodian) => {
       await pool.query(q, [
@@ -113,7 +109,6 @@ async function run() {
 
   process.send(`create database`)
   await pool.query('create database ' + dbName)
-  await pool.end()
 
   pool = new Pool({ database: dbName })
   await pool.query(
@@ -140,7 +135,6 @@ async function run() {
   await pool.query(
     `alter table ${custodianCollection} add constraint custodians_pkey primary key (custodian_id)`
   )
-  await pool.end()
 
   process.send(`process emails`)
   const numEmails = await walkFSfolder(process.argv[2], insertEmails, (msg) =>

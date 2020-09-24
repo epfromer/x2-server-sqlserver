@@ -10,7 +10,7 @@ import {
   wordCloudCollection,
   WordCloudTag,
 } from '@klonzo/common'
-import mysql, { ConnectionConfig } from 'mysql2/promise'
+import mysql from 'mysql2/promise'
 import { getEmail } from './getEmail'
 import { getImportStatus, importPST } from './importPST'
 
@@ -21,7 +21,7 @@ const getWordCloud = async (): Promise<Array<WordCloudTag>> => {
       user: process.env.MYSQL_USER,
       password: process.env.MYSQL_ROOT_PASSWORD,
       database: dbName,
-    } as ConnectionConfig)
+    })
     const [rows] = await connection.execute(
       `select * from ${wordCloudCollection}`
     )
@@ -44,7 +44,7 @@ const getEmailSentByDay = async (): Promise<Array<EmailSentByDay>> => {
       user: process.env.MYSQL_USER,
       password: process.env.MYSQL_ROOT_PASSWORD,
       database: dbName,
-    } as ConnectionConfig)
+    })
     const [rows] = await connection.execute(
       `select * from ${emailSentByDayCollection} order by day_sent asc`
     )
@@ -67,7 +67,7 @@ const getCustodians = async (): Promise<Array<Custodian>> => {
       user: process.env.MYSQL_USER,
       password: process.env.MYSQL_ROOT_PASSWORD,
       database: dbName,
-    } as ConnectionConfig)
+    })
     const [rows] = await connection.execute(
       `select * from ${custodianCollection} order by custodian_id asc`
     )
@@ -96,7 +96,7 @@ const setCustodianColor = async (
     user: process.env.MYSQL_USER,
     password: process.env.MYSQL_ROOT_PASSWORD,
     database: dbName,
-  } as ConnectionConfig)
+  })
   await connection.execute(
     `update ${custodianCollection} set color = '${httpQuery.color}' where custodian_id = '${httpQuery.id}'`
   )

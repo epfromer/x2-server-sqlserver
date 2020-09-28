@@ -7,8 +7,10 @@ import {
   EmailTotal,
   HTTPQuery,
   ImportLogEntry,
+  searchHistoryCollection,
   wordCloudCollection,
   WordCloudTag,
+  SearchHistoryEntry,
 } from '@klonzo/common'
 import * as mongodb from 'mongodb'
 import { getEmail } from './getEmail'
@@ -65,6 +67,26 @@ const getCustodians = async (): Promise<Array<Custodian>> => {
   }
 }
 
+const getSearchHistory = async (): Promise<Array<SearchHistoryEntry>> => {
+  try {
+    const client = await mongodb.MongoClient.connect(process.env.MONGODB_HOST, {
+      useUnifiedTopology: false,
+    })
+    const db = client.db(dbName)
+    const entries = await db
+      .collection(searchHistoryCollection)
+      .find()
+      .toArray()
+    return entries.map((entry) => ({
+      id: entry.id,
+      timestamp: entry.timestamp,
+      entry: entry.entry,
+    }))
+  } catch (err) {
+    console.error(err.stack)
+  }
+}
+
 const setCustodianColor = async (
   httpQuery: HTTPQuery
 ): Promise<Array<Custodian>> => {
@@ -95,21 +117,23 @@ const setCustodianColor = async (
 }
 
 interface Root {
-  importPST: (httpQuery) => string
-  getImportStatus: () => Array<ImportLogEntry>
-  getWordCloud: () => Promise<Array<WordCloudTag>>
-  getEmailSentByDay: () => Promise<Array<EmailSentByDay>>
   getCustodians: () => Promise<Array<Custodian>>
   getEmail: (httpQuery: HTTPQuery) => Promise<EmailTotal>
+  getEmailSentByDay: () => Promise<Array<EmailSentByDay>>
+  getImportStatus: () => Array<ImportLogEntry>
+  getSearchHistory: () => Promise<Array<SearchHistoryEntry>>
+  getWordCloud: () => Promise<Array<WordCloudTag>>
+  importPST: (httpQuery) => string
   setCustodianColor: (httpQuery: HTTPQuery) => Promise<Array<Custodian>>
 }
 export const root: Root = {
-  importPST: (httpQuery) => importPST(httpQuery),
-  getImportStatus: () => getImportStatus(),
-  getWordCloud: () => getWordCloud(),
-  getEmailSentByDay: () => getEmailSentByDay(),
   getCustodians: () => getCustodians(),
   getEmail: (httpQuery) => getEmail(httpQuery),
+  getEmailSentByDay: () => getEmailSentByDay(),
+  getImportStatus: () => getImportStatus(),
+  getSearchHistory: () => getSearchHistory(),
+  getWordCloud: () => getWordCloud(),
+  importPST: (httpQuery) => importPST(httpQuery),
   setCustodianColor: (httpQuery) => setCustodianColor(httpQuery),
 }
 

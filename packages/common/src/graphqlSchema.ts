@@ -51,6 +51,12 @@ export const graphqlSchema = buildSchema(`
     entry: String
   }
 
+  type SearchHistoryEntry {
+    id: String
+    timestamp: String
+    entry: String
+  }
+
   type Mutation {
     importPST(loc: String): String
     setCustodianColor(id: ID, color: String): [Custodian]
@@ -61,6 +67,7 @@ export const graphqlSchema = buildSchema(`
     getWordCloud: [Word]
     getEmailSentByDay: [EmailSentByDay]
     getCustodians: [Custodian]
+    getSearchHistory: [SearchHistoryEntry]
     getEmail(
       id: ID, 
       skip: Int = 0, 

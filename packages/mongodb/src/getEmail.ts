@@ -4,8 +4,10 @@ import {
   emailCollection,
   EmailTotal,
   HTTPQuery,
+  searchHistoryCollection,
 } from '@klonzo/common'
 import * as mongodb from 'mongodb'
+import { v4 as uuidv4 } from 'uuid'
 
 interface MongoSent {
   $gte: Date
@@ -104,6 +106,7 @@ const createSortOrder = (httpQuery) => {
 export async function getEmail(httpQuery: HTTPQuery): Promise<EmailTotal> {
   try {
     // console.log('httpQuery', httpQuery)
+
     const client = await mongodb.MongoClient.connect(process.env.MONGODB_HOST, {
       useUnifiedTopology: false,
     })
@@ -132,6 +135,12 @@ export async function getEmail(httpQuery: HTTPQuery): Promise<EmailTotal> {
       subject: email.subject,
       body: email.body,
     }))
+
+    await db.collection(searchHistoryCollection).insertOne({
+      id: uuidv4(),
+      timestamp: new Date().toISOString(),
+      entry: JSON.stringify(httpQuery),
+    })
 
     return {
       total,

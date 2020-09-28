@@ -137,13 +137,13 @@
         "affectsGlobalScope": true
       },
       "./src/constants.ts": {
-        "version": "a54f861d47b15ad8ce8a1ef365d99e8f02c1e88928e799907e1b6242ebd0936d",
-        "signature": "8bcc6dc3c19e3f0473305fa009386376038167b1e009236a6a54eaad2bcec72d",
+        "version": "718be3061aef5666ebcbb8070e2f16a1cf7f11bbb2c3c4e9423ad47df1f0e7fd",
+        "signature": "c1ad068d3d11ae23ae97a20f15d0c34f68965905eef370383219dd9f4415802a",
         "affectsGlobalScope": false
       },
       "./src/types.ts": {
-        "version": "5cacabb6a64b5209a161dcbd45bc9e95aa3b0cd145a5e36cfd67c6059d6416ee",
-        "signature": "3e3ee04d7d73ac5b16858dd5552bd5fb27f1cf93b0ae0905df4031f1c3ce2ec9",
+        "version": "5350365b3390ba4fce8ef103537bf54797d55524646187cf7a632ed1886c5aed",
+        "signature": "e30fc0ce901fca01960886f22558d01492273bf60e0e0814ee564b84ab6177c5",
         "affectsGlobalScope": false
       },
       "./src/custodians.ts": {
@@ -642,7 +642,7 @@
         "affectsGlobalScope": false
       },
       "./src/graphqlschema.ts": {
-        "version": "df11e608185acdcb8e6745cdb18fa11298f29d13d1dc7039f51ca80fc0948c80",
+        "version": "5162c803ae78d738f33a6c1ac12b3232ba193158d44a6dfd972bdb04a416598a",
         "signature": "94fbeed0623e48f8bcc6146bf95cc4f4fb64e542ccec58c90b76b23f254dd8d8",
         "affectsGlobalScope": false
       },

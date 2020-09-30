@@ -136,11 +136,15 @@ export async function getEmail(httpQuery: HTTPQuery): Promise<EmailTotal> {
       body: email.body,
     }))
 
-    await db.collection(searchHistoryCollection).insertOne({
-      id: uuidv4(),
-      timestamp: new Date().toISOString(),
-      entry: JSON.stringify(httpQuery),
-    })
+    const strQuery = JSON.stringify(httpQuery)
+    // save query if not the initial
+    if (strQuery !== `{"skip":0,"limit":50,"sort":"sent","order":1}`) {
+      await db.collection(searchHistoryCollection).insertOne({
+        id: uuidv4(),
+        timestamp: new Date().toISOString(),
+        entry: strQuery,
+      })
+    }
 
     return {
       total,

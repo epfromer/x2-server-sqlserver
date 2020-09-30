@@ -8,13 +8,26 @@ import {
   HTTPQuery,
   ImportLogEntry,
   searchHistoryCollection,
+  SearchHistoryEntry,
   wordCloudCollection,
   WordCloudTag,
-  SearchHistoryEntry,
 } from '@klonzo/common'
 import * as mongodb from 'mongodb'
 import { getEmail } from './getEmail'
 import { getImportStatus, importPST } from './importPST'
+
+const clearSearchHistory = async (): Promise<string> => {
+  try {
+    const client = await mongodb.MongoClient.connect(process.env.MONGODB_HOST, {
+      useUnifiedTopology: false,
+    })
+    const db = client.db(dbName)
+    await db.dropCollection(searchHistoryCollection)
+    return `Search history cleared`
+  } catch (err) {
+    console.error(err.stack)
+  }
+}
 
 const getWordCloud = async (): Promise<Array<WordCloudTag>> => {
   try {
@@ -76,6 +89,7 @@ const getSearchHistory = async (): Promise<Array<SearchHistoryEntry>> => {
     const entries = await db
       .collection(searchHistoryCollection)
       .find()
+      .sort({ timestamp: -1 })
       .toArray()
     return entries.map((entry) => ({
       id: entry.id,
@@ -117,6 +131,7 @@ const setCustodianColor = async (
 }
 
 interface Root {
+  clearSearchHistory: () => Promise<string>
   getCustodians: () => Promise<Array<Custodian>>
   getEmail: (httpQuery: HTTPQuery) => Promise<EmailTotal>
   getEmailSentByDay: () => Promise<Array<EmailSentByDay>>
@@ -127,6 +142,7 @@ interface Root {
   setCustodianColor: (httpQuery: HTTPQuery) => Promise<Array<Custodian>>
 }
 export const root: Root = {
+  clearSearchHistory: () => clearSearchHistory(),
   getCustodians: () => getCustodians(),
   getEmail: (httpQuery) => getEmail(httpQuery),
   getEmailSentByDay: () => getEmailSentByDay(),

@@ -58,6 +58,7 @@ export const graphqlSchema = buildSchema(`
   }
 
   type Mutation {
+    clearSearchHistory: String
     importPST(loc: String): String
     setCustodianColor(id: ID, color: String): [Custodian]
   }

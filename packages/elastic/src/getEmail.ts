@@ -80,6 +80,8 @@ const createSortOrder = (httpQuery) => {
 
 export async function getEmail(httpQuery: HTTPQuery): Promise<EmailTotal> {
   try {
+    // console.log('httpQuery', httpQuery)
+
     const client = new Client({
       node: `http://${process.env.ELASTIC_HOST}:${process.env.ELASTIC_PORT}`,
     })

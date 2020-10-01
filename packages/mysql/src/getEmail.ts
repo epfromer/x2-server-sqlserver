@@ -4,8 +4,10 @@ import {
   emailCollection,
   EmailTotal,
   HTTPQuery,
+  searchHistoryCollection,
 } from '@klonzo/common'
 import mysql from 'mysql2/promise'
+import { v4 as uuidv4 } from 'uuid'
 
 const createWhereClause = (httpQuery: HTTPQuery) => {
   // console.log(httpQuery)
@@ -121,6 +123,17 @@ export async function getEmail(httpQuery: HTTPQuery): Promise<EmailTotal> {
     const [rows] = await connection.execute(q)
     const [resultTotal] = await connection.execute(qTotal)
     // connection.end()
+
+    const strQuery = JSON.stringify(httpQuery)
+    // save query if not the initial
+    if (strQuery !== `{"skip":0,"limit":50,"sort":"sent","order":1}`) {
+      const q = `insert into ${searchHistoryCollection} (history_id, time_stamp, entry) values (?, ?, ?)`
+      await connection.execute(q, [
+        uuidv4(),
+        new Date().toISOString(),
+        strQuery,
+      ])
+    }
 
     return {
       total: +resultTotal[0].total,

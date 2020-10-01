@@ -10,6 +10,7 @@ import {
   processCustodians,
   processEmailSentByDay,
   processWordCloud,
+  searchHistoryCollection,
   walkFSfolder,
   wordCloudCollection,
   WordCloudTag,
@@ -101,7 +102,7 @@ async function run() {
   const insertCustodians = async (custodians: Custodian[]): Promise<void> => {
     const q = `insert into ${custodianCollection} (custodian_id, custodian_name, title, color, sender_total, receiver_total, to_custodians) values (?, ?, ?, ?, ?, ?, ?)`
     custodians.forEach(async (custodian) => {
-      await connection.query(q, [
+      await connection.execute(q, [
         custodian.id,
         custodian.name,
         custodian.title,
@@ -146,23 +147,32 @@ async function run() {
   await connection.execute(
     `alter table ${emailCollection} add index email_email_subject_sort_index(email_subject_sort)`
   )
-  await connection.query(
+  await connection.execute(
     `create table ${wordCloudCollection} (tag varchar(255), weight integer)`
   )
-  await connection.query(
+  await connection.execute(
     `alter table ${wordCloudCollection} add primary key wordcloud_pkey(tag)`
   )
-  await connection.query(
+  await connection.execute(
     `create table ${emailSentByDayCollection} (day_sent varchar(25), total integer)`
   )
-  await connection.query(
+  await connection.execute(
     `alter table ${emailSentByDayCollection} add primary key emailsentbyday_pkey(day_sent)`
   )
-  await connection.query(
+  await connection.execute(
     `create table ${custodianCollection} (custodian_id varchar(25), custodian_name text, title text, color text, sender_total integer, receiver_total integer, to_custodians text)`
   )
-  await connection.query(
+  await connection.execute(
     `alter table ${custodianCollection} add primary key custodians_pkey(custodian_id)`
+  )
+  await connection.execute(
+    `create table ${searchHistoryCollection} (history_id varchar(255), time_stamp varchar(25), entry varchar(255))`
+  )
+  await connection.execute(
+    `alter table ${searchHistoryCollection} add primary key history_id_pkey(history_id)`
+  )
+  await connection.execute(
+    `alter table ${searchHistoryCollection} add index time_stamp_index(time_stamp)`
   )
 
   process.send(`process emails`)

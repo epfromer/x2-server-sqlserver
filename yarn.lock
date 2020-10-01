@@ -1606,12 +1606,22 @@
     "@types/bson" "*"
     "@types/node" "*"
 
+"@types/mysql2@types/mysql2#":
+  version "1.0.0"
+  resolved "https://codeload.github.com/types/mysql2/tar.gz/d4ef3b2292f328049f7e4c545f6adab7d6a350a9"
+  dependencies:
+    "@types/mysql" types/mysql
+
 "@types/mysql@^2.15.15":
   version "2.15.15"
   resolved "https://registry.yarnpkg.com/@types/mysql/-/mysql-2.15.15.tgz#af2223d2841091a5a819eabee6dff19567f1cf1f"
   integrity sha512-1GJnq7RwuFPRicMHdT53vza5v39nep9OKIbozxNUpFXP04CydcdWrqpZQ+MlVdlLFCisWnnt09xughajjWpFsw==
   dependencies:
     "@types/node" "*"
+
+"@types/mysql@types/mysql":
+  version "2.0.0"
+  resolved "https://codeload.github.com/types/mysql/tar.gz/c26b1bc2bac17010081455e3127a90fb2eafcec9"
 
 "@types/node@*", "@types/node@>= 8":
   version "14.10.3"

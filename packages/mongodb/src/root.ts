@@ -7,7 +7,6 @@ import {
   EmailTotal,
   HTTPQuery,
   ImportLogEntry,
-  searchHistoryCollection,
   SearchHistoryEntry,
   wordCloudCollection,
   WordCloudTag,
@@ -15,19 +14,7 @@ import {
 import * as mongodb from 'mongodb'
 import { getEmail } from './getEmail'
 import { getImportStatus, importPST } from './importPST'
-
-const clearSearchHistory = async (): Promise<string> => {
-  try {
-    const client = await mongodb.MongoClient.connect(process.env.MONGODB_HOST, {
-      useUnifiedTopology: false,
-    })
-    const db = client.db(dbName)
-    await db.dropCollection(searchHistoryCollection)
-    return `Search history cleared`
-  } catch (err) {
-    console.error(err.stack)
-  }
-}
+import { clearSearchHistory, getSearchHistory } from './searchHistory'
 
 const getWordCloud = async (): Promise<Array<WordCloudTag>> => {
   try {
@@ -74,27 +61,6 @@ const getCustodians = async (): Promise<Array<Custodian>> => {
       senderTotal: custodian.senderTotal,
       receiverTotal: custodian.receiverTotal,
       toCustodians: custodian.toCustodians,
-    }))
-  } catch (err) {
-    console.error(err.stack)
-  }
-}
-
-const getSearchHistory = async (): Promise<Array<SearchHistoryEntry>> => {
-  try {
-    const client = await mongodb.MongoClient.connect(process.env.MONGODB_HOST, {
-      useUnifiedTopology: false,
-    })
-    const db = client.db(dbName)
-    const entries = await db
-      .collection(searchHistoryCollection)
-      .find()
-      .sort({ timestamp: -1 })
-      .toArray()
-    return entries.map((entry) => ({
-      id: entry.id,
-      timestamp: entry.timestamp,
-      entry: entry.entry,
     }))
   } catch (err) {
     console.error(err.stack)

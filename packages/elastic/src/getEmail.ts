@@ -1,5 +1,12 @@
 import { Client } from '@elastic/elasticsearch'
-import { dbName, defaultLimit, EmailTotal, HTTPQuery } from '@klonzo/common'
+import {
+  dbName,
+  defaultLimit,
+  EmailTotal,
+  HTTPQuery,
+  searchHistoryCollection,
+} from '@klonzo/common'
+import { v4 as uuidv4 } from 'uuid'
 
 const createSearchParams = (httpQuery) => {
   // console.log(httpQuery)
@@ -83,6 +90,8 @@ export async function getEmail(httpQuery: HTTPQuery): Promise<EmailTotal> {
       sort: createSortOrder(httpQuery),
     })
 
+    console.log(body)
+
     const emails = body.hits.hits.map((email) => ({
       id: email._source.id,
       sent: email._source.sent,
@@ -96,9 +105,23 @@ export async function getEmail(httpQuery: HTTPQuery): Promise<EmailTotal> {
       subject: email._source.subject,
       body: email._source.body,
     }))
+    const total = body.hits.total.value
+
+    // const strQuery = JSON.stringify(httpQuery)
+    // // save query if not the initial
+    // if (strQuery !== `{"skip":0,"limit":50,"sort":"sent","order":1}`) {
+    //   await client.index({
+    //     index: dbName + searchHistoryCollection,
+    //     id: uuidv4(),
+    //     body: {
+    //       timestamp: new Date().toISOString(),
+    //       entry: strQuery,
+    //     },
+    //   })
+    // }
 
     return {
-      total: body.hits.total.value,
+      total,
       emails,
     }
   } catch (err) {

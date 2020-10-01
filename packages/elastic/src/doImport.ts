@@ -10,6 +10,7 @@ import {
   processCustodians,
   processEmailSentByDay,
   processWordCloud,
+  searchHistoryCollection,
   walkFSfolder,
   wordCloudCollection,
   WordCloudTag,
@@ -100,6 +101,7 @@ async function run() {
     await client.indices.delete({ index: dbName + wordCloudCollection })
     await client.indices.delete({ index: dbName + emailSentByDayCollection })
     await client.indices.delete({ index: dbName + custodianCollection })
+    await client.indices.delete({ index: dbName + searchHistoryCollection })
   } catch (error) {
     console.error(error)
   }
@@ -109,6 +111,7 @@ async function run() {
   await client.indices.create({ index: dbName + wordCloudCollection })
   await client.indices.create({ index: dbName + emailSentByDayCollection })
   await client.indices.create({ index: dbName + custodianCollection })
+  await client.indices.create({ index: dbName + searchHistoryCollection })
 
   process.send(`process emails`)
   const numEmails = await walkFSfolder(process.argv[2], insertEmails, (msg) =>
@@ -126,6 +129,9 @@ async function run() {
 
   process.send(`refresh index`)
   await client.indices.refresh({ index: dbName })
+  await client.indices.refresh({ index: dbName + wordCloudCollection })
+  await client.indices.refresh({ index: dbName + emailSentByDayCollection })
+  await client.indices.refresh({ index: dbName + custodianCollection })
 
   process.send(`completed ${numEmails} emails in ${process.argv[2]}`)
 }

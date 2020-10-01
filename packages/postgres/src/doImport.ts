@@ -7,6 +7,7 @@ import {
   processCustodians,
   processEmailSentByDay,
   processWordCloud,
+  searchHistoryCollection,
   walkFSfolder,
   wordCloudCollection,
 } from '@klonzo/common'
@@ -134,6 +135,12 @@ async function run() {
   )
   await pool.query(
     `alter table ${custodianCollection} add constraint custodians_pkey primary key (custodian_id)`
+  )
+  await pool.query(
+    `create table ${searchHistoryCollection} (history_id varchar(255), time_stamp varchar(25), entry varchar(255))`
+  )
+  await pool.query(
+    `alter table ${searchHistoryCollection} add constraint history_id_pkey primary key (history_id)`
   )
 
   process.send(`process emails`)

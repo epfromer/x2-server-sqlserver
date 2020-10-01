@@ -4,8 +4,10 @@ import {
   emailCollection,
   EmailTotal,
   HTTPQuery,
+  searchHistoryCollection,
 } from '@klonzo/common'
 import { Pool } from 'pg'
+import { v4 as uuidv4 } from 'uuid'
 
 const createWhereClause = (httpQuery: HTTPQuery) => {
   // console.log(httpQuery)
@@ -110,6 +112,13 @@ export async function getEmail(httpQuery: HTTPQuery): Promise<EmailTotal> {
     const pool = new Pool({ database: dbName })
     const result = await pool.query(q)
     const resultTotal = await pool.query(qTotal)
+
+    const strQuery = JSON.stringify(httpQuery)
+    // save query if not the initial
+    if (strQuery !== `{"skip":0,"limit":50,"sort":"sent","order":1}`) {
+      const q = `insert into ${searchHistoryCollection} (history_id, time_stamp, entry) values ($1, $2, $3)`
+      await pool.query(q, [uuidv4(), new Date().toISOString(), strQuery])
+    }
 
     return {
       total: resultTotal.rows[0].total,

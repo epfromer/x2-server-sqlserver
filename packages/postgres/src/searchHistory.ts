@@ -3,23 +3,17 @@ import {
   searchHistoryCollection,
   SearchHistoryEntry,
 } from '@klonzo/common'
-import mysql from 'mysql2/promise'
+import { Pool } from 'pg'
 
 export async function getSearchHistory(): Promise<Array<SearchHistoryEntry>> {
   try {
-    const connection = await mysql.createConnection({
-      host: process.env.MYSQL_HOST,
-      user: process.env.MYSQL_USER,
-      password: process.env.MYSQL_ROOT_PASSWORD,
-      database: dbName,
-    })
-    const [rows] = await connection.execute(
+    const pool = new Pool({ database: dbName })
+    const result = await pool.query(
       `select * from ${searchHistoryCollection} order by time_stamp desc`
     )
-    connection.end()
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    return rows.map((entry) => ({
+    return result.rows.map((entry) => ({
       id: entry.history_id,
       timestamp: entry.time_stamp,
       entry: entry.entry,
@@ -31,14 +25,8 @@ export async function getSearchHistory(): Promise<Array<SearchHistoryEntry>> {
 
 export async function clearSearchHistory(): Promise<string> {
   try {
-    const connection = await mysql.createConnection({
-      host: process.env.MYSQL_HOST,
-      user: process.env.MYSQL_USER,
-      password: process.env.MYSQL_ROOT_PASSWORD,
-      database: dbName,
-    })
-    await connection.execute(`truncate table ${searchHistoryCollection}`)
-    connection.end()
+    const pool = new Pool({ database: dbName })
+    await pool.query(`truncate table ${searchHistoryCollection}`)
     return `Search history cleared`
   } catch (err) {
     console.error(err.stack)

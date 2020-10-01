@@ -2,6 +2,7 @@ import { Client } from '@elastic/elasticsearch'
 import {
   dbName,
   defaultLimit,
+  emailCollection,
   EmailTotal,
   HTTPQuery,
   searchHistoryCollection,
@@ -82,15 +83,17 @@ export async function getEmail(httpQuery: HTTPQuery): Promise<EmailTotal> {
     const client = new Client({
       node: `http://${process.env.ELASTIC_HOST}:${process.env.ELASTIC_PORT}`,
     })
+    // http://localhost:9200/_search
+    // https://www.elastic.co/guide/en/elasticsearch/client/javascript-api/7.x/api-reference.html#_search
+    // https://www.elastic.co/guide/en/elasticsearch/reference/7.x/search-search.html
     const { body } = await client.search({
-      index: dbName,
+      index: dbName + emailCollection,
       from: httpQuery.skip ? +httpQuery.skip : 0,
       q: createSearchParams(httpQuery),
       size: httpQuery.limit ? +httpQuery.limit : defaultLimit,
       sort: createSortOrder(httpQuery),
+      ignore_unavailable: true,
     })
-
-    console.log(body)
 
     const emails = body.hits.hits.map((email) => ({
       id: email._source.id,
@@ -107,24 +110,26 @@ export async function getEmail(httpQuery: HTTPQuery): Promise<EmailTotal> {
     }))
     const total = body.hits.total.value
 
-    // const strQuery = JSON.stringify(httpQuery)
-    // // save query if not the initial
-    // if (strQuery !== `{"skip":0,"limit":50,"sort":"sent","order":1}`) {
-    //   await client.index({
-    //     index: dbName + searchHistoryCollection,
-    //     id: uuidv4(),
-    //     body: {
-    //       timestamp: new Date().toISOString(),
-    //       entry: strQuery,
-    //     },
-    //   })
-    // }
+    const strQuery = JSON.stringify(httpQuery)
+    // save query if not the initial
+    if (strQuery !== `{"skip":0,"limit":50,"sort":"sent","order":1}`) {
+      await client.index({
+        index: dbName + searchHistoryCollection,
+        id: uuidv4(),
+        body: {
+          timestamp: new Date().toISOString(),
+          entry: strQuery,
+        },
+      })
+      await client.indices.refresh({ index: dbName + searchHistoryCollection })
+    }
 
     return {
       total,
       emails,
     }
   } catch (err) {
-    console.error(err.stack)
+    // TODO - getting ResponseError: search_phase_execution_exception but query works fine?
+    console.error(err)
   }
 }

@@ -3,6 +3,7 @@ import {
   Custodian,
   custodianCollection,
   dbName,
+  emailCollection,
   Email,
   EmailSentByDay,
   emailSentByDayCollection,
@@ -40,10 +41,10 @@ async function run() {
   const insertEmails = async (emails: Email[]): Promise<void> => {
     emails.forEach(async (email) => {
       await client.index({
-        index: dbName,
+        index: dbName + emailCollection,
         body: {
           id: uuidv4(),
-          sent: email.sent,
+          sent: new Date(email.sent).toISOString(),
           from: email.from,
           fromCustodian: email.fromCustodian,
           to: email.to,
@@ -97,7 +98,7 @@ async function run() {
 
   process.send(`drop database`)
   try {
-    await client.indices.delete({ index: dbName })
+    await client.indices.delete({ index: dbName + emailCollection })
     await client.indices.delete({ index: dbName + wordCloudCollection })
     await client.indices.delete({ index: dbName + emailSentByDayCollection })
     await client.indices.delete({ index: dbName + custodianCollection })
@@ -107,7 +108,7 @@ async function run() {
   }
 
   process.send(`create index`)
-  await client.indices.create({ index: dbName })
+  await client.indices.create({ index: dbName + emailCollection })
   await client.indices.create({ index: dbName + wordCloudCollection })
   await client.indices.create({ index: dbName + emailSentByDayCollection })
   await client.indices.create({ index: dbName + custodianCollection })
@@ -128,7 +129,7 @@ async function run() {
   await processCustodians(insertCustodians, (msg) => process.send(msg))
 
   process.send(`refresh index`)
-  await client.indices.refresh({ index: dbName })
+  await client.indices.refresh({ index: dbName + emailCollection })
   await client.indices.refresh({ index: dbName + wordCloudCollection })
   await client.indices.refresh({ index: dbName + emailSentByDayCollection })
   await client.indices.refresh({ index: dbName + custodianCollection })

@@ -121,8 +121,8 @@ export async function getEmail(httpQuery: HTTPQuery): Promise<EmailTotal> {
     const strQuery = JSON.stringify(httpQuery)
     // save query if not the initial
     if (strQuery !== `{"skip":0,"limit":50,"sort":"sent","order":1}`) {
-      const q = `insert into ${searchHistoryCollection} (history_id, time_stamp, entry) values ($1, $2, $3)`
-      await pool.query(q, [uuidv4(), new Date().toISOString(), strQuery])
+      const q = `INSERT INTO ${searchHistoryCollection}(history_id, time_stamp, entry) VALUES('${uuidv4()}', '${new Date().toISOString()}', '${strQuery}') `
+      await pool.query(q)
     }
 
     return {

@@ -7,17 +7,18 @@ import { Pool } from 'pg'
 
 export async function getSearchHistory(): Promise<Array<SearchHistoryEntry>> {
   try {
-    const pool = new Pool({ database: dbName })
-    const result = await pool.query(
-      `select * from ${searchHistoryCollection} order by time_stamp desc`
-    )
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    return result.rows.map((entry) => ({
-      id: entry.history_id,
-      timestamp: entry.time_stamp,
-      entry: entry.entry,
-    }))
+    // const pool = new Pool({ database: dbName })
+    // const result = await pool.query(
+    //   `select * from ${searchHistoryCollection} order by time_stamp desc`
+    // )
+    // // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // // @ts-ignore
+    // return result.rows.map((entry) => ({
+    //   id: entry.history_id,
+    //   timestamp: entry.time_stamp,
+    //   entry: entry.entry,
+    // }))
+    return []
   } catch (err) {
     console.error(err.stack)
   }

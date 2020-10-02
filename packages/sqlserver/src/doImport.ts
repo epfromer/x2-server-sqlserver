@@ -10,6 +10,7 @@ import {
   processCustodians,
   processEmailSentByDay,
   processWordCloud,
+  searchHistoryCollection,
   walkFSfolder,
   wordCloudCollection,
   WordCloudTag,
@@ -178,6 +179,10 @@ async function run() {
     password: process.env.SQL_PASSWORD,
     database: dbName,
   })
+
+  await pool.query(
+    `create table ${searchHistoryCollection} (history_id varchar(255) primary key, time_stamp varchar(25) not null, entry varchar(255) not null)`
+  )
 
   process.send(`process emails`)
   const numEmails = await walkFSfolder(process.argv[2], insertEmails, (msg) =>

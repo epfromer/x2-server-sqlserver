@@ -10,6 +10,7 @@ import {
   processCustodians,
   processEmailSentByDay,
   processWordCloud,
+  searchHistoryCollection,
   walkFSfolder,
   wordCloudCollection,
   WordCloudTag,
@@ -107,6 +108,7 @@ async function run() {
     await ftDropAsync([dbName + wordCloudCollection])
     await ftDropAsync([dbName + emailSentByDayCollection])
     await ftDropAsync([dbName + custodianCollection])
+    await ftDropAsync([dbName + searchHistoryCollection])
   } catch (err) {
     console.error(err)
   }
@@ -156,6 +158,15 @@ async function run() {
     dbName + custodianCollection,
     'SCHEMA',
     'custodians',
+    'TEXT',
+  ])
+  await ftCreateAsync([
+    dbName + searchHistoryCollection,
+    'SCHEMA',
+    'timestamp',
+    'TEXT',
+    'SORTABLE',
+    'entry',
     'TEXT',
   ])
 

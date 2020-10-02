@@ -7,6 +7,7 @@ import {
   EmailTotal,
   HTTPQuery,
   ImportLogEntry,
+  SearchHistoryEntry,
   wordCloudCollection,
   WordCloudTag,
 } from '@klonzo/common'
@@ -14,6 +15,7 @@ import redis from 'redis'
 import { promisify } from 'util'
 import { getEmail } from './getEmail'
 import { getImportStatus, importPST } from './importPST'
+import { clearSearchHistory, getSearchHistory } from './searchHistory'
 
 // https://oss.redislabs.com/redisearch/Commands.html#ftget
 const client = redis.createClient()
@@ -75,21 +77,25 @@ const setCustodianColor = async (
 }
 
 interface Root {
-  importPST: (httpQuery) => string
-  getImportStatus: () => Array<ImportLogEntry>
-  getWordCloud: () => Promise<Array<WordCloudTag>>
-  getEmailSentByDay: () => Promise<Array<EmailSentByDay>>
+  clearSearchHistory: () => Promise<string>
   getCustodians: () => Promise<Array<Custodian>>
   getEmail: (httpQuery: HTTPQuery) => Promise<EmailTotal>
+  getEmailSentByDay: () => Promise<Array<EmailSentByDay>>
+  getImportStatus: () => Array<ImportLogEntry>
+  getSearchHistory: () => Promise<Array<SearchHistoryEntry>>
+  getWordCloud: () => Promise<Array<WordCloudTag>>
+  importPST: (httpQuery) => string
   setCustodianColor: (httpQuery: HTTPQuery) => Promise<Array<Custodian>>
 }
 export const root: Root = {
-  importPST: (httpQuery) => importPST(httpQuery),
-  getImportStatus: () => getImportStatus(),
-  getWordCloud: () => getWordCloud(),
-  getEmailSentByDay: () => getEmailSentByDay(),
+  clearSearchHistory: () => clearSearchHistory(),
   getCustodians: () => getCustodians(),
   getEmail: (httpQuery) => getEmail(httpQuery),
+  getEmailSentByDay: () => getEmailSentByDay(),
+  getImportStatus: () => getImportStatus(),
+  getSearchHistory: () => getSearchHistory(),
+  getWordCloud: () => getWordCloud(),
+  importPST: (httpQuery) => importPST(httpQuery),
   setCustodianColor: (httpQuery) => setCustodianColor(httpQuery),
 }
 

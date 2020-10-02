@@ -4,10 +4,12 @@ import {
   emailCollection,
   EmailTotal,
   HTTPQuery,
+  searchHistoryCollection,
 } from '@klonzo/common'
 import redis from 'redis'
 import redisearch from 'redis-redisearch'
 import { promisify } from 'util'
+import { v4 as uuidv4 } from 'uuid'
 
 redisearch(redis)
 
@@ -15,6 +17,7 @@ redisearch(redis)
 // https://oss.redislabs.com/redisearch/Query_Syntax.html#a_few_query_examples
 const client = redis.createClient()
 const ftSearchAsync = promisify(client.ft_search).bind(client)
+const ftAddAsync = promisify(client.ft_add).bind(client)
 
 const createSearchParams = (httpQuery: HTTPQuery) => {
   // https://oss.redislabs.com/redisearch/Query_Syntax.html#field_modifiers
@@ -102,6 +105,22 @@ export async function getEmail(httpQuery: HTTPQuery): Promise<EmailTotal> {
         body: doc.body,
       })
     }
+
+    const strQuery = JSON.stringify(httpQuery)
+    // save query if not the initial
+    if (strQuery !== `{"skip":0,"limit":50,"sort":"sent","order":1}`) {
+      await ftAddAsync([
+        dbName + searchHistoryCollection,
+        uuidv4(),
+        1.0,
+        'FIELDS',
+        'timestamp',
+        new Date().toISOString(),
+        'entry',
+        strQuery,
+      ])
+    }
+
     return { total, emails }
   } catch (err) {
     console.error(err.stack)

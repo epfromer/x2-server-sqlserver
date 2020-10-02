@@ -124,7 +124,7 @@ export async function getEmail(httpQuery: HTTPQuery): Promise<EmailTotal> {
 
     emails = emails.map((email) => ({
       id: email.id,
-      sent: email.sent,
+      sent: new Date(email.sent).toISOString(),
       sentShort: new Date(email.sent).toISOString().slice(0, 10),
       from: email.from,
       fromCustodian: email.fromCustodian,

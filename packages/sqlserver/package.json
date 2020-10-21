@@ -11,10 +11,11 @@
     "node": ">= 12",
     "yarn": ">= 1"
   },
+  "comment": "note need to replace single quote with double quote in docker script below",
   "scripts": {
     "clean": "rimraf dist",
     "compile": "tsc --build --verbose",
-    "docker": "docker run --name sqlserver -p 1433:1433 -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=f0000Bar!' -d mcr.microsoft.com/mssql/server:latest",
+    "docker": "docker run --name sqlserver -p 1433:1433 -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=f0000Bar!' -d mcr.microsoft.com/mssql/server:latest", 
     "serve": "node dist/index.js",
     "start": "run-s clean compile serve",
     "watch": "ts-node-dev --respawn -- src/index.ts"

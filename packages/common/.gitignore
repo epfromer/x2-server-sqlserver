@@ -27,3 +27,5 @@ yarn-error.log*
 
 output.log
 debug.log
+
+tsconfig.tsbuildinfo

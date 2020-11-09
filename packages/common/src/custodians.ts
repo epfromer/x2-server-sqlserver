@@ -6,7 +6,7 @@ export const custodians: Custodian[] = [
   {
     name: 'Causey, Richard',
     id: 'causey',
-    title: 'Executive Vice President and Chief Accounting Officer',
+    title: 'Chief Accounting Officer',
     color: '#03a9f4',
     aliases: [
       'Causey, Richard',

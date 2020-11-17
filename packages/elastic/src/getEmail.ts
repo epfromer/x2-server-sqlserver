@@ -12,6 +12,8 @@ import { v4 as uuidv4 } from 'uuid'
 const createSearchParams = (httpQuery) => {
   // console.log(httpQuery)
 
+  // TODO remove timespan
+
   const { id, allText, sent, timeSpan, from, to, subject, body } = httpQuery
 
   // get single email?

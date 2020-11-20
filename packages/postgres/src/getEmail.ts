@@ -18,7 +18,7 @@ const createWhereClause = (httpQuery: HTTPQuery) => {
   if (to) to = to.toLowerCase()
   if (subject) subject = subject.toLowerCase()
   if (body) body = body.toLowerCase()
-  const { id, sent, timeSpan } = httpQuery
+  const { id, sent } = httpQuery
 
   // get single email?
   if (id) return `email_id = '${id}'`
@@ -29,11 +29,6 @@ const createWhereClause = (httpQuery: HTTPQuery) => {
     const start = new Date(sent)
     const end = new Date(start.getTime())
     end.setDate(end.getDate() + 1)
-    // is there a time span?
-    if (timeSpan && timeSpan > 0) {
-      start.setDate(start.getDate() - +timeSpan)
-      end.setDate(end.getDate() + +timeSpan)
-    }
     query +=
       `(email_sent >= '${new Date(start).toISOString().slice(0, 10)}' and ` +
       `email_sent <= '${new Date(end).toISOString().slice(0, 10)}')`
@@ -101,13 +96,14 @@ export async function getEmail(httpQuery: HTTPQuery): Promise<EmailTotal> {
       q += ' where ' + whereClause
     }
 
-    q += ` order by ${
-      httpQuery.sort ? 'email_' + httpQuery.sort : 'email_sent'
-    } ${httpQuery.order === 1 ? 'asc' : 'desc'} offset ${
-      httpQuery.skip ? +httpQuery.skip : 0
-    } rows fetch next ${
-      httpQuery.limit ? +httpQuery.limit : defaultLimit
-    } rows only`
+    // eslint-disable-next-line prettier/prettier
+    q += ` order by ${httpQuery.sort ? 'email_' + httpQuery.sort : 'email_sent'
+      // eslint-disable-next-line prettier/prettier
+      } ${httpQuery.order === 1 ? 'asc' : 'desc'} offset ${httpQuery.skip ? +httpQuery.skip : 0
+      // eslint-disable-next-line prettier/prettier
+      } rows fetch next ${httpQuery.limit ? +httpQuery.limit : defaultLimit
+      // eslint-disable-next-line prettier/prettier
+      } rows only`
 
     const pool = new Pool({ database: dbName })
     const result = await pool.query(q)

@@ -24,7 +24,7 @@ const createSearchParams = (httpQuery: HTTPQuery) => {
 
   // console.log(httpQuery)
 
-  const { id, from, to, subject, body, allText, sent, timeSpan } = httpQuery
+  const { id, from, to, subject, body, allText, sent } = httpQuery
 
   // get single email?
   if (id) return ` @id:${id} `
@@ -35,11 +35,6 @@ const createSearchParams = (httpQuery: HTTPQuery) => {
     const start = new Date(sent)
     const end = new Date(start.getTime())
     end.setDate(end.getDate() + 1)
-    // is there a time span?
-    if (timeSpan && timeSpan > 0) {
-      start.setDate(start.getDate() - +timeSpan)
-      end.setDate(end.getDate() + +timeSpan)
-    }
     query += ` @sent:[${new Date(start).getTime()} ${new Date(end).getTime()}] `
   }
 

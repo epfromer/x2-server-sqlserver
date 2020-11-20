@@ -76,7 +76,6 @@ export const graphqlSchema = buildSchema(`
       sort: String = "sent", 
       order: Int = 1, 
       sent: String,
-      timeSpan: Int
       allText: String
       from: String
       to: String

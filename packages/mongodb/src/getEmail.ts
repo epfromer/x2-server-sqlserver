@@ -28,7 +28,7 @@ interface query {
 const createSearchParams = (httpQuery: HTTPQuery): query => {
   // console.log(httpQuery)
 
-  const { id, allText, sent, timeSpan, from, to, subject, body } = httpQuery
+  const { id, allText, sent, from, to, subject, body } = httpQuery
 
   // get single email?
   if (id) return { id }
@@ -39,12 +39,6 @@ const createSearchParams = (httpQuery: HTTPQuery): query => {
     const start = new Date(sent)
     const end = new Date(start.getTime())
     end.setDate(end.getDate() + 1)
-
-    // is there a time span?
-    if (timeSpan && timeSpan > 0) {
-      start.setDate(start.getDate() - +timeSpan)
-      end.setDate(end.getDate() + +timeSpan)
-    }
 
     query.sent = {
       $gte: start,

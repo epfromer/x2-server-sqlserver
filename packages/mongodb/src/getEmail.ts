@@ -5,6 +5,7 @@ import {
   EmailTotal,
   HTTPQuery,
   searchHistoryCollection,
+  startupQuery,
 } from '@klonzo/common'
 import * as mongodb from 'mongodb'
 import { v4 as uuidv4 } from 'uuid'
@@ -134,7 +135,7 @@ export async function getEmail(httpQuery: HTTPQuery): Promise<EmailTotal> {
     delete httpQuery.limit
     const strQuery = JSON.stringify(httpQuery)
     // save query if not the initial
-    if (strQuery !== `{"sort":"sent","order":1}`) {
+    if (strQuery !== startupQuery) {
       await db.collection(searchHistoryCollection).insertOne({
         id: uuidv4(),
         timestamp: new Date().toISOString(),
@@ -142,10 +143,7 @@ export async function getEmail(httpQuery: HTTPQuery): Promise<EmailTotal> {
       })
     }
 
-    return {
-      total,
-      emails,
-    }
+    return { total, emails }
   } catch (err) {
     console.error(err.stack)
   }

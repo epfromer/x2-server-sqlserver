@@ -6,6 +6,7 @@ import {
   EmailTotal,
   HTTPQuery,
   searchHistoryCollection,
+  startupQuery,
 } from '@klonzo/common'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -107,9 +108,11 @@ export async function getEmail(httpQuery: HTTPQuery): Promise<EmailTotal> {
     }))
     const total = body.hits.total.value
 
+    delete httpQuery.skip
+    delete httpQuery.limit
     const strQuery = JSON.stringify(httpQuery)
     // save query if not the initial
-    if (strQuery !== `{"skip":0,"limit":50,"sort":"sent","order":1}`) {
+    if (strQuery !== startupQuery) {
       await client.index({
         index: dbName + searchHistoryCollection,
         id: uuidv4(),
@@ -121,10 +124,7 @@ export async function getEmail(httpQuery: HTTPQuery): Promise<EmailTotal> {
       await client.indices.refresh({ index: dbName + searchHistoryCollection })
     }
 
-    return {
-      total,
-      emails,
-    }
+    return { total, emails }
   } catch (err) {
     // TODO - getting ResponseError: search_phase_execution_exception but query works fine?
     console.error(err)

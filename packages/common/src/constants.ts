@@ -7,3 +7,4 @@ export const custodianCollection = 'custodians'
 export const emailSentByDayCollection = 'emailsentbyday'
 export const wordCloudCollection = 'wordcloud'
 export const searchHistoryCollection = 'searchhistory'
+export const startupQuery = `{"sort":"sent","order":1}`

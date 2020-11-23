@@ -5,6 +5,7 @@ import {
   EmailTotal,
   HTTPQuery,
   searchHistoryCollection,
+  startupQuery,
 } from '@klonzo/common'
 import sql from 'mssql'
 import { v4 as uuidv4 } from 'uuid'
@@ -114,9 +115,11 @@ export async function getEmail(httpQuery: HTTPQuery): Promise<EmailTotal> {
     const result = await pool.query(q)
     const resultTotal = await pool.query(qTotal)
 
+    delete httpQuery.skip
+    delete httpQuery.limit
     const strQuery = JSON.stringify(httpQuery)
     // save query if not the initial
-    if (strQuery !== `{"skip":0,"limit":50,"sort":"sent","order":1}`) {
+    if (strQuery !== startupQuery) {
       const q = `INSERT INTO ${searchHistoryCollection}(history_id, time_stamp, entry) VALUES('${uuidv4()}', '${new Date().toISOString()}', '${strQuery}') `
       await pool.query(q)
     }

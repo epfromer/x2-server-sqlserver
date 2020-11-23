@@ -15,7 +15,7 @@ export async function getSearchHistory(): Promise<Array<SearchHistoryEntry>> {
   try {
     const historyArr = await ftSearchAsync([
       dbName + searchHistoryCollection,
-      '*',
+      ` @type:${searchHistoryCollection} `,
       'SORTBY',
       'timestamp',
       'desc',

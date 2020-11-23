@@ -5,6 +5,7 @@ import {
   EmailTotal,
   HTTPQuery,
   searchHistoryCollection,
+  startupQuery,
 } from '@klonzo/common'
 import redis from 'redis'
 import redisearch from 'redis-redisearch'
@@ -29,7 +30,7 @@ const createSearchParams = (httpQuery: HTTPQuery) => {
   // get single email?
   if (id) return ` @id:${id} `
 
-  let query = ''
+  let query = ` @type:${emailCollection} `
 
   if (sent) {
     const start = new Date(sent)
@@ -48,8 +49,6 @@ const createSearchParams = (httpQuery: HTTPQuery) => {
     if (subject) query += ` @subject:${subject} `
     if (body) query += ` @body:${body} `
   }
-
-  if (!query) query = '*'
 
   // console.log(query)
   return query
@@ -101,14 +100,18 @@ export async function getEmail(httpQuery: HTTPQuery): Promise<EmailTotal> {
       })
     }
 
+    delete httpQuery.skip
+    delete httpQuery.limit
     const strQuery = JSON.stringify(httpQuery)
     // save query if not the initial
-    if (strQuery !== `{"skip":0,"limit":50,"sort":"sent","order":1}`) {
+    if (strQuery !== startupQuery) {
       await ftAddAsync([
         dbName + searchHistoryCollection,
         uuidv4(),
         1.0,
         'FIELDS',
+        'type',
+        searchHistoryCollection,
         'timestamp',
         new Date().toISOString(),
         'entry',

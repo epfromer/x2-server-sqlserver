@@ -5,6 +5,7 @@ import {
   EmailTotal,
   HTTPQuery,
   searchHistoryCollection,
+  startupQuery,
 } from '@klonzo/common'
 import mysql from 'mysql2/promise'
 import { v4 as uuidv4 } from 'uuid'
@@ -119,9 +120,11 @@ export async function getEmail(httpQuery: HTTPQuery): Promise<EmailTotal> {
     const [resultTotal] = await connection.execute(qTotal)
     // connection.end()
 
+    delete httpQuery.skip
+    delete httpQuery.limit
     const strQuery = JSON.stringify(httpQuery)
     // save query if not the initial
-    if (strQuery !== `{"skip":0,"limit":50,"sort":"sent","order":1}`) {
+    if (strQuery !== startupQuery) {
       const q = `insert into ${searchHistoryCollection} (history_id, time_stamp, entry) values (?, ?, ?)`
       await connection.execute(q, [
         uuidv4(),

@@ -43,6 +43,8 @@ async function run() {
         uuidv4(),
         1.0,
         'FIELDS',
+        'type',
+        'email',
         'sent',
         new Date(email.sent).getTime(),
         'sentStr',
@@ -117,6 +119,8 @@ async function run() {
   await ftCreateAsync([
     dbName + emailCollection,
     'SCHEMA',
+    'type',
+    'TEXT',
     'sent',
     'NUMERIC',
     'SORTABLE',
@@ -163,6 +167,8 @@ async function run() {
   await ftCreateAsync([
     dbName + searchHistoryCollection,
     'SCHEMA',
+    'type',
+    'TEXT',
     'timestamp',
     'TEXT',
     'SORTABLE',

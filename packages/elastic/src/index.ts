@@ -29,4 +29,4 @@ app.use(
 )
 
 const port = process.env.PORT || 3000
-app.listen(port, () => console.log(`running on PORT: ${port}`))
+app.listen(port, () => console.log(`elastic running on PORT: ${port}`))

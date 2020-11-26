@@ -27,7 +27,7 @@ interface query {
 }
 
 const createSearchParams = (httpQuery: HTTPQuery): query => {
-  // console.log(httpQuery)
+  console.log(httpQuery)
 
   const { id, allText, sent, from, to, subject, body } = httpQuery
 
@@ -100,8 +100,6 @@ const createSortOrder = (httpQuery) => {
 
 export async function getEmail(httpQuery: HTTPQuery): Promise<EmailTotal> {
   try {
-    console.log(httpQuery)
-
     const client = await mongodb.MongoClient.connect(process.env.MONGODB_HOST, {
       useUnifiedTopology: false,
     })

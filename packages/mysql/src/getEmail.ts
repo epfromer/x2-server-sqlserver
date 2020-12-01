@@ -94,6 +94,8 @@ const sort = (httpQuery: HTTPQuery) => {
 }
 
 export async function getEmail(httpQuery: HTTPQuery): Promise<EmailTotal> {
+  console.log('mysql', httpQuery)
+
   try {
     let qTotal = `select count(*) as total from ${emailCollection}`
     let q = `select * from ${emailCollection}`
@@ -104,11 +106,9 @@ export async function getEmail(httpQuery: HTTPQuery): Promise<EmailTotal> {
       q += ' where ' + whereClause
     }
 
-    q += ` order by ${sort(httpQuery)} ${
-      httpQuery.order === 1 ? 'asc' : 'desc'
-    } limit ${httpQuery.limit ? +httpQuery.limit : defaultLimit} offset ${
-      httpQuery.skip ? +httpQuery.skip : 0
-    } `
+    q += ` order by ${sort(httpQuery)} ${httpQuery.order === 1 ? 'asc' : 'desc'
+      } limit ${httpQuery.limit ? +httpQuery.limit : defaultLimit} offset ${httpQuery.skip ? +httpQuery.skip : 0
+      } `
 
     const connection = await mysql.createConnection({
       host: process.env.MYSQL_HOST,

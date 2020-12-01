@@ -24,7 +24,7 @@ const ftGetAsync = promisify(client.ft_get).bind(client)
 const createSearchParams = (httpQuery: HTTPQuery) => {
   // https://oss.redislabs.com/redisearch/Query_Syntax.html#field_modifiers
 
-  console.log(httpQuery)
+  // console.log(httpQuery)
 
   const { id, from, to, subject, body, allText, sent } = httpQuery
 
@@ -57,6 +57,8 @@ const createSearchParams = (httpQuery: HTTPQuery) => {
 
 // HTTP GET /email/
 export async function getEmail(httpQuery: HTTPQuery): Promise<EmailTotal> {
+  console.log('redis', httpQuery)
+
   try {
     let emailArr
     if (httpQuery.id) {

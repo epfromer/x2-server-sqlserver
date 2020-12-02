@@ -37,7 +37,8 @@ const getCustodians = (s, foundCustodians) => {
 }
 
 // helps with display of super long email addresses
-const breakUpAddress = (addr) => addr.split('@').join(' @')
+const breakUpAddress = (addr) =>
+  addr.split('@').join(' @').split('+').join(' +')
 
 // Processes individual email and stores in list.
 export function processEmail(email: PSTMessage, emails: Email[]): void {

@@ -87,9 +87,8 @@ const createWhereClause = (httpQuery: HTTPQuery) => {
 }
 
 export async function getEmail(httpQuery: HTTPQuery): Promise<EmailTotal> {
-  console.log('postgres', httpQuery)
-
   try {
+    const start = Date.now()
     let qTotal = `select count(*) as total from ${emailCollection}`
     let q = `select * from ${emailCollection}`
 
@@ -121,25 +120,26 @@ export async function getEmail(httpQuery: HTTPQuery): Promise<EmailTotal> {
       await pool.query(q, [uuidv4(), new Date().toISOString(), strQuery])
     }
 
-    return {
-      total: resultTotal.rows[0].total,
-      emails: result.rows.map((email) => ({
-        id: email.email_id,
-        sent: email.email_sent,
-        sentShort: new Date(email.email_sent).toISOString().slice(0, 10),
-        from: email.email_from,
-        fromCustodian: email.email_from_custodian,
-        to: email.email_to,
-        toCustodians: email.email_to_custodians
-          ? email.email_to_custodians.split(',')
-          : [],
-        cc: email.email_cc,
-        bcc: email.email_bcc,
-        subject: email.email_subject,
-        body: email.email_body,
-      })),
-    }
+    const total = resultTotal.rows[0].total
+    const emails = result.rows.map((email) => ({
+      id: email.email_id,
+      sent: email.email_sent,
+      sentShort: new Date(email.email_sent).toISOString().slice(0, 10),
+      from: email.email_from,
+      fromCustodian: email.email_from_custodian,
+      to: email.email_to,
+      toCustodians: email.email_to_custodians
+        ? email.email_to_custodians.split(',')
+        : [],
+      cc: email.email_cc,
+      bcc: email.email_bcc,
+      subject: email.email_subject,
+      body: email.email_body,
+    }))
+
+    console.log('postgres', httpQuery, total, Date.now() - start)
+    return { total, emails }
   } catch (err) {
-    console.error(err.stack)
+    console.error(err)
   }
 }

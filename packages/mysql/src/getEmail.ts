@@ -94,9 +94,8 @@ const sort = (httpQuery: HTTPQuery) => {
 }
 
 export async function getEmail(httpQuery: HTTPQuery): Promise<EmailTotal> {
-  console.log('mysql', httpQuery)
-
   try {
+    const start = Date.now()
     let qTotal = `select count(*) as total from ${emailCollection}`
     let q = `select * from ${emailCollection}`
 
@@ -106,9 +105,10 @@ export async function getEmail(httpQuery: HTTPQuery): Promise<EmailTotal> {
       q += ' where ' + whereClause
     }
 
-    q += ` order by ${sort(httpQuery)} ${httpQuery.order === 1 ? 'asc' : 'desc'
-      } limit ${httpQuery.limit ? +httpQuery.limit : defaultLimit} offset ${httpQuery.skip ? +httpQuery.skip : 0
-      } `
+    q +=
+      ` order by ${sort(httpQuery)} ${httpQuery.order === 1 ? 'asc' : 'desc'}` +
+      ` limit ${httpQuery.limit ? +httpQuery.limit : defaultLimit}` +
+      ` offset ${httpQuery.skip ? +httpQuery.skip : 0} `
 
     const connection = await mysql.createConnection({
       host: process.env.MYSQL_HOST,
@@ -133,27 +133,28 @@ export async function getEmail(httpQuery: HTTPQuery): Promise<EmailTotal> {
       ])
     }
 
-    return {
-      total: +resultTotal[0].total,
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      emails: rows.map((email) => ({
-        id: email.email_id,
-        sent: email.email_sent,
-        sentShort: new Date(email.email_sent).toISOString().slice(0, 10),
-        from: email.email_from,
-        fromCustodian: email.email_from_custodian,
-        to: email.email_to,
-        toCustodians: email.email_to_custodians
-          ? email.email_to_custodians.split(',')
-          : [],
-        cc: email.email_cc,
-        bcc: email.email_bcc,
-        subject: email.email_subject,
-        body: email.email_body,
-      })),
-    }
+    const total = +resultTotal[0].total
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const emails = rows.map((email) => ({
+      id: email.email_id,
+      sent: email.email_sent,
+      sentShort: new Date(email.email_sent).toISOString().slice(0, 10),
+      from: email.email_from,
+      fromCustodian: email.email_from_custodian,
+      to: email.email_to,
+      toCustodians: email.email_to_custodians
+        ? email.email_to_custodians.split(',')
+        : [],
+      cc: email.email_cc,
+      bcc: email.email_bcc,
+      subject: email.email_subject,
+      body: email.email_body,
+    }))
+
+    console.log('mysql', httpQuery, total, Date.now() - start)
+    return { total, emails }
   } catch (err) {
-    console.error(err.stack)
+    console.error(err)
   }
 }

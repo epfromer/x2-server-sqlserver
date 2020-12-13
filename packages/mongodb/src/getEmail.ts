@@ -100,8 +100,7 @@ const createSortOrder = (httpQuery) => {
 
 export async function getEmail(httpQuery: HTTPQuery): Promise<EmailTotal> {
   try {
-    console.log('mongodb', httpQuery)
-
+    const start = Date.now()
     const client = await mongodb.MongoClient.connect(process.env.MONGODB_HOST, {
       useUnifiedTopology: false,
     })
@@ -143,8 +142,9 @@ export async function getEmail(httpQuery: HTTPQuery): Promise<EmailTotal> {
       })
     }
 
+    console.log('mongodb', httpQuery, total, Date.now() - start)
     return { total, emails }
   } catch (err) {
-    console.error(err.stack)
+    console.error(err)
   }
 }

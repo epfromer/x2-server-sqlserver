@@ -57,9 +57,8 @@ const createSearchParams = (httpQuery: HTTPQuery) => {
 
 // HTTP GET /email/
 export async function getEmail(httpQuery: HTTPQuery): Promise<EmailTotal> {
-  console.log('redis', httpQuery)
-
   try {
+    const start = Date.now()
     let emailArr
     if (httpQuery.id) {
       emailArr = await ftGetAsync([dbName + emailCollection, httpQuery.id])
@@ -126,8 +125,9 @@ export async function getEmail(httpQuery: HTTPQuery): Promise<EmailTotal> {
       ])
     }
 
+    console.log('redis', httpQuery, total, Date.now() - start)
     return { total, emails }
   } catch (err) {
-    console.error(err.stack)
+    console.error(err)
   }
 }

@@ -76,8 +76,7 @@ const createSortOrder = (httpQuery) => {
 
 export async function getEmail(httpQuery: HTTPQuery): Promise<EmailTotal> {
   try {
-    console.log('elastic', httpQuery)
-
+    const start = Date.now()
     const client = new Client({
       node: `http://${process.env.ELASTIC_HOST}:${process.env.ELASTIC_PORT}`,
     })
@@ -124,9 +123,9 @@ export async function getEmail(httpQuery: HTTPQuery): Promise<EmailTotal> {
       await client.indices.refresh({ index: dbName + searchHistoryCollection })
     }
 
+    console.log('elastic', httpQuery, total, Date.now() - start)
     return { total, emails }
   } catch (err) {
-    // TODO - getting ResponseError: search_phase_execution_exception but query works fine?
     console.error(err)
   }
 }

@@ -9,9 +9,7 @@
   "scripts": {
     "build": "run-s clean compile",
     "clean": "rimraf lib tsconfig.tsbuildinfo",
-    "compile": "tsc --build --verbose",
-    "coverage": "jest --verbose --coverage",
-    "test": "run-s build coverage"
+    "compile": "tsc --build --verbose"
   },
   "dependencies": {
     "graphql": "^15.4.0",
@@ -58,28 +56,5 @@
     "singleQuote": true,
     "trailingComma": "es5",
     "endOfLine": "auto"
-  },
-  "jest": {
-    "preset": "ts-jest",
-    "setupFiles": [
-      "./src/setupTests.js"
-    ],
-    "collectCoverageFrom": [
-      "src/**/*.{js,jsx,ts,tsx}"
-    ],
-    "roots": [
-      "src"
-    ],
-    "transform": {
-      ".+\\.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2)$": "jest-transform-stub"
-    },
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "jsx",
-      "json",
-      "node"
-    ]
   }
 }

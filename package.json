@@ -14,24 +14,18 @@
   "scripts": {
     "clean": "lerna clean",
     "build": "tsc --build --verbose",
-    "watch:elastic": "lerna run --scope @klonzo/elastic watch --stream",
-    "watch:mongodb": "lerna run --scope @klonzo/mongodb watch --stream",
-    "watch:mysql": "lerna run --scope @klonzo/mysql watch --stream",
-    "watch:postgres": "lerna run --scope @klonzo/postgres watch --stream",
-    "watch:redis": "lerna run --scope @klonzo/redis watch --stream",
-    "watch:sqlserver": "lerna run --scope @klonzo/sqlserver watch --stream",
     "yarn": "yarn"
   },
   "devDependencies": {
     "lerna": "latest",
-    "eslint": "^7.21.0",
-    "eslint-config-prettier": "^8.1.0",
-    "eslint-plugin-flowtype": "^5.3.1",
-    "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-prettier": "^3.3.1",
+    "eslint": "^7.27.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-flowtype": "^5.7.2",
+    "eslint-plugin-import": "^2.23.3",
+    "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-react-hooks": "^4.2.0",
-    "prettier": "^2.2.1",
-    "typescript": "^4.2.2"
+    "prettier": "^2.3.0",
+    "typescript": "^4.2.4"
   },
   "eslintConfig": {
     "extends": [

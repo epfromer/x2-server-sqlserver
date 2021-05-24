@@ -112,6 +112,7 @@ export async function getEmail(httpQuery: HTTPQuery): Promise<EmailTotal> {
       user: process.env.SQL_USER,
       password: process.env.SQL_PASSWORD,
       database: dbName,
+      trustServerCertificate: true,
     })
     const result = await pool.query(q)
     const resultTotal = await pool.query(qTotal)

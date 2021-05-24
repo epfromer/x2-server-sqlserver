@@ -29,6 +29,7 @@ async function run() {
     server: process.env.SQL_HOST,
     user: process.env.SQL_USER,
     password: process.env.SQL_PASSWORD,
+    trustServerCertificate: true,
   })
 
   const insertEmails = async (emails: Email[]): Promise<void> => {
@@ -135,6 +136,7 @@ async function run() {
       user: process.env.SQL_USER,
       password: process.env.SQL_PASSWORD,
       database: dbName,
+      trustServerCertificate: true,
     })
 
     const table = new sql.Table(custodianCollection)
@@ -178,6 +180,7 @@ async function run() {
     user: process.env.SQL_USER,
     password: process.env.SQL_PASSWORD,
     database: dbName,
+    trustServerCertificate: true,
   })
 
   await pool.query(

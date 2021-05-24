@@ -12,6 +12,7 @@ export async function getSearchHistory(): Promise<Array<SearchHistoryEntry>> {
       user: process.env.SQL_USER,
       password: process.env.SQL_PASSWORD,
       database: dbName,
+      trustServerCertificate: true,
     })
     const result = await pool.query(
       `select * from ${searchHistoryCollection} order by time_stamp desc`
@@ -34,6 +35,7 @@ export async function clearSearchHistory(): Promise<string> {
       user: process.env.SQL_USER,
       password: process.env.SQL_PASSWORD,
       database: dbName,
+      trustServerCertificate: true,
     })
     await pool.query(`truncate table ${searchHistoryCollection}`)
     return `Search history cleared`

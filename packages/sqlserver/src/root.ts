@@ -23,6 +23,7 @@ const getWordCloud = async (): Promise<Array<WordCloudTag>> => {
       user: process.env.SQL_USER,
       password: process.env.SQL_PASSWORD,
       database: dbName,
+      trustServerCertificate: true,
     })
     const result = await pool.query(`select * from ${wordCloudCollection}`)
     return result.recordset
@@ -38,6 +39,7 @@ const getEmailSentByDay = async (): Promise<Array<EmailSentByDay>> => {
       user: process.env.SQL_USER,
       password: process.env.SQL_PASSWORD,
       database: dbName,
+      trustServerCertificate: true,
     })
     const result = await pool.query(
       `select * from ${emailSentByDayCollection} order by day_sent asc`
@@ -58,6 +60,7 @@ const getCustodians = async (): Promise<Array<Custodian>> => {
       user: process.env.SQL_USER,
       password: process.env.SQL_PASSWORD,
       database: dbName,
+      trustServerCertificate: true,
     })
     const result = await pool.query(
       `select * from ${custodianCollection} order by custodian_id asc`

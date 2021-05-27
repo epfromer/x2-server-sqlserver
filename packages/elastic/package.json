@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "@elastic/elasticsearch": "^7.12.0",
+    "@klonzo/common": "*",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
@@ -30,12 +31,11 @@
   },
   "devDependencies": {
     "@babel/core": "^7.14.3",
-    "@klonzo/common": "*",
+    "@babel/eslint-parser": "^7.14.3",
     "@types/express": "^4.17.12",
     "@types/node": "^15.6.1",
     "@typescript-eslint/eslint-plugin": "^4.25.0",
     "@typescript-eslint/parser": "^4.25.0",
-    "babel-eslint": "^10.1.0",
     "babel-jest": "^27.0.1",
     "eslint": "^7.27.0",
     "eslint-config-prettier": "^8.3.0",

@@ -1,7 +1,7 @@
 import { graphqlSchema } from '@klonzo/common'
 import cors from 'cors'
 import * as dotenv from 'dotenv'
-import express from 'express'
+import express, { Application } from 'express'
 import { graphqlHTTP } from 'express-graphql'
 import root from './root'
 dotenv.config()
@@ -20,7 +20,7 @@ app.use(
       stack: error.stack ? error.stack.split('\n') : [],
       path: error.path,
     }),
-  })
+  }) as Application
 )
 
 const port = process.env.PORT || 3000

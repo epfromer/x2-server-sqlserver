@@ -19,7 +19,7 @@
     "start": "run-s clean compile serve"
   },
   "dependencies": {
-    "@elastic/elasticsearch": "^7.12.0",
+    "@elastic/elasticsearch": "^7.13.0",
     "@klonzo/common": "*",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",

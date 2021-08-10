@@ -23,9 +23,7 @@ async function run() {
   }
 
   process.send(`connect to ${process.env.MONGODB_HOST}`)
-  const client = await mongodb.MongoClient.connect(process.env.MONGODB_HOST, {
-    useUnifiedTopology: false,
-  })
+  const client = await mongodb.MongoClient.connect(process.env.MONGODB_HOST)
   const db = client.db(dbName)
 
   const insertEmails = async (email: Email[]): Promise<void> => {

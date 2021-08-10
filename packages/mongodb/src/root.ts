@@ -18,9 +18,7 @@ import { clearSearchHistory, getSearchHistory } from './searchHistory'
 
 const getWordCloud = async (): Promise<Array<WordCloudTag>> => {
   try {
-    const client = await mongodb.MongoClient.connect(process.env.MONGODB_HOST, {
-      useUnifiedTopology: false,
-    })
+    const client = await mongodb.MongoClient.connect(process.env.MONGODB_HOST)
     const db = client.db(dbName)
     const wordCloud = await db.collection(wordCloudCollection).find().toArray()
     return wordCloud.map((word) => ({ tag: word.tag, weight: word.weight }))
@@ -31,9 +29,7 @@ const getWordCloud = async (): Promise<Array<WordCloudTag>> => {
 
 const getEmailSentByDay = async (): Promise<Array<EmailSentByDay>> => {
   try {
-    const client = await mongodb.MongoClient.connect(process.env.MONGODB_HOST, {
-      useUnifiedTopology: false,
-    })
+    const client = await mongodb.MongoClient.connect(process.env.MONGODB_HOST)
     const db = client.db(dbName)
     const emailSentByDay = await db
       .collection(emailSentByDayCollection)
@@ -48,9 +44,7 @@ const getEmailSentByDay = async (): Promise<Array<EmailSentByDay>> => {
 
 const getCustodians = async (): Promise<Array<Custodian>> => {
   try {
-    const client = await mongodb.MongoClient.connect(process.env.MONGODB_HOST, {
-      useUnifiedTopology: false,
-    })
+    const client = await mongodb.MongoClient.connect(process.env.MONGODB_HOST)
     const db = client.db(dbName)
     const custodians = await db.collection(custodianCollection).find().toArray()
     return custodians.map((custodian) => ({
@@ -71,9 +65,7 @@ const setCustodianColor = async (
   httpQuery: HTTPQuery
 ): Promise<Array<Custodian>> => {
   try {
-    const client = await mongodb.MongoClient.connect(process.env.MONGODB_HOST, {
-      useUnifiedTopology: false,
-    })
+    const client = await mongodb.MongoClient.connect(process.env.MONGODB_HOST)
     const db = client.db(dbName)
     await db
       .collection(custodianCollection)

@@ -1,6 +1,7 @@
 import {
   dbName,
   defaultLimit,
+  Email,
   emailCollection,
   EmailTotal,
   HTTPQuery,
@@ -101,24 +102,22 @@ const createSortOrder = (httpQuery) => {
 export async function getEmail(httpQuery: HTTPQuery): Promise<EmailTotal> {
   try {
     const start = Date.now()
-    const client = await mongodb.MongoClient.connect(process.env.MONGODB_HOST, {
-      useUnifiedTopology: false,
-    })
+    const client = await mongodb.MongoClient.connect(process.env.MONGODB_HOST)
     const db = client.db(dbName)
     const query = createSearchParams(httpQuery)
     const total = await db.collection(emailCollection).countDocuments(query)
-    let emails = await db
+    const dox = await db
       .collection(emailCollection)
       .find(query)
       .collation({ locale: 'en' })
-      .sort(createSortOrder(httpQuery))
+      .sort(createSortOrder(httpQuery) as mongodb.Sort)
       .skip(httpQuery.skip ? +httpQuery.skip : 0)
       .limit(httpQuery.limit ? +httpQuery.limit : defaultLimit)
       .toArray()
 
-    emails = emails.map((email) => ({
+    const emails: Email[] = dox.map((email) => ({
       id: email.id,
-      sent: new Date(email.sent).toISOString(),
+      sent: new Date(new Date(email.sent).toISOString()),
       sentShort: new Date(email.sent).toISOString().slice(0, 10),
       from: email.from,
       fromCustodian: email.fromCustodian,

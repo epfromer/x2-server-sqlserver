@@ -8,8 +8,7 @@
   "main": "index.js",
   "docker-version": "https://hub.docker.com/_/postgres",
   "engines": {
-    "node": "16.x",
-    "yarn": ">= 1"
+    "node": "16.x"
   },
   "scripts": {
     "clean": "rimraf dist",

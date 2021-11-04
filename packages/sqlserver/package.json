@@ -8,8 +8,7 @@
   "main": "index.js",
   "docker-version": "https://hub.docker.com/_/microsoft-mssql-server",
   "engines": {
-    "node": "16.x",
-    "yarn": ">= 1"
+    "node": "16.x"
   },
   "comment": "note need to replace single quote with double quote in docker script below",
   "scripts": {

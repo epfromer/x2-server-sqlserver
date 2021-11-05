@@ -543,7 +543,7 @@
   dependencies:
     "@cspotcode/source-map-consumer" "0.8.0"
 
-"@elastic/elasticsearch@^7.14.1":
+"@elastic/elasticsearch@^7.15.0":
   version "7.15.0"
   resolved "https://registry.yarnpkg.com/@elastic/elasticsearch/-/elasticsearch-7.15.0.tgz#4b009a87e0b11b8cfd2e4f378f0292574bc17300"
   integrity sha512-FUKvjV2IKtIiWsvBy7D+wLbSEONsmNR15RRN7P/Sb30g4ObZRHH2qGOP5PPnzxdntEkzZ8HzY7nKKXFS+3Du1g==
@@ -4360,6 +4360,11 @@ graphql@^15.5.2:
   resolved "https://registry.yarnpkg.com/graphql/-/graphql-15.7.2.tgz#85ab0eeb83722977151b3feb4d631b5f2ab287ef"
   integrity sha512-AnnKk7hFQFmU/2I9YSQf3xw44ctnSFCfp3zE0N6W174gqe9fWG/2rKaKxROK7CcI3XtERpjEKFqts8o319Kf7A==
 
+graphql@^16.0.1:
+  version "16.0.1"
+  resolved "https://registry.yarnpkg.com/graphql/-/graphql-16.0.1.tgz#93a13cd4e0e38ca8d0832e79614c8578bfd34f10"
+  integrity sha512-oPvCuu6dlLdiz8gZupJ47o1clgb72r1u8NDBcQYjcV6G/iEdmE11B1bBlkhXRvV0LisP/SXRFP7tT6AgaTjpzg==
+
 handlebars@^4.7.6:
   version "4.7.7"
   resolved "https://registry.yarnpkg.com/handlebars/-/handlebars-4.7.7.tgz#9ce33416aad02dbd6c8fafa8240d5d98004945a1"
@@ -6122,7 +6127,7 @@ mongodb-connection-string-url@^2.1.0:
     "@types/whatwg-url" "^8.2.1"
     whatwg-url "^9.1.0"
 
-mongodb@*, mongodb@^4.1.1:
+mongodb@*, mongodb@^4.1.4:
   version "4.1.4"
   resolved "https://registry.yarnpkg.com/mongodb/-/mongodb-4.1.4.tgz#ba8062c7c67e7a22db5a059dbac1e3044b48453b"
   integrity sha512-Cv/sk8on/tpvvqbEvR1h03mdyNdyvvO+WhtFlL4jrZ+DSsN/oSQHVqmJQI/sBCqqbOArFcYCAYDfyzqFwV4GSQ==
@@ -6187,7 +6192,7 @@ mute-stream@0.0.8, mute-stream@~0.0.4:
   resolved "https://registry.yarnpkg.com/mute-stream/-/mute-stream-0.0.8.tgz#1630c42b2251ff81e2a283de96a5497ea92e5e0d"
   integrity sha512-nnbWWOkoWyUsTjKrhgD0dcz22mdkSnpYqbEjIm2nhwhuxlSkpywJmBo8h0ZqJdkp73mb90SssHkN4rsRaBAfAA==
 
-mysql2@^2.3.0:
+mysql2@^2.3.2:
   version "2.3.2"
   resolved "https://registry.yarnpkg.com/mysql2/-/mysql2-2.3.2.tgz#3efe9814dbf1c2a3d7c2a1fc4666235939943ff9"
   integrity sha512-JUSA50rt/nSew8aq8xe3pRk5Q4y/M5QdSJn7Ey3ndOlPp2KXuialQ0sS35DNhPT5Z5PnOiIwSSQvKkl1WorqRA==

@@ -8,8 +8,7 @@
   "main": "index.js",
   "docker-version": "https://hub.docker.com/_/elasticsearch",
   "engines": {
-    "node": "16.x",
-    "yarn": ">= 1"
+    "node": "16.x"
   },
   "scripts": {
     "clean": "rimraf dist",
@@ -19,13 +18,13 @@
     "start": "run-s clean compile serve"
   },
   "dependencies": {
-    "@elastic/elasticsearch": "^7.14.1",
+    "@elastic/elasticsearch": "^7.15.0",
     "@klonzo/common": "*",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "express-graphql": "^0.12.0",
-    "graphql": "^15.5.2",
+    "graphql": "^16.0.1",
     "pst-extractor": "^1.8.0",
     "uuid": "^8.3.2"
   },

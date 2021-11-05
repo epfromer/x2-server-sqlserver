@@ -8,8 +8,7 @@
   "main": "index.js",
   "docker-version": "https://hub.docker.com/_/mysql",
   "engines": {
-    "node": "16.x",
-    "yarn": ">= 1"
+    "node": "16.x"
   },
   "scripts": {
     "clean": "rimraf dist",
@@ -24,8 +23,8 @@
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "express-graphql": "^0.12.0",
-    "graphql": "^15.5.2",
-    "mysql2": "^2.3.0",
+    "graphql": "^16.0.1",
+    "mysql2": "^2.3.2",
     "pst-extractor": "^1.8.0",
     "uuid": "^8.3.2"
   },

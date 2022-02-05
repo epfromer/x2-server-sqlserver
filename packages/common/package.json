@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@klonzo/common": "*",
-    "graphql": "^16.3.0",
+    "graphql": "^15.3.0",
     "pst-extractor": "^1.8.0",
     "stopword": "^1.0.11",
     "uuid": "^8.3.2"

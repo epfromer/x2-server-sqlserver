@@ -1,9 +1,0 @@
-export declare const dbName = "x2";
-export declare const defaultLimit = 50;
-export declare const onlyHot = true;
-export declare const emailCollection = "email";
-export declare const custodianCollection = "custodians";
-export declare const emailSentByDayCollection = "emailsentbyday";
-export declare const wordCloudCollection = "wordcloud";
-export declare const searchHistoryCollection = "searchhistory";
-export declare const startupQuery = "{\"sort\":\"sent\",\"order\":1}";

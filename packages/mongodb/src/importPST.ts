@@ -11,6 +11,7 @@ export function importPST(httpQuery: HTTPQuery): string {
   importing = true
 
   // fork long duration processing task
+  console.log('forking import process')
   const importer = cp.fork('./src/doImport.ts', [httpQuery.loc], {
     execArgv: ['-r', 'ts-node/register'],
   })
@@ -22,7 +23,7 @@ export function importPST(httpQuery: HTTPQuery): string {
     })
   )
   importer.on('close', () => {
-    console.log('process exit')
+    console.log('import process exit')
     importing = false
   })
   return `Started import from ${httpQuery.loc}`

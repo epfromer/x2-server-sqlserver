@@ -107,8 +107,8 @@ async function run() {
     const table = new sql.Table(wordCloudCollection)
     table.create = true
 
-    table.columns.add('tag', sql.VarChar(256), { nullable: false })
-    table.columns.add('weight', sql.VarChar(256), { nullable: false })
+    table.columns.add('tag', sql.VarChar(30), { nullable: false })
+    table.columns.add('weight', sql.Int, { nullable: false })
 
     wordCloud.forEach((word) => table.rows.add(word.tag, word.weight))
 

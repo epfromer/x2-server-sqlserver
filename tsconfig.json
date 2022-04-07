@@ -6,7 +6,6 @@
     { "path": "packages/mongodb" },
     { "path": "packages/mysql" },
     { "path": "packages/postgres" },
-    { "path": "packages/redis" },
     { "path": "packages/sqlserver" }
   ]
 }

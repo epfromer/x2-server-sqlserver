@@ -23,7 +23,7 @@
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
     "express-graphql": "^0.12.0",
-    "graphql": "^16.3.0",
+    "graphql": "^15.3.0",
     "mysql2": "^2.3.3",
     "pst-extractor": "^1.9.0",
     "uuid": "^8.3.2"

@@ -75,6 +75,9 @@ const createSortOrder = (httpQuery) => {
 }
 
 export async function getEmail(httpQuery: HTTPQuery): Promise<EmailTotal> {
+  // Note that ES has a max search result size of 10,000
+  // https://discuss.elastic.co/t/how-to-increase-the-default-size-limit-from-10000-to-1000000-in-elasticsearch/208807
+  // https://stackoverflow.com/questions/55594386/where-should-i-configure-max-result-window-index-setting
   try {
     const start = Date.now()
     const client = new Client({

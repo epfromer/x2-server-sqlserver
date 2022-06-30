@@ -13,9 +13,9 @@
   },
   "dependencies": {
     "@klonzo/common": "*",
-    "graphql": "^15.3.0",
+    "graphql": "^15.8.0",
     "pst-extractor": "^1.9.0",
-    "stopword": "^2.0.1",
+    "stopword": "^2.0.2",
     "uuid": "^8.3.2"
   },
   "devDependencies": {

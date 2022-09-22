@@ -4,7 +4,7 @@
   "compilerOptions": {
     "esModuleInterop": true,
     "isolatedModules": true,
-    "outDir": "dist",
+    "outDir": "build",
     "rootDir": "src",
   },
   "references": [{"path": "../common"}]

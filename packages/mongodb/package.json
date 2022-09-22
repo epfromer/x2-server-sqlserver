@@ -12,7 +12,7 @@
   },
   "scripts": {
     "clean": "rimraf dist",
-    "build": "tsc --build --verbose",
+    "build": "yarn install && tsc --build --verbose",
     "docker": "docker run --name mongodb -p 27017:27017 mongo",
     "logs": "heroku logs -a x2-server-mongodb -t",
     "serve": "node dist/index.js",

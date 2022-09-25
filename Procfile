@@ -1,1 +1,0 @@
-web: node packages/mongodb/dist/index.js

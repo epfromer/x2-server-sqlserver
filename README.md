@@ -1,3 +1,9 @@
-# x2-servers
+# x2-server-sqlserver
 
-Monorepo of servers to extract email from PSTs, store in MongoDB, ElasticSearch, PostgreSQL, MySQL, SQL Server and serve via GraphQL for full text searching.
+GraphQL interface on email in SQL Server for X2 client.
+
+To run SQL Server in a Docker container, use:
+
+```bash
+docker run --name sqlserver -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=f00bar' -p 1433:1433 -d mcr.microsoft.com/mssql/server:latest
+```

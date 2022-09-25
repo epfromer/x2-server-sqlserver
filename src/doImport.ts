@@ -14,7 +14,7 @@ import {
   walkFSfolder,
   wordCloudCollection,
   WordCloudTag,
-} from '@klonzo/common'
+} from './common'
 import sql from 'mssql'
 import { v4 as uuidv4 } from 'uuid'
 

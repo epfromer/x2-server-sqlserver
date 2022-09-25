@@ -14,7 +14,7 @@ import { hasTerms } from './terms'
 import { Email } from './types'
 
 // filter out funky stuff that isn't hot
-const isValidEmail = (email): boolean | null =>
+const isValidEmail = (email: PSTMessage): boolean | null =>
   email.messageClass === 'IPM.Note' &&
   email.clientSubmitTime !== null &&
   email.clientSubmitTime > new Date(1999, 0, 1) &&
@@ -22,12 +22,11 @@ const isValidEmail = (email): boolean | null =>
   (email.senderName.trim() !== '' || email.senderEmailAddress.trim() !== '')
 
 // check for custodians
-const getCustodians = (s, foundCustodians) => {
+const getCustodians = (s: string, foundCustodians: Set<string>) => {
   let potentialCustodians = s.toLowerCase().trim().split(';')
   potentialCustodians = potentialCustodians.map((c) => c.trim())
   potentialCustodians = potentialCustodians.filter((c) => c !== '')
-
-  potentialCustodians.forEach((custodian) => {
+  potentialCustodians.forEach((custodian: string) => {
     if (aliasMap.has(custodian)) {
       foundCustodians.add(aliasMap.get(custodian))
     }
@@ -37,7 +36,7 @@ const getCustodians = (s, foundCustodians) => {
 }
 
 // helps with display of super long email addresses
-const breakUpAddress = (addr) =>
+const breakUpAddress = (addr: string) =>
   addr.split('@').join(' @').split('+').join(' +')
 
 // Processes individual email and stores in list.
@@ -49,7 +48,7 @@ export function processEmail(email: PSTMessage, emails: Email[]): void {
   if (!isValidEmail(email)) return
 
   // get custodians, if any
-  const fromCustodiansSet = new Set()
+  const fromCustodiansSet = new Set<string>()
   getCustodians(email.senderName, fromCustodiansSet)
   getCustodians(email.senderEmailAddress, fromCustodiansSet)
   const fromCustodians = [...Array.from(fromCustodiansSet)]
@@ -57,7 +56,7 @@ export function processEmail(email: PSTMessage, emails: Email[]): void {
     ? (fromCustodians[0] as string)
     : ''
 
-  const toCustodiansSet = new Set()
+  const toCustodiansSet = new Set<string>()
   getCustodians(email.displayTo, toCustodiansSet)
   getCustodians(email.displayCC, toCustodiansSet)
   getCustodians(email.displayBCC, toCustodiansSet)
@@ -75,14 +74,19 @@ export function processEmail(email: PSTMessage, emails: Email[]): void {
   if (fromCustodian) incSenderTotal(fromCustodian)
   if (toCustodians.length) toCustodians.forEach((c) => incReceiverTotal(c))
 
-  incEmailSentByDay(email.clientSubmitTime)
+  incEmailSentByDay(
+    email.clientSubmitTime ? email.clientSubmitTime : new Date()
+  )
 
   addToWordCloud(email, fromCustodian, toCustodians.join(' '))
 
   // add to list to be inserted later
   emails.push({
     id: emailId,
-    sent: email.clientSubmitTime,
+    sent: email.clientSubmitTime ? email.clientSubmitTime : new Date(),
+    sentShort: email.clientSubmitTime
+      ? new Date(email.clientSubmitTime).toISOString().slice(0, 10)
+      : new Date().toISOString().slice(0, 10),
     from: breakUpAddress(email.senderName),
     fromCustodian: fromCustodian,
     to: breakUpAddress(email.displayTo),

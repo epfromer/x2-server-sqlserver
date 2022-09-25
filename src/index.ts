@@ -6,6 +6,15 @@ import { graphqlHTTP } from 'express-graphql'
 import root from './root'
 dotenv.config()
 
+if (
+  !process.env.PGUSER ||
+  !process.env.PGPASSWORD ||
+  !process.env.PGHOST ||
+  !process.env.PGPORT
+) {
+  throw 'PGUSER or PGPASSWORD or PGHOST or PGPORT undefined'
+}
+
 const app = express()
 app.use(cors())
 app.use(
@@ -24,4 +33,4 @@ app.use(
 )
 
 const port = process.env.PORT || 3000
-app.listen(port, () => console.log(`mysql running on PORT: ${port}`))
+app.listen(port, () => console.log(`sqlserver running on PORT: ${port}`))

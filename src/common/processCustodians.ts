@@ -21,10 +21,12 @@ export function addCustodiansInteraction(
 
 // add to totals for Custodians
 export function incSenderTotal(fromCustodian: string): void {
-  custodians.find((c) => c.id === fromCustodian).senderTotal++
+  const custodian = custodians.find((c) => c.id === fromCustodian)
+  if (custodian) custodian.senderTotal++
 }
 export function incReceiverTotal(toCustodian: string): void {
-  custodians.find((c) => c.id === toCustodian).receiverTotal++
+  const custodian = custodians.find((c) => c.id === toCustodian)
+  if (custodian) custodian.receiverTotal++
 }
 
 // Process list for Custodians and store in db.
@@ -39,9 +41,10 @@ export async function processCustodians(
   // split apart fast map into individual custodians
   custodialInteractions.forEach((value, key) => {
     const peeps = key.split('/')
-    custodians
-      .find((c) => c.id === peeps[0])
-      .toCustodians.push({ custodianId: peeps[1], total: value })
+    const custodian = custodians.find((c) => c.id === peeps[0])
+    if (custodian) {
+      custodian.toCustodians.push({ custodianId: peeps[1], total: value })
+    }
   })
 
   await insertCustodians(custodians)

@@ -1,3 +1,5 @@
+import sql from 'mssql'
+import { v4 as uuidv4 } from 'uuid'
 import {
   Custodian,
   custodianCollection,
@@ -7,6 +9,7 @@ import {
   EmailSentByDay,
   emailSentByDayCollection,
   getNumPSTs,
+  getSQLConnection,
   processCustodians,
   processEmailSentByDay,
   processWordCloud,
@@ -15,22 +18,52 @@ import {
   wordCloudCollection,
   WordCloudTag,
 } from './common'
-import sql from 'mssql'
-import { v4 as uuidv4 } from 'uuid'
+
+const processSend = (msg: string) => {
+  if (!process || !process.send) {
+    console.error('no process object or process.end undefined')
+    return
+  }
+  process.send(msg)
+}
 
 async function run() {
   if (!getNumPSTs(process.argv[2])) {
-    process.send(`no PSTs found in ${process.argv[2]}`)
+    processSend(`no PSTs found in ${process.argv[2]}`)
     return
   }
 
-  process.send(`connect to ${process.env.SQL_HOST}`)
-  let pool = await sql.connect({
-    server: process.env.SQL_HOST,
-    user: process.env.SQL_USER,
-    password: process.env.SQL_PASSWORD,
-    trustServerCertificate: true,
-  })
+  const dropAndCreateDatabase = async () => {
+    const pool = await getSQLConnection(false)
+    if (pool) {
+      try {
+        processSend(`drop database`)
+        await pool.query('drop database if exists ' + dbName)
+
+        processSend(`create database`)
+        await pool.query('create database ' + dbName)
+        await pool.close()
+      } catch (err) {
+        console.error(err)
+      }
+      return true
+    } else {
+      processSend(`no pool from connect`)
+      return false
+    }
+  }
+
+  if (!(await dropAndCreateDatabase())) {
+    processSend('cannot drop and create database')
+    return
+  }
+
+  processSend(`connect to ${process.env.SQL_HOST}`)
+  const pool = await getSQLConnection()
+  if (!pool) {
+    processSend(`no pool from connect`)
+    return
+  }
 
   const insertEmails = async (emails: Email[]): Promise<void> => {
     const table = new sql.Table(emailCollection)
@@ -131,14 +164,6 @@ async function run() {
   }
 
   const insertCustodians = async (custodians: Custodian[]): Promise<void> => {
-    const pool = await sql.connect({
-      server: process.env.SQL_HOST,
-      user: process.env.SQL_USER,
-      password: process.env.SQL_PASSWORD,
-      database: dbName,
-      trustServerCertificate: true,
-    })
-
     const table = new sql.Table(custodianCollection)
     table.create = true
 
@@ -168,40 +193,25 @@ async function run() {
     await request.bulk(table)
   }
 
-  process.send(`drop database`)
-  await pool.query('drop database if exists ' + dbName)
-
-  process.send(`create database`)
-  await pool.query('create database ' + dbName)
-  await pool.close()
-
-  pool = await sql.connect({
-    server: process.env.SQL_HOST,
-    user: process.env.SQL_USER,
-    password: process.env.SQL_PASSWORD,
-    database: dbName,
-    trustServerCertificate: true,
-  })
-
   await pool.query(
     `create table ${searchHistoryCollection} (history_id varchar(255) primary key, time_stamp varchar(25) not null, entry varchar(255) not null)`
   )
 
-  process.send(`process emails`)
+  processSend(`process emails`)
   const numEmails = await walkFSfolder(process.argv[2], insertEmails, (msg) =>
-    process.send(msg)
+    processSend(msg)
   )
 
-  process.send(`process word cloud`)
-  await processWordCloud(insertWordCloud, (msg) => process.send(msg))
+  processSend(`process word cloud`)
+  await processWordCloud(insertWordCloud, (msg) => processSend(msg))
 
-  process.send(`process email sent`)
-  await processEmailSentByDay(insertEmailSentByDay, (msg) => process.send(msg))
+  processSend(`process email sent`)
+  await processEmailSentByDay(insertEmailSentByDay, (msg) => processSend(msg))
 
-  process.send(`create custodians`)
-  await processCustodians(insertCustodians, (msg) => process.send(msg))
+  processSend(`create custodians`)
+  await processCustodians(insertCustodians, (msg) => processSend(msg))
 
-  process.send(`completed ${numEmails} emails in ${process.argv[2]}`)
+  processSend(`completed ${numEmails} emails in ${process.argv[2]}`)
   await pool.close()
 }
 

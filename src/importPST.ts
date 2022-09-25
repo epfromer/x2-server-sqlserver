@@ -1,11 +1,12 @@
-import { HTTPQuery, ImportLogEntry } from '@klonzo/common'
 import cp from 'child_process'
 import { v4 as uuidv4 } from 'uuid'
+import { HTTPQuery, ImportLogEntry } from './common'
 
 const log: Array<ImportLogEntry> = []
 let importing = false
 
 export function importPST(httpQuery: HTTPQuery): string {
+  if (!httpQuery.loc) return 'No import location specified'
   if (importing) return `Import from ${httpQuery.loc} in progress`
   log.length = 0 // truncate log
   importing = true

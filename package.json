@@ -13,7 +13,7 @@
   "scripts": {
     "clean": "rimraf build",
     "build": "yarn install && tsc --build --verbose",
-    "docker": "docker run --name sqlserver -p 1433:1433 -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=f0000Bar!' -d mcr.microsoft.com/mssql/server:latest",
+    "docker": "docker run --name sqlserver -p 1433:1433 -e \"ACCEPT_EULA=Y\" -e \"SA_PASSWORD=f0000Bar!\" -d mcr.microsoft.com/mssql/server:latest",
     "serve": "node build/index.js",
     "start": "run-s clean build serve"
   },
@@ -33,6 +33,7 @@
     "@babel/eslint-parser": "^7.19.1",
     "@types/cors": "^2.8.12",
     "@types/express": "^4.17.14",
+    "@types/mssql": "^8.1.1",
     "@types/node": "^18.7.20",
     "@types/pg": "^8.6.5",
     "@types/stopword": "^2.0.0",

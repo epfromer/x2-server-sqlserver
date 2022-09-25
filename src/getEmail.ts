@@ -1,14 +1,13 @@
+import { v4 as uuidv4 } from 'uuid'
 import {
-  dbName,
   defaultLimit,
   emailCollection,
   EmailTotal,
+  getSQLConnection,
   HTTPQuery,
   searchHistoryCollection,
   startupQuery,
-} from '@klonzo/common'
-import sql from 'mssql'
-import { v4 as uuidv4 } from 'uuid'
+} from './common'
 
 const createWhereClause = (httpQuery: HTTPQuery) => {
   // console.log(httpQuery)
@@ -107,13 +106,11 @@ export async function getEmail(httpQuery: HTTPQuery): Promise<EmailTotal> {
       // eslint-disable-next-line prettier/prettier
       } rows only`
 
-    const pool = await sql.connect({
-      server: process.env.SQL_HOST,
-      user: process.env.SQL_USER,
-      password: process.env.SQL_PASSWORD,
-      database: dbName,
-      trustServerCertificate: true,
-    })
+    const pool = await getSQLConnection()
+    if (!pool) {
+      console.error(`no pool from connect`)
+      return { total: 0, emails: [] }
+    }
     const result = await pool.query(q)
     const resultTotal = await pool.query(qTotal)
 
@@ -146,6 +143,7 @@ export async function getEmail(httpQuery: HTTPQuery): Promise<EmailTotal> {
     console.log('sqlserver', httpQuery, total, Date.now() - start)
     return { total, emails }
   } catch (err) {
-    console.error(err.stack)
+    console.error(err)
+    return { total: 0, emails: [] }
   }
 }

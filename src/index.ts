@@ -1,18 +1,17 @@
-import { graphqlSchema } from '@klonzo/common'
 import cors from 'cors'
 import * as dotenv from 'dotenv'
 import express, { Application } from 'express'
 import { graphqlHTTP } from 'express-graphql'
+import { graphqlSchema } from './common'
 import root from './root'
 dotenv.config()
 
 if (
-  !process.env.PGUSER ||
-  !process.env.PGPASSWORD ||
-  !process.env.PGHOST ||
-  !process.env.PGPORT
+  !process.env.SQL_HOST ||
+  !process.env.SQL_USER ||
+  !process.env.SQL_PASSWORD
 ) {
-  throw 'PGUSER or PGPASSWORD or PGHOST or PGPORT undefined'
+  throw 'SQL_HOST or SQL_USER or SQL_PASSWORD undefined'
 }
 
 const app = express()

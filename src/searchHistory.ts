@@ -1,45 +1,31 @@
 import {
-  dbName,
+  getSQLConnection,
   searchHistoryCollection,
   SearchHistoryEntry,
-} from '@klonzo/common'
-import sql from 'mssql'
+} from './common'
 
 export async function getSearchHistory(): Promise<Array<SearchHistoryEntry>> {
-  try {
-    const pool = await sql.connect({
-      server: process.env.SQL_HOST,
-      user: process.env.SQL_USER,
-      password: process.env.SQL_PASSWORD,
-      database: dbName,
-      trustServerCertificate: true,
-    })
-    const result = await pool.query(
-      `select * from ${searchHistoryCollection} order by time_stamp desc`
-    )
-    return result.recordset.map((entry) => ({
-      id: entry.history_id,
-      timestamp: entry.time_stamp,
-      entry: entry.entry,
-    }))
+  const pool = await getSQLConnection()
+  if (!pool) {
+    console.error('no pool from connect')
     return []
-  } catch (err) {
-    console.error(err.stack)
   }
+  const result = await pool.query(
+    `select * from ${searchHistoryCollection} order by time_stamp desc`
+  )
+  return result.recordset.map((entry) => ({
+    id: entry.history_id,
+    timestamp: entry.time_stamp,
+    entry: entry.entry,
+  }))
 }
 
 export async function clearSearchHistory(): Promise<string> {
-  try {
-    const pool = await sql.connect({
-      server: process.env.SQL_HOST,
-      user: process.env.SQL_USER,
-      password: process.env.SQL_PASSWORD,
-      database: dbName,
-      trustServerCertificate: true,
-    })
-    await pool.query(`truncate table ${searchHistoryCollection}`)
-    return `Search history cleared`
-  } catch (err) {
-    console.error(err.stack)
+  const pool = await getSQLConnection()
+  if (!pool) {
+    console.error('no pool from connect')
+    return ''
   }
+  await pool.query(`truncate table ${searchHistoryCollection}`)
+  return `Search history cleared`
 }

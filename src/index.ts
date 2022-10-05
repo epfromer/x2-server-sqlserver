@@ -22,6 +22,11 @@ app.use(
     }),
   }) as Application
 )
+app.get('/', function (req, res) {
+  res.send(
+    'x2-server-sqlserver: GraphQL interface on email in SQL Server for X2 client'
+  )
+})
 
 const port = process.env.PORT || 3000
 app.listen(port, () => console.log(`sqlserver running on PORT: ${port}`))

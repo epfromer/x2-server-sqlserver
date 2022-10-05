@@ -8,6 +8,7 @@ import {
   emailCollection,
   EmailSentByDay,
   emailSentByDayCollection,
+  getEnv,
   getNumPSTs,
   getSQLConnection,
   processCustodians,
@@ -58,7 +59,7 @@ async function run() {
     return
   }
 
-  processSend(`connect to ${process.env.SQL_HOST}`)
+  processSend(`connect to ${getEnv('SQL_HOST')}`)
   const pool = await getSQLConnection()
   if (!pool) {
     processSend(`no pool from connect`)

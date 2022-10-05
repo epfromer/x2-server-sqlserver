@@ -6,14 +6,6 @@ import { graphqlSchema } from './common'
 import root from './root'
 dotenv.config()
 
-if (
-  !process.env.SQL_HOST ||
-  !process.env.SQL_USER ||
-  !process.env.SQL_PASSWORD
-) {
-  throw 'SQL_HOST or SQL_USER or SQL_PASSWORD undefined'
-}
-
 const app = express()
 app.use(cors())
 app.use(

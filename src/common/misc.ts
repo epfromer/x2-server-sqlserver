@@ -7,9 +7,9 @@ export async function sleep(ms = 0): Promise<void> {
 
 export const getSQLConnection = async (bSpecifyName = true) => {
   const config: any = {
-    server: process.env.SQL_HOST!,
-    user: process.env.SQL_USER,
-    password: process.env.SQL_PASSWORD,
+    server: getEnv('SQL_HOST'),
+    user: getEnv('SQL_USER'),
+    password: getEnv('SQL_PASSWORD'),
     options: {
       trustServerCertificate: true,
     },
@@ -23,4 +23,14 @@ export const getSQLConnection = async (bSpecifyName = true) => {
   } catch (error) {
     console.log(error)
   }
+}
+
+export function getEnv(item: string): string {
+  const val = process.env[item]
+  if (!val) {
+    console.error(`${item} undefined`)
+    throw `${item} undefined`
+  }
+
+  return val
 }
